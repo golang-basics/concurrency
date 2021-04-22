@@ -2,40 +2,33 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
-var wg sync.WaitGroup
-
 func main() {
-	wg.Add(1)
-	go task1()
-	wg.Wait()
-
-	wg.Add(1)
-	go task2()
-	wg.Wait()
-
-	wg.Add(1)
-	go task3()
-	wg.Wait()
+	done := make(chan struct{})
+	go task1(done)
+	<-done
+	go task2(done)
+	<-done
+	go task3(done)
+	<-done
 }
 
-func task1() {
+func task1(done chan struct{}) {
 	time.Sleep(100 * time.Millisecond)
 	fmt.Println("task 1")
-	wg.Done()
+	done <- struct{}{}
 }
 
-func task2() {
+func task2(done chan struct{}) {
 	time.Sleep(50 * time.Millisecond)
 	fmt.Println("task 2")
-	wg.Done()
+	done <- struct{}{}
 }
 
-func task3() {
+func task3(done chan struct{}) {
 	time.Sleep(10 * time.Millisecond)
 	fmt.Println("task 3")
-	wg.Done()
+	done <- struct{}{}
 }
