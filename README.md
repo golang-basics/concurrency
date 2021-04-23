@@ -23,6 +23,7 @@ sysctl -a | grep machdep.cpu | grep count
 - [Windows - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_windows.go#L356)
 - [Go Scheduler by rakyll](https://rakyll.org/scheduler/)
 - [Go Scheduler by morsmachine](https://morsmachine.dk/go-scheduler)
+- [Illustrated Tales of Go Runtime Scheduler](https://medium.com/@ankur_anand/illustrated-tales-of-go-runtime-scheduler-74809ef6d19b)
 - [Go Scheduler Implementation](https://github.com/golang/go/blob/master/src/runtime/proc.go)
 - [Main Goroutine](https://github.com/golang/go/blob/master/src/runtime/proc.go#L144)
 - [Go Scheduler Implementation](https://github.com/golang/go/blob/master/src/runtime/proc.go#L3470)
