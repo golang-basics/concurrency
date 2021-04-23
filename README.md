@@ -1,5 +1,29 @@
 # Concurrency in Go
 
+### Go routines
+
+A go routines can block for one of these reasons:
+
+- Sending/Receiving on channel
+- Network or I/O
+- Blocking System Call
+- Timers
+- Mutexes
+
+#### Fairness
+
+- Infinite loop — preemption (~10ms time slice)
+- Local Run queue — preemption (~10ms time slice)
+- Global run queue starvation is avoided by checking the global run queue for every 61 scheduler tick
+- Network Poller Starvation Background thread poll network occasionally if not polled by the main worker thread
+
+#### Poll Order
+
+- Local Run queue
+- Global Run queue
+- Network Poller
+- Work Stealing
+
 ### OSX `sysctl`
 
 ```bash
@@ -31,4 +55,9 @@ sysctl -a | grep machdep.cpu | grep count
 - [M](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L503)
 - [P](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L596)
 - [Go Scheduler Design Doc](https://docs.google.com/document/d/1TTj4T2JO42uD5ID9e89oa0sLKhJYD0Y_kqxDv3I3XMw/edit)
+- [Scheduling in Go (Part 2) - Ardan Labs](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
+- [Scheduling in Go (Part 3 - Concurrency) - Ardan Labs](https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html)
 - [Stack size](https://github.com/golang/go/blob/master/src/runtime/stack.go#L73)
+- [Golang Net Poller Source Code](https://github.com/golang/go/blob/master/src/runtime/netpoll.go)
+- [Golang Net Poller](https://morsmachine.dk/netpoller)
+- [Preemptive vs Non-Preemptive Scheduling](https://www.guru99.com/preemptive-vs-non-preemptive-scheduling.html#:~:text=In%20Preemptive%20Scheduling%2C%20the%20CPU,Schedulign%20no%20switching%20takes%20place.)
