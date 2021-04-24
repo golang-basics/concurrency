@@ -10,6 +10,23 @@ A go routines can block for one of these reasons:
 - Timers
 - Mutexes
 
+### Channels
+
+Here are couple of simple rules to make sure channels are used correctly
+
+- Before writing to a channel, make sure someone else is reading from it (deadlock)
+- Before reading from a channel, make sure someone else is writing to it (deadlock)
+- When ranging over a channel, ALWAYS make sure the producer closes the channel eventually (deadlock)
+- Writing to a closed channel will result in a runtime panic
+- Reading from a closed channel won't have any effects
+- A channel close, is considered a write operation
+
+### Mutexes
+
+### Wait Groups
+
+### Atomics
+
 #### Fairness
 
 - Infinite loop — preemption (~10ms time slice)
@@ -61,3 +78,4 @@ sysctl -a | grep machdep.cpu | grep count
 - [Golang Net Poller Source Code](https://github.com/golang/go/blob/master/src/runtime/netpoll.go)
 - [Golang Net Poller](https://morsmachine.dk/netpoller)
 - [Preemptive vs Non-Preemptive Scheduling](https://www.guru99.com/preemptive-vs-non-preemptive-scheduling.html#:~:text=In%20Preemptive%20Scheduling%2C%20the%20CPU,Schedulign%20no%20switching%20takes%20place.)
+- [Guarded Command Language](https://en.wikipedia.org/wiki/Guarded_Command_Language)
