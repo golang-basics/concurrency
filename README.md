@@ -58,6 +58,15 @@ sysctl hw.ncpu
 sysctl -a | grep machdep.cpu | grep count
 ```
 
+### Go Scheduler
+
+Primarily the Go scheduler has the opportunity to get triggered on these events:
+
+- The use of the keyword go
+- Garbage collection
+- System calls (i.e. open file, read file, e.t.c.)
+- Synchronization and Orchestration (channel read/write)
+
 ### Resources
 
 - [OSX - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_darwin.go#L151)
@@ -71,9 +80,12 @@ sysctl -a | grep machdep.cpu | grep count
 - [G - Source Code](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L403)
 - [M - Source Code](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L503)
 - [P - Source Code](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L596)
+- [GRQ Check - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L3343)
+- [Force Preempt Duration for G - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5435)
 - [Go Scheduler Design Doc](https://docs.google.com/document/d/1TTj4T2JO42uD5ID9e89oa0sLKhJYD0Y_kqxDv3I3XMw/edit)
 - [Scheduling in Go (Part 2) - Ardan Labs](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
 - [Scheduling in Go (Part 3 - Concurrency) - Ardan Labs](https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html)
+- [The Scheduler Saga](https://about.sourcegraph.com/go/gophercon-2018-the-scheduler-saga/#:~:text=The%20scheduler%20needs%20to%20exist,it%20multiplexes%20goroutines%20onto%20threads.)
 - [Stack size](https://github.com/golang/go/blob/master/src/runtime/stack.go#L73)
 - [Golang Net Poller Source Code](https://github.com/golang/go/blob/master/src/runtime/netpoll.go)
 - [Golang Net Poller](https://morsmachine.dk/netpoller)
@@ -83,3 +95,4 @@ sysctl -a | grep machdep.cpu | grep count
 - [Go Asynchronous Preemption](https://medium.com/a-journey-with-go/go-asynchronous-preemption-b5194227371c)
 - [Go Routine & Preemption](https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7)
 - [Guarded Command Language](https://en.wikipedia.org/wiki/Guarded_Command_Language)
+- [System Monitor - sysmon](https://en.wikipedia.org/wiki/System_monitor)
