@@ -67,6 +67,54 @@ Primarily the Go scheduler has the opportunity to get triggered on these events:
 - System calls (i.e. open file, read file, e.t.c.)
 - Synchronization and Orchestration (channel read/write)
 
+#### P, M, G
+
+Once the syscall exists Go tries to apply one of the rules:
+
+- try to acquire the exact same P, and resume the execution
+- try to acquire a P in the idle list and resume the execution
+- put the goroutine in the global queue and put the associated M back to the idle list
+
+Goroutines do not go in the global queue only when the local queue is full;
+it is also pushed in it when Go inject a list of goroutines to the scheduler,
+e.g. from the network poller or goroutines asleep during the garbage collection
+
+### Spinning Threads
+
+### Net Poller
+
+### SysMon
+
+`sysmon` is smart enough to not consume resources when there is nothing to do.
+Its cycle time is dynamic and depends on the current activity of the running program.
+The initial pace is set at 20 nanoseconds, meaning the thread is constantly looking to help.
+Then, after some cycles, if the thread is not doing anything, the sleep between two cycles
+will double until it reaches 10ms.
+If your application does not have many system calls or long-running goroutines,
+the thread should back off to a 10ms delay most of its time, giving
+a very light overhead to your application.
+
+The thread is also able to detect when it should not run. Here are two cases:
+
+- The garbage collector is going to run. sysmon will resume when the garbage collector ends.
+- All the threads are idle, nothing is running.
+
+### Work Stealing
+
+Here's how Go makes sure to equally distribute & balance work
+and make use of computer resources as efficient as possible:
+
+- pull work from the local queue
+- pull work from the global queue
+- pull work from network poller
+- steal work from the other P’s local queues
+
+### Tracing
+
+```bash
+GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
+```
+
 ### Resources
 
 - [OSX - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_darwin.go#L151)
@@ -85,6 +133,7 @@ Primarily the Go scheduler has the opportunity to get triggered on these events:
 - [Go Scheduler Design Doc](https://docs.google.com/document/d/1TTj4T2JO42uD5ID9e89oa0sLKhJYD0Y_kqxDv3I3XMw/edit)
 - [Scheduling in Go (Part 2) - Ardan Labs](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
 - [Scheduling in Go (Part 3 - Concurrency) - Ardan Labs](https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html)
+- [Scheduler Tracing in Go - Ardan Labs](https://www.ardanlabs.com/blog/2015/02/scheduler-tracing-in-go.html)
 - [The Scheduler Saga](https://about.sourcegraph.com/go/gophercon-2018-the-scheduler-saga/#:~:text=The%20scheduler%20needs%20to%20exist,it%20multiplexes%20goroutines%20onto%20threads.)
 - [Stack size](https://github.com/golang/go/blob/master/src/runtime/stack.go#L73)
 - [Golang Net Poller Source Code](https://github.com/golang/go/blob/master/src/runtime/netpoll.go)
@@ -94,5 +143,10 @@ Primarily the Go scheduler has the opportunity to get triggered on these events:
 - [Go 1.14 Release Notes - Runtime](https://golang.org/doc/go1.14#runtime)
 - [Go Asynchronous Preemption](https://medium.com/a-journey-with-go/go-asynchronous-preemption-b5194227371c)
 - [Go Routine & Preemption](https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7)
+- [Go Routine, OS Thread and CPU Management](https://medium.com/a-journey-with-go/go-goroutine-os-thread-and-cpu-management-2f5a5eaf518a)
+- [Go Work Stealing - Go Scheduler](https://medium.com/a-journey-with-go/go-work-stealing-in-go-scheduler-d439231be64d)
 - [Guarded Command Language](https://en.wikipedia.org/wiki/Guarded_Command_Language)
 - [System Monitor - sysmon](https://en.wikipedia.org/wiki/System_monitor)
+- [Go SysMon Runtime Monitoring](https://medium.com/@blanchon.vincent/go-sysmon-runtime-monitoring-cff9395060b5)
+- [SysMon - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5273)
+- [Garbage Collector Period - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5268)
