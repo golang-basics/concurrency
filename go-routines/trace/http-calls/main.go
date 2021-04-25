@@ -3,9 +3,11 @@ package main
 import (
 	"net/http"
 	"sync"
+	"time"
 )
-// To enable tracing on this program make sure to run the below command
-// GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
+// To enable tracing on this program make sure to run the below commands
+// go build main.go
+// GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 ./main
 func main() {
 	var wg sync.WaitGroup
 	for i := 0; i < 5; i++ {
@@ -16,4 +18,7 @@ func main() {
 		}()
 	}
 	wg.Wait()
+
+	// wait for Global Run Queue
+	time.Sleep(3 * time.Second)
 }

@@ -2,20 +2,30 @@ package main
 
 import (
 	"os"
+	"strconv"
 	"sync"
+	"time"
 )
-// To enable tracing on this program make sure to run the below command
-// GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
+// To enable tracing on this program make sure to run the below commands
+// go build main.go
+// GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 ./main
 func main() {
 	var wg sync.WaitGroup
-	_, _ = os.Create("tmp.txt")
+	file, _ := os.Create("tmp.txt")
+	defer file.Close()
 	for i := 0; i < 5; i++ {
 		wg.Add(1)
-		go func() {
-			file, _ := os.Open("tmp.txt")
-			_ = file.Close()
+		go func(n int) {
+			_, err := file.WriteString(strconv.Itoa(n))
+			if err != nil {
+				panic(err)
+			}
+			time.Sleep(time.Second)
 			wg.Done()
-		}()
+		}(i)
 	}
 	wg.Wait()
+
+	// wait for Global Run Queue
+	time.Sleep(3 * time.Second)
 }

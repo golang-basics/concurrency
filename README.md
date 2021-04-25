@@ -10,6 +10,20 @@ A go routines can block for one of these reasons:
 - Timers
 - Mutexes
 
+Here's the full list of Go routines statuses:
+
+- Gidle,            // 0
+- Grunnable,        // 1 runnable and on a run queue
+- Grunning,         // 2 running
+- Gsyscall,         // 3 performing a syscall
+- Gwaiting,         // 4 waiting for the runtime
+- Gmoribund_unused, // 5 currently unused, but hardcoded in gdb scripts
+- Gdead,            // 6 goroutine is dead
+- Genqueue,         // 7 only the Gscanenqueue is used
+- Gcopystack,       // 8 in this state when newstack is moving the stack
+
+Feel free to check the rest of the statuses in the [runtime](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L34) source code
+
 #### Fairness
 
 - Infinite loop — preemption (~10ms time slice)
