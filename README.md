@@ -150,3 +150,6 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 - [Go SysMon Runtime Monitoring](https://medium.com/@blanchon.vincent/go-sysmon-runtime-monitoring-cff9395060b5)
 - [SysMon - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5273)
 - [Garbage Collector Period - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5268)
+- [CSP](https://levelup.gitconnected.com/communicating-sequential-processes-csp-for-go-developer-in-a-nutshell-866795eb879d)
+- [Visualising Concurrency in Go](https://divan.dev/posts/go_concurrency_visualize/)
+- [NUMA Deep Dive](https://frankdenneman.nl/2016/07/07/numa-deep-dive-part-1-uma-numa/)
