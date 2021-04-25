@@ -17,7 +17,7 @@ func main() {
 		go work(&wg)
 	}
 	wg.Wait()
-	// Wait to see the global run queue deplete.
+	// Wait to see the global run queue complete
 	time.Sleep(3 * time.Second)
 }
 
