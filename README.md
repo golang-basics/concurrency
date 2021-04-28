@@ -133,6 +133,9 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 
 - [OSX - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_darwin.go#L151)
 - [Windows - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_windows.go#L356)
+- [OSX - osinit](https://github.com/golang/go/blob/master/src/runtime/os_darwin.go#L128)
+- [Windows - osinit](https://github.com/golang/go/blob/master/src/runtime/os_windows.go#L545)
+- [Linux - osinit](https://github.com/golang/go/blob/master/src/runtime/os_linux.go#L301)
 - [Go Scheduler by rakyll](https://rakyll.org/scheduler/)
 - [Go Scheduler by morsmachine](https://morsmachine.dk/go-scheduler)
 - [Illustrated Tales of Go Runtime Scheduler](https://medium.com/@ankur_anand/illustrated-tales-of-go-runtime-scheduler-74809ef6d19b)
