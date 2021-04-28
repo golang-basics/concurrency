@@ -170,3 +170,4 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 - [CSP](https://levelup.gitconnected.com/communicating-sequential-processes-csp-for-go-developer-in-a-nutshell-866795eb879d)
 - [Visualising Concurrency in Go](https://divan.dev/posts/go_concurrency_visualize/)
 - [NUMA Deep Dive](https://frankdenneman.nl/2016/07/07/numa-deep-dive-part-1-uma-numa/)
+- [How to Reduce Lock Contention with Atomic Package](https://medium.com/a-journey-with-go/go-how-to-reduce-lock-contention-with-the-atomic-package-ba3b2664b549)
