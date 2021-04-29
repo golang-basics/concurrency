@@ -6,11 +6,6 @@ import (
 )
 
 func main() {
-	//m := sync.Map{}
-	//p := sync.Pool{}
-	//o := sync.Once{}
-	//c := sync.Cond{}
-
 	d := newDB()
 	var wg sync.WaitGroup
 	wg.Add(2)
