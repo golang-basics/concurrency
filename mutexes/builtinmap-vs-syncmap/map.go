@@ -1,4 +1,4 @@
-package benchmarks
+package builtinmap_vs_syncmap
 
 import "sync"
 

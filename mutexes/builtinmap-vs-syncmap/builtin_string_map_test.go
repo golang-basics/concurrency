@@ -1,4 +1,4 @@
-package benchmarks
+package builtinmap_vs_syncmap
 
 import (
 	"strconv"
@@ -21,7 +21,7 @@ func BenchmarkBuiltinStringMap_Store(b *testing.B) {
 	}
 }
 
-func BenchmarkBuiltinStringMap_Store_Load(b *testing.B) {
+func BenchmarkBuiltinStringMap_Hybrid(b *testing.B) {
 	m := NewBuiltinStringMap()
 	for i := 0; i < b.N; i++ {
 		val := strconv.Itoa(i)

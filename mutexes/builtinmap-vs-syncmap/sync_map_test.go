@@ -1,4 +1,4 @@
-package benchmarks
+package builtinmap_vs_syncmap
 
 import (
 	"strconv"
@@ -25,7 +25,7 @@ func BenchmarkSyncMap_Store(b *testing.B) {
 }
 
 // write/read heavy with a lot of overwrites => better than built in map
-func BenchmarkSyncMap_Store_Load(b *testing.B) {
+func BenchmarkSyncMap_Hybrid(b *testing.B) {
 	m := NewBuiltinStringMap()
 	for i := 0; i < b.N; i++ {
 		val := strconv.Itoa(i)
