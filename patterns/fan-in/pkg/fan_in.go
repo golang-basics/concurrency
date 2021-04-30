@@ -1,8 +1,8 @@
-// The FAN-IN pattern states that a function receives multiple channels as inputs
-// It reads each input and sends all the values into 1 final output channel
-
 package pkg
 
+// FanIn reads from multiple channels and writes into 1 final channel
+// The FAN-IN pattern states that a function receives multiple channels as inputs
+// It reads each input and sends all the values into 1 final output channel
 func FanIn(inputs ...<-chan int) <-chan int {
 	out := make(chan int)
 	done := make(chan struct{})
