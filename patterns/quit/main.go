@@ -25,10 +25,10 @@ func main() {
 
 func worker(quit chan os.Signal) chan error {
 	ticker := time.NewTicker(500*time.Millisecond)
-	timer := time.NewTimer(3*time.Second)
+	timeout := time.NewTimer(3*time.Second)
 	for {
 		select {
-		case <-timer.C:
+		case <-timeout.C:
 			err := make(chan error, 1)
 			err <- errors.New("something wrong happened")
 			return err
