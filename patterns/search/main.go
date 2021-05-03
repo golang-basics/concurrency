@@ -74,6 +74,7 @@ func google(query string) []Result {
 		ImageSearch{},
 		MapsSearch{},
 	}
+	// used for multiple search servers, not for normal index as you used here
 	searchReplica := func(i int) {
 		out <- replicas[i].Search(query)
 	}
@@ -94,6 +95,9 @@ func google(query string) []Result {
 	}
 
 	return results
+}
+
+func first(query string, replicas ...Searcher) {
 }
 
 func networkLatency() {

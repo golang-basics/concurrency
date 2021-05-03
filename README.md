@@ -174,3 +174,4 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 - [Go Mutex and Starvation](https://medium.com/a-journey-with-go/go-mutex-and-starvation-3f4f4e75ad50)
 - [Linux Kernel Mutex Lock Hand Off](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c)
 - [Sync Map - Medium](https://medium.com/@deckarep/the-new-kid-in-town-gos-sync-map-de24a6bf7c2c)
+- [Pipelines](https://blog.golang.org/pipelines)
