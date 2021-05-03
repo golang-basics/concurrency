@@ -4,10 +4,15 @@ import "fmt"
 
 func main() {
 	nums := gen(3) // 1, 2, 3
-	inc := inc(nums) // 2, 3, 4
-	sq := sq(inc) // 4, 9, 16
-	res := dec(sq) // 3, 8, 15
+	incremented := inc(nums) // 2, 3, 4
+	squared := sq(incremented) // 4, 9, 16
+	res := dec(squared) // 3, 8, 15
 	for n := range res {
+		fmt.Println(n)
+	}
+
+	fmt.Println("the same exact result using nested calls")
+	for n := range dec(sq(inc(gen(3)))) {
 		fmt.Println(n)
 	}
 }
