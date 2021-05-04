@@ -46,7 +46,6 @@ func (p *intPipeline) inc() *intPipeline {
 		select {
 		case out <- <-p.outChan + 1:
 		case <-p.doneChan:
-			//close(p.outChan)
 			return p
 		}
 	}
@@ -60,8 +59,6 @@ func (p *intPipeline) dec() *intPipeline {
 		select {
 		case out <- <-p.outChan - 1:
 		case <-p.doneChan:
-			// nil channel
-			//close(p.outChan)
 			return p
 		}
 	}
@@ -72,11 +69,10 @@ func (p *intPipeline) dec() *intPipeline {
 func (p *intPipeline) sq() *intPipeline {
 	out := make(chan int, p.length)
 	for i := 0; i < p.length; i++ {
-		v := <-p.outChan
 		select {
-		case out <- v * v:
+		case v := <-p.outChan:
+			out <- v * v
 		case <-p.doneChan:
-			//close(p.outChan)
 			return p
 		}
 	}
