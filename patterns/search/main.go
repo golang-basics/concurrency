@@ -1,3 +1,7 @@
+// The search pattern resembles improvement on big/tail latency by
+// using replicated servers and using the first value and discarding anything else
+// Reduce tail latency using replicated search servers
+
 package main
 
 import (
@@ -6,55 +10,10 @@ import (
 	"time"
 )
 
-type Result string
-
-type Searcher interface {
-	Search(query string) Result
-}
-
-type YouTubeSearch struct {
-}
-
-func (YouTubeSearch) Search(query string) Result {
-	networkLatency()
-	return Result(fmt.Sprintf(
-		"youtube search result for: %q",
-		query,
-	))
-}
-
-type WebSearch struct {
-}
-
-func (WebSearch) Search(query string) Result {
-	networkLatency()
-	return Result(fmt.Sprintf(
-		"web search result for: %q",
-		query,
-	))
-}
-
-type ImageSearch struct {
-}
-
-func (ImageSearch) Search(query string) Result {
-	networkLatency()
-	return Result(fmt.Sprintf(
-		"image search result for: %q",
-		query,
-	))
-}
-
-type MapsSearch struct {
-}
-
-func (MapsSearch) Search(query string) Result {
-	networkLatency()
-	return Result(fmt.Sprintf(
-		"maps search result for: %q",
-		query,
-	))
-}
+const (
+	ip1 = "192.168.1.0"
+	ip2 = "192.168.1.1"
+)
 
 func main() {
 	start := time.Now()
@@ -66,25 +25,83 @@ func main() {
 	fmt.Println("elapsed", elapsed)
 }
 
+type Result string
+
+type Searcher interface {
+	Search(query string) Result
+}
+
+type YouTubeSearch struct {
+	ip string
+}
+
+func (s YouTubeSearch) Search(query string) Result {
+	networkLatency()
+	return Result(fmt.Sprintf(
+		"[%s] youtube search result for: %q",
+		s.ip,
+		query,
+	))
+}
+
+type WebSearch struct {
+	ip string
+}
+
+func (s WebSearch) Search(query string) Result {
+	networkLatency()
+	return Result(fmt.Sprintf(
+		"[%s] web search result for: %q",
+		s.ip,
+		query,
+	))
+}
+
+type ImageSearch struct {
+	ip string
+}
+
+func (s ImageSearch) Search(query string) Result {
+	networkLatency()
+	return Result(fmt.Sprintf(
+		"[%s] image search result for: %q",
+		s.ip,
+		query,
+	))
+}
+
+type MapsSearch struct {
+	ip string
+}
+
+func (s MapsSearch) Search(query string) Result {
+	networkLatency()
+	return Result(fmt.Sprintf(
+		"[%s] maps search result for: %q",
+		s.ip,
+		query,
+	))
+}
+
 func google(query string) []Result {
 	out := make(chan Result)
-	replicas := []Searcher{
-		WebSearch{},
-		YouTubeSearch{},
-		ImageSearch{},
-		MapsSearch{},
-	}
-	// used for multiple search servers, not for normal index as you used here
-	searchReplica := func(i int) {
-		out <- replicas[i].Search(query)
-	}
-	for i := range replicas {
-		go searchReplica(i)
-	}
+
+	go func() {
+		out <- first(query, WebSearch{ip: ip1}, WebSearch{ip: ip2})
+	}()
+	go func() {
+		out <- first(query, YouTubeSearch{ip: ip1}, YouTubeSearch{ip: ip2})
+	}()
+	go func() {
+		out <- first(query, ImageSearch{ip: ip1}, ImageSearch{ip: ip2})
+	}()
+	go func() {
+		out <- first(query, MapsSearch{ip: ip1}, MapsSearch{ip: ip2})
+	}()
 
 	results := make([]Result, 0)
 	timeout := time.After(80 * time.Millisecond)
-	for i := 0; i < len(replicas); i++ {
+	for i := 0; i < 4; i++ {
 		select {
 		case res := <-out:
 			results = append(results, res)
@@ -97,7 +114,21 @@ func google(query string) []Result {
 	return results
 }
 
-func first(query string, replicas ...Searcher) {
+func first(query string, replicas ...Searcher) Result {
+	out := make(chan Result)
+	done := make(chan struct{})
+	defer close(done)
+
+	searchReplica := func(i int) {
+		select {
+		case out <- replicas[i].Search(query):
+		case <-done:
+		}
+	}
+	for i := range replicas {
+		go searchReplica(i)
+	}
+	return <-out
 }
 
 func networkLatency() {
