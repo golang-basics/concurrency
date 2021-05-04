@@ -5,13 +5,13 @@ type IntPipeline struct {
 	length int
 }
 
-func New(n int) *IntPipeline {
+func New(vs ...int) *IntPipeline {
 	p := IntPipeline{}
-	out := make(chan int, n)
-	for i := 1; i <= n; i++ {
-		out <- i
+	out := make(chan int, len(vs))
+	for _, n := range vs {
+		out <- n
 	}
-	p.length = n
+	p.length = len(vs)
 	p.out = out
 	return &p
 }

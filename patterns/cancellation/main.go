@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	p := newIntPipeline(3)
+	p := newIntPipeline(1,2,3)
 	defer p.done()
 	//for i := range p.inc().sq().done().dec().res() {
 	for i := range p.inc().sq().dec().res() {
@@ -27,14 +27,14 @@ type intPipeline struct {
 	length   int
 }
 
-func newIntPipeline(n int) *intPipeline {
+func newIntPipeline(vs ...int) *intPipeline {
 	p := &intPipeline{
 		doneChan: make(chan struct{}),
-		length:   n,
+		length:   len(vs),
 	}
-	out := make(chan int, n)
-	for i := 1; i <= n; i++ {
-		out <- i
+	out := make(chan int, len(vs))
+	for _, n := range vs {
+		out <- n
 	}
 	p.outChan = out
 	return p
@@ -46,6 +46,7 @@ func (p *intPipeline) inc() *intPipeline {
 		select {
 		case out <- <-p.outChan + 1:
 		case <-p.doneChan:
+			//close(p.outChan)
 			return p
 		}
 	}
@@ -59,6 +60,8 @@ func (p *intPipeline) dec() *intPipeline {
 		select {
 		case out <- <-p.outChan - 1:
 		case <-p.doneChan:
+			// nil channel
+			//close(p.outChan)
 			return p
 		}
 	}
@@ -73,6 +76,7 @@ func (p *intPipeline) sq() *intPipeline {
 		select {
 		case out <- v * v:
 		case <-p.doneChan:
+			//close(p.outChan)
 			return p
 		}
 	}
