@@ -1,14 +1,18 @@
 package mycontext
 
-import "context"
+import (
+	"context"
+	"net/http"
+)
 
 type key string
 
 const (
 	someValueKey = key("some_value")
+	someValueRequestKey = "X-Some-Value"
 )
 
-func New(ctx context.Context, value string) context.Context {
+func WithSomeValue(ctx context.Context, value string) context.Context {
 	return context.WithValue(ctx, someValueKey, value)
 }
 
@@ -18,4 +22,13 @@ func SomeValue(ctx context.Context) string {
 		return ""
 	}
 	return someValue
+}
+
+func WithSomeValueRequest(req *http.Request) *http.Request {
+	req.Header.Set(someValueRequestKey, SomeValue(req.Context()))
+	return req
+}
+
+func SomeValueFromRequest(req *http.Request) string {
+	return req.Header.Get(someValueRequestKey)
 }

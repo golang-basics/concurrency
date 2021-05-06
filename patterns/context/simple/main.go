@@ -16,7 +16,7 @@ func main() {
 	// So avoid having multiple cancellation methods.
 	// 3. Try to create new context instance from the same initial context
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx = mycontext.New(ctx, "hello world")
+	ctx = mycontext.WithSomeValue(ctx, "hello world")
 	go func() {
 		err := operation3(ctx, 1)
 		if err != nil {
