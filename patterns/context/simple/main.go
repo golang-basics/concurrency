@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"concurrency/patterns/context/mycontext"
 )
 
 func main() {
@@ -14,6 +16,7 @@ func main() {
 	// So avoid having multiple cancellation methods.
 	// 3. Try to create new context instance from the same initial context
 	ctx, cancel := context.WithCancel(context.Background())
+	ctx = mycontext.New(ctx, "hello world")
 	go func() {
 		err := operation3(ctx, 1)
 		if err != nil {
@@ -28,6 +31,8 @@ func main() {
 }
 
 func operation1(ctx context.Context) {
+	someValue := mycontext.SomeValue(ctx)
+	fmt.Println("operation 1 ctx value:", someValue)
 	select {
 	case <-time.After(500 * time.Millisecond):
 		fmt.Println("operation 1 - done")
@@ -37,6 +42,8 @@ func operation1(ctx context.Context) {
 }
 
 func operation2(ctx context.Context) {
+	someValue := mycontext.SomeValue(ctx)
+	fmt.Println("operation 2 ctx value:", someValue)
 	select {
 	case <-time.After(300 * time.Millisecond):
 		fmt.Println("operation 2 - done")
@@ -46,6 +53,8 @@ func operation2(ctx context.Context) {
 }
 
 func operation3(ctx context.Context, n int) error {
+	someValue := mycontext.SomeValue(ctx)
+	fmt.Println("operation 3 ctx value:", someValue)
 	time.Sleep(200 * time.Millisecond)
 	if n < 0 {
 		return errors.New("something bad happened")
@@ -65,6 +74,3 @@ func longRunningOperation(ctx context.Context) {
 		}
 	}
 }
-
-// add value to context
-// extract value from context
