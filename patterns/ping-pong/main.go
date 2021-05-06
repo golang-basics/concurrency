@@ -3,6 +3,7 @@
 // The data is ping-ponged between multiple go routines back an forth
 // There's constantly some go routine receiving data (PING) and re-passing (PONG)
 // to another go routine listening on the same data.
+// Huge thanks to divan.dev. Check out the full resource here: https://divan.dev/posts/go_concurrency_visualize/
 
 package main
 

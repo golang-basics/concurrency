@@ -1,6 +1,7 @@
 // The worker pattern is very similar to the fan-out pattern where
 // multiple go routines (workers) can read from the same channel, thus
 // distributing the amount of work between the CPU cores.
+// Huge thanks to divan.dev. Check out the full resource here: https://divan.dev/posts/go_concurrency_visualize/
 
 package main
 
