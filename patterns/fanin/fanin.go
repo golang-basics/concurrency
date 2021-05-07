@@ -1,4 +1,4 @@
-package pkg
+package fanin
 
 // FanIn reads from multiple channels and writes into 1 final channel
 // The FAN-IN aka Multiplexing pattern states that a function receives multiple channels as inputs

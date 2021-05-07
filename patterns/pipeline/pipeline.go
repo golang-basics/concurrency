@@ -1,4 +1,4 @@
-package pkg
+package pipeline
 
 type IntPipeline struct {
 	out    chan int
@@ -47,4 +47,48 @@ func (p *IntPipeline) Square() *IntPipeline {
 func (p *IntPipeline) Result() chan int {
 	close(p.out)
 	return p.out
+}
+
+func Gen(vs ...int) chan int {
+	out := make(chan int)
+	go func() {
+		for _, n := range vs {
+			out <- n
+		}
+		close(out)
+	}()
+	return out
+}
+
+func Inc(in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		for i := range in {
+			out <- i + 1
+		}
+		close(out)
+	}()
+	return out
+}
+
+func Dec(in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		for i := range in {
+			out <- i - 1
+		}
+		close(out)
+	}()
+	return out
+}
+
+func Sq(in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		for i := range in {
+			out <- i * i
+		}
+		close(out)
+	}()
+	return out
 }

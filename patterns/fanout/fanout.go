@@ -1,4 +1,4 @@
-package pkg
+package fanout
 
 // FanOut reads all values from a given input channel and sends each value to a resulting channel
 // The FAN-OUT pattern states that multiple invocation of this function

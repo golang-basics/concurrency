@@ -89,3 +89,5 @@ func (p *intPipeline) res() chan int {
 	close(p.outChan)
 	return p.outChan
 }
+
+// add the function version as well
