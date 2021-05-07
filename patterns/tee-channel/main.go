@@ -1,3 +1,8 @@
+// The tee channel pattern works exactly like the Linux tee command.
+// The tee command writes the output to STDOUT and a list of specified FILES.
+// Respectively the tee channel will take an input channel and clone that into a
+// specified number of channel for further pipeline operations.
+
 package main
 
 import (
