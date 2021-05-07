@@ -177,3 +177,4 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 - [Pipelines](https://blog.golang.org/pipelines)
 - [Nil Channels](https://medium.com/justforfunc/why-are-there-nil-channels-in-go-9877cc0b2308)
 - [Context Cancellation](https://www.sohamkamani.com/golang/2018-06-17-golang-using-context-cancellation/)
+- [Concurrency in Go - O Reilly](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/ch04.html)
