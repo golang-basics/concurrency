@@ -6,11 +6,17 @@ import (
 	"concurrency/patterns/cancellation"
 )
 
+var (
+	inc = cancellation.Inc
+	dec = cancellation.Dec
+	sq  = cancellation.Sq
+)
+
 func main() {
-	p := cancellation.NewIntPipeline(1,2,3)
-	defer p.Done()
-	//for i := range p.Inc().Sq().Done().Dec().Res() {
-	for i := range p.Inc().Sq().Dec().Res() {
-		fmt.Println(i)
+	done := make(chan struct{})
+	defer close(done)
+	nums := cancellation.Gen(done, 1, 2, 3)
+	for v := range dec(done, sq(done, inc(done, nums))) {
+		fmt.Println("value:", v)
 	}
 }
