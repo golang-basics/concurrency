@@ -133,6 +133,9 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 
 #### Pipelines
 
+In general terms a pipeline is a mechanism for inter-process communication using message passing,
+where the output of a pipeline is the input for the next pipeline.
+
 Suppose that assembling one car requires three tasks that take 20, 10, and 15 minutes, respectively.
 Then, if all three tasks were performed by a single station, the factory would output one car every 45 minutes.
 By using a pipeline of three stations, the factory would output the first car in 45 minutes,
