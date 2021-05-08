@@ -2,6 +2,8 @@
 // for a bunch of other channels. This pattern removes the effort of intermediate
 // individual channel reading, bridging everything from a given amount of channels
 // to a single easily consumable channel.
+// Working with a channel of channels is most of the times cumbersome,
+// and the bridge channel pattern lets us focus only on what's needed
 
 package main
 
