@@ -188,3 +188,4 @@ and then a new one every 20 minutes.
 - [Context Cancellation](https://www.sohamkamani.com/golang/2018-06-17-golang-using-context-cancellation/)
 - [Concurrency in Go - O Reilly](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/ch04.html)
 - [Pipeline - Wiki](https://en.wikipedia.org/wiki/Pipeline_(computing))
+- [Pipeline - Unix](https://en.wikipedia.org/wiki/Pipeline_(Unix))
