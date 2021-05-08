@@ -6,29 +6,16 @@
 // As a best practice, it's better to call done using defer to avoid any hanging go routines
 // and a predictable complete result.
 
-package main
+package cancellation
 
-import (
-	"fmt"
-)
-
-func main() {
-	p := newIntPipeline(1,2,3)
-	defer p.done()
-	//for i := range p.inc().sq().done().dec().res() {
-	for i := range p.inc().sq().dec().res() {
-		fmt.Println(i)
-	}
-}
-
-type intPipeline struct {
+type IntPipeline struct {
 	outChan  chan int
 	doneChan chan struct{}
 	length   int
 }
 
-func newIntPipeline(vs ...int) *intPipeline {
-	p := &intPipeline{
+func NewIntPipeline(vs ...int) *IntPipeline {
+	p := &IntPipeline{
 		doneChan: make(chan struct{}),
 		length:   len(vs),
 	}
@@ -40,7 +27,7 @@ func newIntPipeline(vs ...int) *intPipeline {
 	return p
 }
 
-func (p *intPipeline) inc() *intPipeline {
+func (p *IntPipeline) Inc() *IntPipeline {
 	out := make(chan int, p.length)
 	for i := 0; i < p.length; i++ {
 		select {
@@ -53,7 +40,7 @@ func (p *intPipeline) inc() *intPipeline {
 	return p
 }
 
-func (p *intPipeline) dec() *intPipeline {
+func (p *IntPipeline) Dec() *IntPipeline {
 	out := make(chan int, p.length)
 	for i := 0; i < p.length; i++ {
 		select {
@@ -66,7 +53,7 @@ func (p *intPipeline) dec() *intPipeline {
 	return p
 }
 
-func (p *intPipeline) sq() *intPipeline {
+func (p *IntPipeline) Sq() *IntPipeline {
 	out := make(chan int, p.length)
 	for i := 0; i < p.length; i++ {
 		select {
@@ -80,14 +67,66 @@ func (p *intPipeline) sq() *intPipeline {
 	return p
 }
 
-func (p *intPipeline) done() *intPipeline {
+func (p *IntPipeline) Done() *IntPipeline {
 	close(p.doneChan)
 	return p
 }
 
-func (p *intPipeline) res() chan int {
+func (p *IntPipeline) Res() chan int {
 	close(p.outChan)
 	return p.outChan
 }
 
-// add the function version as well
+func Gen(done chan struct{}, vs ...int) chan int {
+	out := make(chan int, len(vs))
+	defer close(out)
+	for _, n := range vs {
+		select {
+		case <-done:
+		case out <- n:
+		}
+	}
+	return out
+}
+
+func Inc(done chan struct{}, in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for v := range in {
+			select {
+			case <-done:
+			case out <- v + 1:
+			}
+		}
+	}()
+	return out
+}
+
+func Dec(done chan struct{}, in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for v := range in {
+			select {
+			case <-done:
+			case out <- v - 1:
+			}
+		}
+	}()
+	return out
+}
+
+func Sq(done chan struct{}, in <-chan int) chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for v := range in {
+			select {
+			case <-done:
+			case out <- v * v:
+			}
+		}
+	}()
+	return out
+}
