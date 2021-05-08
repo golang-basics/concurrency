@@ -129,6 +129,15 @@ and make use of computer resources as efficient as possible:
 GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 ```
 
+### Concurrency Patterns
+
+#### Pipelines
+
+Suppose that assembling one car requires three tasks that take 20, 10, and 15 minutes, respectively.
+Then, if all three tasks were performed by a single station, the factory would output one car every 45 minutes.
+By using a pipeline of three stations, the factory would output the first car in 45 minutes,
+and then a new one every 20 minutes.
+
 ### Resources
 
 - [OSX - number of CPUs](https://github.com/golang/go/blob/master/src/runtime/os_darwin.go#L151)
@@ -178,3 +187,4 @@ GOMAXPROCS=2 GODEBUG=schedtrace=1000,scheddetail=1 go run main.go
 - [Nil Channels](https://medium.com/justforfunc/why-are-there-nil-channels-in-go-9877cc0b2308)
 - [Context Cancellation](https://www.sohamkamani.com/golang/2018-06-17-golang-using-context-cancellation/)
 - [Concurrency in Go - O Reilly](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/ch04.html)
+- [Pipeline - Wiki](https://en.wikipedia.org/wiki/Pipeline_(computing))
