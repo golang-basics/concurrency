@@ -1,5 +1,10 @@
 # Concurrency in Go
 
+### Concurrency vs Parallelism
+
+Concurrency is a property of the code; parallelism is
+a property of the running program.
+
 ### Go routines
 
 A go routines can block for one of these reasons:
@@ -71,6 +76,31 @@ sysctl hw.ncpu
 # also thread count meaning the total count of running threads in parallel
 sysctl -a | grep machdep.cpu | grep count
 ```
+
+#### Deadlocks
+
+The Coffman Conditions are known as the techniques/conditions to help detect, prevent and correct deadlocks.
+The Coffman Conditions are as follows:
+
+- `Mutual Exclusion`
+
+A concurrent process holds exclusive rights to a resource,
+at any one time.
+
+- `Wait for Condition`
+
+A concurrent process must simultaneously hold a resource
+and be waiting for an additional resource.
+
+- `No Preemption`
+
+A resource held by a concurrent process can only be released
+by that process
+
+- `Circular Wait`
+
+A concurrent process (P1) must be waiting on a chain of other
+concurrent processes (P2), which are in turn waiting on it (P1)
 
 ### Go Scheduler
 
@@ -179,6 +209,11 @@ and then a new one every 20 minutes.
 - [Go SysMon Runtime Monitoring](https://medium.com/@blanchon.vincent/go-sysmon-runtime-monitoring-cff9395060b5)
 - [SysMon - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5273)
 - [Garbage Collector Period - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5268)
+- [Preemption - suspend](https://github.com/golang/go/blob/master/src/runtime/preempt.go#L105)
+- [Preemption - resume](https://github.com/golang/go/blob/master/src/runtime/preempt.go#L105)
+- [Preemption - asyncPreempt](https://github.com/golang/go/blob/master/src/runtime/preempt.go#L302)
+- [Preemption - preemptPark](https://github.com/golang/go/blob/master/src/runtime/proc.go#L3563)
+- [Scheduling - schedule](https://github.com/golang/go/blob/master/src/runtime/proc.go#L3289)
 - [CSP](https://levelup.gitconnected.com/communicating-sequential-processes-csp-for-go-developer-in-a-nutshell-866795eb879d)
 - [Visualising Concurrency in Go](https://divan.dev/posts/go_concurrency_visualize/)
 - [NUMA Deep Dive](https://frankdenneman.nl/2016/07/07/numa-deep-dive-part-1-uma-numa/)

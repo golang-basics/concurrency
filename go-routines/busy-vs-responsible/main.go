@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"time"
 )
 
@@ -11,7 +12,8 @@ func main() {
 	go responsible(c)
 	c <- 1
 	close(c)
-	time.Sleep(1 * time.Second)
+	time.Sleep(time.Second)
+	fmt.Println("number of go routines", runtime.NumGoroutine())
 }
 
 func busy(in chan int) {
