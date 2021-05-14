@@ -25,6 +25,9 @@ func greedy(wg *sync.WaitGroup, lock *sync.Mutex) {
 		time.Sleep(3*time.Nanosecond)
 		lock.Unlock()
 		count++
+		// will allow the processor to move on processing other go routines
+		// will also avoid starvation
+		//runtime.Gosched()
 	}
 	fmt.Println("greedy worker executed", count, "times")
 }
