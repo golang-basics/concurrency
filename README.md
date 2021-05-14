@@ -227,3 +227,4 @@ and then a new one every 20 minutes.
 - [Concurrency in Go - O Reilly](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/ch04.html)
 - [Pipeline - Wiki](https://en.wikipedia.org/wiki/Pipeline_(computing))
 - [Pipeline - Unix](https://en.wikipedia.org/wiki/Pipeline_(Unix))
+- [Mutex of Channel - Golang Docs](https://github.com/golang/go/wiki/MutexOrChannel)
