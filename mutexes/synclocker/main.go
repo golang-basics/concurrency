@@ -8,8 +8,10 @@ import (
 func main() {
 	var wg sync.WaitGroup
 	mu := &locker{}
-	//mu := &sync.Mutex{}
-	//mu := &sync.RWMutex{}
+	// mu := &sync.Mutex{}
+	// rwMu := &sync.RWMutex{}
+	// calls RLock and RUnlock inside Lock and Unlock
+	// mu := rwMu.RLocker()
 	c := newCache(mu)
 
 	wg.Add(3)
