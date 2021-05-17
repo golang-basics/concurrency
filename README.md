@@ -207,6 +207,7 @@ and then a new one every 20 minutes.
 - [Guarded Command Language](https://en.wikipedia.org/wiki/Guarded_Command_Language)
 - [System Monitor - sysmon](https://en.wikipedia.org/wiki/System_monitor)
 - [Go SysMon Runtime Monitoring](https://medium.com/@blanchon.vincent/go-sysmon-runtime-monitoring-cff9395060b5)
+- [How does Go routine stack size evolve? - Medium](https://medium.com/a-journey-with-go/go-how-does-the-goroutine-stack-size-evolve-447fc02085e5)
 - [SysMon - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5273)
 - [Garbage Collector Period - Source Code](https://github.com/golang/go/blob/master/src/runtime/proc.go#L5268)
 - [Preemption - suspend](https://github.com/golang/go/blob/master/src/runtime/preempt.go#L105)

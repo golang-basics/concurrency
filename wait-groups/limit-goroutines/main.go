@@ -3,29 +3,35 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
-func main() {
-	// 1. ADD number of waits
-	// 2. Call Done() inside each go routine
-	// 3. Call Wait() where you want to wait for the execution of all go routines
+type request func()
 
-	// RULES
-	// 1. Done MUST be called as many times as the number inside the Add call
-	// 2. Waiting or not calling Done enough times will result in a deadlock
+func main() {
+	requests := map[int]request{}
+	for i := 1; i <= 100; i++ {
+		f := func(n int) request {
+			return func() {
+				time.Sleep(500 * time.Millisecond)
+				fmt.Println("request", n)
+			}
+		}
+		requests[i] = f(i)
+	}
+
 	var wg sync.WaitGroup
-	wg.Add(3)
-	go func() {
-		fmt.Println("1")
-		wg.Done()
-	}()
-	go func() {
-		fmt.Println("2")
-		wg.Done()
-	}()
-	go func() {
-		fmt.Println("3")
-		wg.Done()
-	}()
+	max, processed := 10, 0
+	for _, r := range requests {
+		if processed > max-1 {
+			break
+		}
+		wg.Add(1)
+		go func(r request) {
+			defer wg.Done()
+			r()
+		}(r)
+		processed++
+	}
 	wg.Wait()
 }
