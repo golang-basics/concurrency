@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// compare BenchmarkBasicMutex_Load with BenchmarkRWMutex_Load
 func BenchmarkBasicMutex_Load(b *testing.B) {
 	mu := BasicMutex{}
 	mu.Store(10)
@@ -31,6 +32,7 @@ func BenchmarkBasicMutex_Hybrid(b *testing.B) {
 	}
 }
 
+// compare BenchmarkRWMutex_Load with BenchmarkBasicMutex_Load
 func BenchmarkRWMutex_Load(b *testing.B) {
 	mu := RWMutex{}
 	mu.Store(10)
