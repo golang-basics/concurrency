@@ -20,6 +20,9 @@ func main() {
 			validatorsCond.Signal()
 			time.Sleep(100*time.Millisecond)
 		}
+		// the below call to Broadcast has enough time
+		// so that the go routines rendezvous is ready
+		// so that we avoid deadlocks
 		readersCond.Broadcast()
 		wg.Done()
 	}()
