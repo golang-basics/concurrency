@@ -5,6 +5,16 @@ import (
 	"sync"
 )
 
+// sync.Pool is a concurrent safe type
+// so feel free to run this program with -race flag
+// go run -race main.go
+
+// Also do not make any false assumptions about the Get relation to Set
+// to break it to you here are some comment from the source code
+// -------------------------------------------------------------
+// Get may choose to ignore the pool and treat it as empty.
+// Callers should not assume any relation between values passed to Put and
+// the values returned by Get.
 func main() {
 	var wg sync.WaitGroup
 	p := sync.Pool{}
@@ -40,7 +50,7 @@ func main() {
 		fmt.Println(p.Get())
 		wg.Done()
 	}()
-
 	wg.Wait()
+
 	fmt.Println(p.Get())
 }
