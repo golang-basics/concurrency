@@ -25,7 +25,7 @@ func main() {
 	go func() {
 		defer wg.Done()
 		<-broadcast
-		for i:=0;i<2;i++ {
+		for i := 0; i < 2; i++ {
 			cond <- struct{}{}
 		}
 	}()

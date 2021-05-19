@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 )
+
 // go routine 1 will acquire the lock way more often in Go <=1.8
 func main() {
 	done := make(chan bool, 1)

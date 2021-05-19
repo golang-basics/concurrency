@@ -45,13 +45,13 @@ func (l *locker) Unlock() {
 }
 
 type cache struct {
-	mu sync.Locker
+	mu    sync.Locker
 	cache map[string]string
 }
 
 func newCache(l sync.Locker) cache {
 	return cache{
-		mu: l,
+		mu:    l,
 		cache: map[string]string{},
 	}
 }

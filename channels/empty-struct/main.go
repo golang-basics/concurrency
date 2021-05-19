@@ -13,5 +13,5 @@ func main() {
 		intChan <- 1
 	}()
 	fmt.Println(unsafe.Sizeof(<-emptyStructChan)) // 0
-	fmt.Println(unsafe.Sizeof(<-intChan)) // 8 => 8*8=64 => int64
+	fmt.Println(unsafe.Sizeof(<-intChan))         // 8 => 8*8=64 => int64
 }

@@ -8,7 +8,7 @@ import (
 type key string
 
 const (
-	someValueKey = key("some_value")
+	someValueKey        = key("some_value")
 	someValueRequestKey = "X-Some-Value"
 )
 

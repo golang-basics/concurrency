@@ -20,7 +20,7 @@ func main() {
 		wg.Done()
 	}()
 	go func() {
-		time.Sleep(500*time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 		mu.Lock()
 		defer mu.Unlock()
 		wg.Done()

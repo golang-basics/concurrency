@@ -13,7 +13,7 @@ import (
 func main() {
 	done := make(chan struct{})
 	go func() {
-		time.Sleep(100*time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 		close(done)
 	}()
 	for val := range orDone(done, gen(1, 2, 3)) {

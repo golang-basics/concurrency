@@ -6,7 +6,7 @@ import (
 )
 
 type BasicMutex struct {
-	mu sync.Mutex
+	mu    sync.Mutex
 	value int
 }
 
@@ -18,13 +18,13 @@ func (m *BasicMutex) Store(value int) {
 
 func (m *BasicMutex) Load() int {
 	m.mu.Lock()
-	time.Sleep(100*time.Nanosecond)
+	time.Sleep(100 * time.Nanosecond)
 	defer m.mu.Unlock()
 	return m.value
 }
 
 type RWMutex struct {
-	mu sync.RWMutex
+	mu    sync.RWMutex
 	value int
 }
 
@@ -36,7 +36,7 @@ func (m *RWMutex) Store(value int) {
 
 func (m *RWMutex) Load() int {
 	m.mu.RLock()
-	time.Sleep(100*time.Nanosecond)
+	time.Sleep(100 * time.Nanosecond)
 	defer m.mu.RUnlock()
 	return m.value
 }

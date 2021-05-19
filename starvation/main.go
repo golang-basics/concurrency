@@ -22,7 +22,7 @@ func greedy(wg *sync.WaitGroup, lock *sync.Mutex) {
 	var count int
 	for begin := time.Now(); time.Since(begin) < time.Second; {
 		lock.Lock()
-		time.Sleep(3*time.Nanosecond)
+		time.Sleep(3 * time.Nanosecond)
 		lock.Unlock()
 		count++
 		// will allow the processor to move on processing other go routines
@@ -37,13 +37,13 @@ func polite(wg *sync.WaitGroup, lock *sync.Mutex) {
 	var count int
 	for begin := time.Now(); time.Since(begin) < time.Second; {
 		lock.Lock()
-		time.Sleep(1*time.Nanosecond)
+		time.Sleep(1 * time.Nanosecond)
 		lock.Unlock()
 		lock.Lock()
-		time.Sleep(1*time.Nanosecond)
+		time.Sleep(1 * time.Nanosecond)
 		lock.Unlock()
 		lock.Lock()
-		time.Sleep(1*time.Nanosecond)
+		time.Sleep(1 * time.Nanosecond)
 		lock.Unlock()
 		count++
 	}

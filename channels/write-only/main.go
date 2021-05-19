@@ -12,7 +12,7 @@ func main() {
 
 func write(ch chan<- int) {
 	for i := 0; i < 3; i++ {
-		ch<-i
+		ch <- i
 	}
 	//<-ch will result in a compilation error: receive from send-only chan
 	close(ch)

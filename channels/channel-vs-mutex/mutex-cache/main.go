@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 )
+
 // try running the example like: go run -race main.go
 func main() {
 	c := newMutexCache()
@@ -39,7 +40,7 @@ func main() {
 
 type mutexCache struct {
 	cache map[string]string
-	mu sync.RWMutex
+	mu    sync.RWMutex
 }
 
 func newMutexCache() mutexCache {

@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func main() {
-	select {
-	}
+	select {}
 	fmt.Println("I never get printed")
 }

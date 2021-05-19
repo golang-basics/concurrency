@@ -8,9 +8,9 @@ import (
 func main() {
 	ch := make(chan int)
 	go read(ch)
-	ch<-1
-	ch<-2
-	ch<-3
+	ch <- 1
+	ch <- 2
+	ch <- 3
 	time.Sleep(time.Second)
 }
 

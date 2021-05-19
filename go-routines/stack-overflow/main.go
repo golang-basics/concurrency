@@ -10,5 +10,5 @@ func f() {
 
 func main() {
 	go f()
-	time.Sleep(10*time.Second)
+	time.Sleep(10 * time.Second)
 }

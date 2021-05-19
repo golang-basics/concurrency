@@ -24,8 +24,8 @@ func main() {
 }
 
 func worker(quit chan os.Signal) chan error {
-	ticker := time.NewTicker(500*time.Millisecond)
-	timeout := time.NewTimer(3*time.Second)
+	ticker := time.NewTicker(500 * time.Millisecond)
+	timeout := time.NewTimer(3 * time.Second)
 	for {
 		select {
 		case <-timeout.C:

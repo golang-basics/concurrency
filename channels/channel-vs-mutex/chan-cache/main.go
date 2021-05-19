@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 )
+
 // try running the example like: go run -race main.go
 func main() {
 	c := newChanCache()

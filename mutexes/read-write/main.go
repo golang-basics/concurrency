@@ -27,7 +27,7 @@ func newDB() db {
 
 type db struct {
 	values map[string]string
-	mu sync.RWMutex
+	mu     sync.RWMutex
 }
 
 func (d *db) set(key, value string) {

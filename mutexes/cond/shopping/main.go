@@ -84,7 +84,7 @@ func processShoppingCart(c *cart, o *orders, wg *sync.WaitGroup) {
 	for _, item := range c.cart {
 		fmt.Println("processing cart:", item)
 		// simulate work and network
-		time.Sleep(200*time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		o.orders = append(o.orders, item)
 	}
 	fmt.Println("---------")
@@ -103,7 +103,7 @@ func processOrders(o *orders, s *shipping, wg *sync.WaitGroup) {
 	for _, order := range o.orders {
 		fmt.Println("processing order:", order)
 		// simulate work and network
-		time.Sleep(200*time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		s.packages = append(s.packages, order)
 	}
 	fmt.Println("---------")
@@ -121,7 +121,7 @@ func processShipping(s *shipping, wg *sync.WaitGroup) {
 	fmt.Println("PROCESSING SHIPPING")
 	for _, pkg := range s.packages {
 		// simulate work and network
-		time.Sleep(200*time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		fmt.Println("processing package:", pkg)
 	}
 	fmt.Println("---------")
@@ -129,12 +129,12 @@ func processShipping(s *shipping, wg *sync.WaitGroup) {
 }
 
 type warehouse struct {
-	id string
-	cond     *sync.Cond
-	wg       *sync.WaitGroup
+	id   string
+	cond *sync.Cond
+	wg   *sync.WaitGroup
 }
 
-func (wh warehouse) process (packages []string, wg *sync.WaitGroup) {
+func (wh warehouse) process(packages []string, wg *sync.WaitGroup) {
 	wh.wg.Add(1)
 	defer wh.wg.Done()
 
@@ -144,7 +144,7 @@ func (wh warehouse) process (packages []string, wg *sync.WaitGroup) {
 	fmt.Println("warehouse", wh.id)
 	for _, pkg := range packages {
 		// simulate work and network
-		time.Sleep(200*time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 		fmt.Println("looking for package:", pkg)
 	}
 	fmt.Println("---------")

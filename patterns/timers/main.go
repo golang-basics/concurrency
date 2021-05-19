@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	tick := time.NewTicker(100*time.Millisecond)
+	tick := time.NewTicker(100 * time.Millisecond)
 	timeout := time.NewTimer(3 * time.Second)
 	for {
 		select {

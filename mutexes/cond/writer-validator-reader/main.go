@@ -16,9 +16,9 @@ func main() {
 	// writer
 	go func() {
 		fmt.Println("writer")
-		for i :=0; i<3;i++ {
+		for i := 0; i < 3; i++ {
 			validatorsCond.Signal()
-			time.Sleep(100*time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 		// the below call to Broadcast has enough time
 		// so that the go routines rendezvous is ready

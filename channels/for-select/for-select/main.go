@@ -10,7 +10,7 @@ func main() {
 	go write(ch)
 
 	timeout := time.NewTimer(3 * time.Second)
-	ticker := time.NewTicker(500*time.Millisecond)
+	ticker := time.NewTicker(500 * time.Millisecond)
 	for {
 		select {
 		case at := <-ticker.C:

@@ -14,10 +14,10 @@ func main() {
 
 func task1(c chan bool) {
 	fmt.Println("task 1")
-	c<-true
+	c <- true
 }
 
 func task2(c chan bool) {
 	fmt.Println("task 2")
-	c<-false
+	c <- false
 }

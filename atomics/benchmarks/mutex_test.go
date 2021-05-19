@@ -38,7 +38,7 @@ func BenchmarkMutexStruct(b *testing.B) {
 			for j := 0; j < b.N; j++ {
 				mu.Lock()
 				cfg = Config{
-					a: []int{j+1, j+2, j+3, j+4, j+5},
+					a: []int{j + 1, j + 2, j + 3, j + 4, j + 5},
 				}
 				mu.Unlock()
 			}

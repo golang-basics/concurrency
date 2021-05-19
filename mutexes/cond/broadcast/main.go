@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 )
+
 // Here are some important things to keep in mind about Broadcast
 // It must be called only after we made sure all the go routines
 // are ready for the rendezvous point. Calling Broadcast before

@@ -30,6 +30,6 @@ func BenchmarkSyncMap_Hybrid(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := strconv.Itoa(i)
 		go m.Store("k"+val, "v"+val)
-		go m.Load("k"+val)
+		go m.Load("k" + val)
 	}
 }

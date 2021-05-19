@@ -12,5 +12,6 @@ func main() {
 	// enable below to statement to allow main go routine
 	// to be preempted so that other go routines can take execution
 	// runtime.Gosched()
-	for {}
+	for {
+	}
 }

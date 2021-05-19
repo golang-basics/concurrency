@@ -17,5 +17,5 @@ func main() {
 	<-p1
 	p2 <- struct{}{}
 	fmt.Println("done in main")
-	time.Sleep(500*time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
 }

@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"sync"
 )
+
 // calling runtime.Goexit inside main will crash the program if
 // no go routines are running, resulting in a deadlock
 func main() {

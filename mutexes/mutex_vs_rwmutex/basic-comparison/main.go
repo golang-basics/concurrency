@@ -34,7 +34,7 @@ func main() {
 }
 
 type basicMutex struct {
-	mu sync.Mutex
+	mu    sync.Mutex
 	value int
 }
 
@@ -52,7 +52,7 @@ func (m *basicMutex) load() int {
 }
 
 type rwMutex struct {
-	mu sync.RWMutex
+	mu    sync.RWMutex
 	value int
 }
 

@@ -37,7 +37,7 @@ func main() {
 	}()
 	go func() {
 		defer wg.Done()
-		time.Sleep(10*time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 		atomic.StoreInt32(&condition, 1)
 	}()
 	wg.Wait()

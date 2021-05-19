@@ -26,8 +26,8 @@ func main() {
 		wg.Add(1)
 		go func() {
 			t := 0
-			for i:=0;i<100;i++ {
-				t+=2
+			for i := 0; i < 100; i++ {
+				t += 2
 			}
 			fmt.Println("total:", t)
 			wg.Done()

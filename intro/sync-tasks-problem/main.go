@@ -15,12 +15,12 @@ func main() {
 }
 
 func task1() {
-	time.Sleep(100*time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	fmt.Println("task 1")
 }
 
 func task2() {
-	time.Sleep(200*time.Millisecond)
+	time.Sleep(200 * time.Millisecond)
 	fmt.Println("task 2")
 }
 
@@ -29,6 +29,6 @@ func task3() {
 }
 
 func task4() {
-	time.Sleep(100*time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	fmt.Println("task 4")
 }

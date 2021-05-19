@@ -4,6 +4,7 @@ import (
 	"sync"
 	"testing"
 )
+
 // cd into benchmarks
 // go test -bench=.
 func BenchmarkSignalCond(b *testing.B) {
