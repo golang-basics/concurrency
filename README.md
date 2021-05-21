@@ -230,3 +230,5 @@ and then a new one every 20 minutes.
 - [Pipeline - Unix](https://en.wikipedia.org/wiki/Pipeline_(Unix))
 - [Mutex of Channel - Golang Docs](https://github.com/golang/go/wiki/MutexOrChannel)
 - [Understand the Design of Sync Pool - Medium](https://medium.com/a-journey-with-go/go-understand-the-design-of-sync-pool-2dde3024e277)
+- [clearpools - sync.Pool, GC - Go source code](https://github.com/golang/go/blob/master/src/runtime/mgc.go#L1547)
+- [poolCleanup - sync.Pool - Go source code](https://github.com/golang/go/blob/master/src/sync/pool.go#L233)

@@ -1,11 +1,12 @@
-#include <iostream>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
-using namespace std;
+
 #define NUM_THREADS 10
 
-// g++ -o exec main.cpp
+// clang -o exec main.c
+// gcc -o exec main.c
 // ./exec
 void *PrintHello(void *threadid) {
    long tid;
@@ -21,8 +22,8 @@ int main () {
    int rc;
    int i;
    for(i = 0; i < NUM_THREADS; i++) {
-      cout << "main() : creating thread: " << i << endl;
-      rc = pthread_create(&threads[i], NULL, PrintHello, (void *) (size_t) i);
+      printf("main() : creating thread: %d\n", i+1);
+      rc = pthread_create(&threads[i], NULL, PrintHello, (void *) (size_t) i+1);
       if (rc) {
          printf("Error: unable to create thread: %d\n", rc);
          exit(-1);

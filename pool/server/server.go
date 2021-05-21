@@ -74,6 +74,8 @@ func poolServer() *sync.WaitGroup {
 			_, _ = fmt.Fprintln(conn, "")
 			connPool.Put(svcConn)
 			_ = conn.Close()
+			// you will see a much slower performance
+			// runtime.GC()
 		}
 	}()
 	return &wg
