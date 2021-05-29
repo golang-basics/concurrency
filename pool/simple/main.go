@@ -11,6 +11,13 @@ import (
 // relieving pressure on the garbage collector. That is, it makes it easy to
 // build efficient, thread-safe free lists. However, it is not suitable for all
 // free lists.
+
+// Here are couple of sync.Pool use cases
+// 1. You won't notice performance improvements on simple data (faster using normal allocations)
+// 2. You won't notice performance improvements (actually slower) if GC is triggered often
+// 3. You must have some sort of reset function to clear dirty object data fetched from Pool
+// 4. You usually get a lot of performance benefits when running things in parallel and when
+// dealing with relatively big objects which otherwise have a big cost allocating/deallocating frequently
 func main() {
 	pool := &sync.Pool{
 		New: func() interface{} {

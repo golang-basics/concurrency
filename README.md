@@ -232,3 +232,4 @@ and then a new one every 20 minutes.
 - [Understand the Design of Sync Pool - Medium](https://medium.com/a-journey-with-go/go-understand-the-design-of-sync-pool-2dde3024e277)
 - [clearpools - sync.Pool, GC - Go source code](https://github.com/golang/go/blob/master/src/runtime/mgc.go#L1547)
 - [poolCleanup - sync.Pool - Go source code](https://github.com/golang/go/blob/master/src/sync/pool.go#L233)
+- [Using Sync Pool](https://developer20.com/using-sync-pool/)
