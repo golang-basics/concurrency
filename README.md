@@ -1,5 +1,22 @@
 # Concurrency in Go
 
+### Summary
+
+- Topic1
+- Topic2
+- Topic3
+- ...
+
+### Examples
+
+- Link to directory of examples 1
+- Link to directory of examples 2
+- Link to directory of examples 3
+- ...
+
+Note: place a readme inside each directory
+with its own summary
+
 ### Concurrency vs Parallelism
 
 Concurrency is a property of the code; parallelism is
