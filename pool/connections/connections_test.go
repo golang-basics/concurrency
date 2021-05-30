@@ -1,26 +1,22 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
+	"os"
 	"sync"
 	"testing"
 )
 
-func init() {
-	tcpServer(":8080").Wait()
+func TestMain(m *testing.M) {
+	srv := newTCPServer(":8080")
+	defer srv.shutdown()
+	os.Exit(m.Run())
 }
 
+// go test -bench=. -benchtime=3s
 func BenchmarkTCPConnWithPool(b *testing.B) {
-	//var rLimit syscall.Rlimit
-	//rLimit.Max = 99999
-	//rLimit.Cur = 99999
-	//err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
-	//if err != nil {
-	//	fmt.Println("could not set rlimit:", err)
-	//}
-	fmt.Println("N:", b.N)
+	b.ReportAllocs()
 	pool := &sync.Pool{
 		New: func() interface{} {
 			conn, err := net.Dial("tcp", ":8080")
@@ -34,28 +30,64 @@ func BenchmarkTCPConnWithPool(b *testing.B) {
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	for i:=0;i<b.N;i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			//conn, err := net.Dial("tcp", ":8080")
-			//if err != nil {
-			//	log.Fatalf("could not dial: %v", err)
-			//}
-			conn := pool.Get().(*net.TCPConn)
-			pool.Put(conn)
+	connects := 50
+	for i := 0; i < b.N; i += connects {
+		for j := 0; j < connects; j++ {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				conn := pool.Get().(*net.TCPConn)
+				pool.Put(conn)
 
-			mu.Lock()
-			defer mu.Unlock()
-			err := write(conn, "write")
-			if err != nil {
-				fmt.Printf("error writing: %v\n", err)
-			}
-			_, err = read(conn)
-			if err != nil {
-				fmt.Printf("error reading: %v\n", err)
-			}
-		}()
+				mu.Lock()
+				defer mu.Unlock()
+				err := write(conn, "write")
+				if err != nil {
+					b.Errorf("error writing: %v", err)
+				}
+				_, err = read(conn)
+				if err != nil {
+					b.Errorf("error reading: %v", err)
+				}
+			}()
+		}
+		wg.Wait()
 	}
-	wg.Wait()
+}
+
+// go test -bench=. -benchtime=3s
+func BenchmarkTCPConnWithoutPool(b *testing.B) {
+	b.ReportAllocs()
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	connects := 50
+	for i := 0; i < b.N; i += connects {
+		for j := 0; j < connects; j++ {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				conn, err := net.Dial("tcp", ":8080")
+				if err != nil {
+					log.Fatalf("could not dial: %v", err)
+				}
+
+				mu.Lock()
+				defer mu.Unlock()
+				err = write(conn, "write")
+				if err != nil {
+					b.Errorf("error writing: %v", err)
+				}
+				_, err = read(conn)
+				if err != nil {
+					b.Errorf("error reading: %v", err)
+				}
+
+				err = write(conn, "close")
+				if err != nil {
+					b.Errorf("error closing: %v", err)
+				}
+			}()
+		}
+		wg.Wait()
+	}
 }

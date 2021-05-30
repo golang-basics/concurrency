@@ -9,10 +9,16 @@ import (
 	"sync"
 )
 
-const addr = ":8080"
+const (
+	addr = ":8080"
+	concurrentConnects = 30
+)
 
+// set max open files using: ulimit command
+// ulimit -n 15000 && go run main.go
 func main() {
-	tcpServer(addr).Wait()
+	srv := newTCPServer(addr)
+	defer srv.shutdown()
 	var connectionsCreated int
 	pool := &sync.Pool{
 		New: func() interface{} {
@@ -28,32 +34,39 @@ func main() {
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	for i := 0; i < 100000; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			conn := pool.Get().(*net.TCPConn)
-			pool.Put(conn)
+	for i := 0; i < 10000; i += concurrentConnects {
+		for j := 0; j < concurrentConnects; j++ {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				conn := pool.Get().(*net.TCPConn)
+				pool.Put(conn)
 
-			mu.Lock()
-			defer mu.Unlock()
-			err := write(conn, "write")
-			if err != nil {
-				log.Printf("client: %v", err)
-			}
+				mu.Lock()
+				defer mu.Unlock()
+				err := write(conn, "write")
+				if err != nil {
+					log.Printf("client: %v", err)
+				}
 
-			s, err := read(conn)
-			if err != nil {
-				log.Printf("client: %v", err)
-			}
-			fmt.Println("conn string:", s)
-		}()
+				s, err := read(conn)
+				if err != nil {
+					log.Printf("client: %v", err)
+				}
+				fmt.Println("conn string:", s)
+			}()
+		}
+		wg.Wait()
 	}
-	wg.Wait()
 	fmt.Println("connections created:", connectionsCreated)
 }
 
-func tcpServer(addr string) *sync.WaitGroup {
+type tcpServer struct {
+	li net.Listener
+}
+
+func newTCPServer(addr string) *tcpServer {
+	srv := tcpServer{}
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
@@ -61,7 +74,7 @@ func tcpServer(addr string) *sync.WaitGroup {
 		if err != nil {
 			log.Fatalf("could not listen: %v", err)
 		}
-		defer func() { _ = li.Close() }()
+		srv.li = li
 		wg.Done()
 
 		for {
@@ -70,13 +83,14 @@ func tcpServer(addr string) *sync.WaitGroup {
 				log.Printf("could not accept connection: %v", err)
 				continue
 			}
-			go serve(conn)
+			go srv.serve(conn)
 		}
 	}()
-	return &wg
+	wg.Wait()
+	return &srv
 }
 
-func serve(conn net.Conn) {
+func (srv *tcpServer) serve(conn net.Conn) {
 	scanner := bufio.NewScanner(conn)
 	for scanner.Scan() {
 		switch scanner.Text() {
@@ -94,6 +108,10 @@ func serve(conn net.Conn) {
 			return
 		}
 	}
+}
+
+func (srv *tcpServer) shutdown() {
+	_ = srv.li.Close()
 }
 
 func write(w io.Writer, s string) error {
