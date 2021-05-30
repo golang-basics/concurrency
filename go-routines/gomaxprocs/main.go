@@ -12,6 +12,7 @@ func main() {
 	go task2()
 	go task3()
 	time.Sleep(time.Second)
+	//for{}
 }
 
 func task1() {
