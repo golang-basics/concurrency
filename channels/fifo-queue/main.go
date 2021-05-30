@@ -23,7 +23,7 @@ func main() {
 	// the maximum capacity of serving people is 2
 	// the restaurant serves people slower, then they arrive in the queue
 	for person := range queue {
-		time.Sleep(3*time.Second)
+		time.Sleep(3 * time.Second)
 		fmt.Println("serving:", person)
 	}
 	time.Sleep(time.Second)

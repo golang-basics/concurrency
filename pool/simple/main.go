@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 )
+
 // A sync.Pool may be a misunderstood data type and not clear about its purpose.
 // Here a small excerpt from the official docs comments:
 // ----------------------------------------------------
@@ -22,7 +23,7 @@ func main() {
 	pool := &sync.Pool{
 		New: func() interface{} {
 			fmt.Println("creating new object")
-			return struct {}{}
+			return struct{}{}
 		},
 	}
 	// this will invoke New

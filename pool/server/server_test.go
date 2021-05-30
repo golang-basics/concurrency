@@ -27,6 +27,7 @@ func BenchmarkPlainServer(b *testing.B) {
 		_ = conn.Close()
 	}
 }
+
 // to run the benchmark run the following
 // go test -benchtime=3s -bench=.
 func BenchmarkPoolServer(b *testing.B) {

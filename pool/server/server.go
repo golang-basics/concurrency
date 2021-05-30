@@ -43,7 +43,7 @@ func plainServer() *sync.WaitGroup {
 
 func serviceCacheWarmup() *sync.Pool {
 	p := &sync.Pool{New: service}
-	for i:=0;i<10;i++ {
+	for i := 0; i < 10; i++ {
 		p.Put(p.New())
 	}
 	return p

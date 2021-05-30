@@ -23,7 +23,7 @@ func main() {
 	}()
 
 	// wait for all writes inside the go routine till it blocks
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 
 	fmt.Println("reading 1:", <-numbers) // does not block
 	fmt.Println("reading 2:", <-numbers) // does not block

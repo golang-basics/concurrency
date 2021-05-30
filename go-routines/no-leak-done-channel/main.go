@@ -21,7 +21,7 @@ func main() {
 	}()
 	fmt.Println("number of go routines while working:", runtime.NumGoroutine())
 
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 	fmt.Println("number of go routines after closing done:", runtime.NumGoroutine())
 }
 

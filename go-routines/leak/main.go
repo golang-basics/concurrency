@@ -11,7 +11,7 @@ func main() {
 	// it automatically runs in its own go routine
 	fmt.Println("go routines before work:", runtime.NumGoroutine())
 	go work(nil)
-	timer := time.NewTimer(5*time.Second)
+	timer := time.NewTimer(5 * time.Second)
 	for {
 		select {
 		case <-timer.C:

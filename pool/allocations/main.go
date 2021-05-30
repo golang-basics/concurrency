@@ -23,7 +23,7 @@ func main() {
 	pool.Put(pool.New())
 
 	var wg sync.WaitGroup
-	for i:=0;i<1024*1024;i++ {
+	for i := 0; i < 1024*1024; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()

@@ -33,15 +33,17 @@ func main() {
 	}
 	for result := range checkStatus(done, urls...) {
 		if result.Error != nil {
-			fmt.Printf("error: %v\n", result.Error)
+			fmt.Println("error:", result.Error)
 			errCount++
+			// the main function decides how to handle the errors
+			// and gracefully handle the situation
 			if errCount >= 3 {
 				fmt.Println("Too many errors, breaking!")
 				break
 			}
 			continue
 		}
-		fmt.Printf("Response: %v\n", result.Response.Status)
+		fmt.Println("response status:", result.Response.Status)
 	}
 }
 

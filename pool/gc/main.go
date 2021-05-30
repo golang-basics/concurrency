@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"sync"
 )
+
 // Pools are always cleared before Garbage Collector kicks in
 // Have a look inside the source code
 // https://github.com/golang/go/blob/master/src/runtime/mgc.go#L1547

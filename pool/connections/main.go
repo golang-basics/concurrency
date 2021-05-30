@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	addr = ":8080"
+	addr               = ":8080"
 	concurrentConnects = 30
 )
 

@@ -48,6 +48,8 @@ func or(channels ...<-chan interface{}) <-chan interface{} {
 			}
 		default:
 			// try to select the channel which closes first
+			// remember select does not fall through case by case
+			// it tries to resolve all cases simultaneously picking the one who's most ready
 			select {
 			case <-channels[0]:
 			case <-channels[1]:
