@@ -6,7 +6,12 @@ import (
 )
 
 func main() {
+	// an unbuffered channel is a buffered channel with length 0
+	// writes to a channel block if the channel if full
+	// reads from a channel block if the channel is empty
+	fmt.Println("buffered")
 	buffered(2) // go routines will not block
+	fmt.Println("un-buffered")
 	buffered(0) // go routines will block
 	time.Sleep(time.Second)
 	fmt.Println("DONE")
