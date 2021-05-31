@@ -10,11 +10,19 @@ import (
 // 3. Thus, each stage in a pipeline operates with the same type of data that it receives/returns
 // 4. Pipelines can implemented as a batch (all at once) or as a stream (1 at a time)
 func main() {
-	numbers := []int{1, 2, 3, 4}
+	numbers := gen(4)
 	res := add(multiply(numbers, 2), 1)
 	for _, num := range multiply(res, 2) {
 		fmt.Println("number:", num)
 	}
+}
+
+func gen(n int) []int {
+	out := make([]int, n)
+	for i := 0; i < n; i++ {
+		out[i] = i + 1
+	}
+	return out
 }
 
 // add receives a slice of int adds the additive to each element
