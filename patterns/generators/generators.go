@@ -6,51 +6,66 @@
 package generators
 
 // Repeat generates an infinite number of repeated values till stopped via the done channel
-func Repeat(done <-chan interface{}, values ...interface{}) <-chan interface{} {
-	valueStream := make(chan interface{})
+func Repeat(done <-chan struct{}, values ...interface{}) <-chan interface{} {
+	out := make(chan interface{})
 	go func() {
-		defer close(valueStream)
+		defer close(out)
 		for {
 			for _, v := range values {
 				select {
 				case <-done:
 					return
-				case valueStream <- v:
+				case out <- v:
 				}
 			}
 		}
 	}()
-	return valueStream
+	return out
 }
 
 // Take extracts a sub stream of values out of the value stream till it reaches a certain amount or stopped
-func Take(done <-chan interface{}, valueStream <-chan interface{}, num int) <-chan interface{} {
-	takeStream := make(chan interface{})
+func Take(done <-chan struct{}, in <-chan interface{}, num int) <-chan interface{} {
+	out := make(chan interface{})
 	go func() {
-		defer close(takeStream)
+		defer close(out)
 		for i := 0; i < num; i++ {
 			select {
 			case <-done:
 				return
-			case takeStream <- <-valueStream:
+			case out <- <-in:
 			}
 		}
 	}()
-	return takeStream
+	return out
 }
 
 // RepeatFn works just like Repeat, but executes a function an infinite number of times till stopped
-func RepeatFn(done <-chan interface{}, fn func() interface{}) <-chan interface{} {
-	valueStream := make(chan interface{})
+func RepeatFn(done <-chan struct{}, fn func() interface{}) <-chan interface{} {
+	out := make(chan interface{})
 	go func() {
-		defer close(valueStream)
+		defer close(out)
 		for {
 			select {
 			case <-done:
 				return
-			case valueStream <- fn():
+			case out <- fn():
 			}
 		}
 	}()
-	return valueStream
+	return out
+}
+
+func ToInt(done <-chan struct{}, in <-chan interface{}) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for v := range in {
+			select {
+			case <-done:
+				return
+			case out <- v.(int):
+			}
+		}
+	}()
+	return out
 }

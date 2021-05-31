@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	done := make(chan interface{})
+	done := make(chan struct{})
 	defer close(done)
 
 	randFn := func() interface{} { return rand.Int() }

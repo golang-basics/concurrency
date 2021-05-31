@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	done := make(chan interface{})
+	done := make(chan struct{})
 	go func() {
 		select {
 		case <-time.After(3 * time.Second):
