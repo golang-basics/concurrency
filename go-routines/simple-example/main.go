@@ -17,5 +17,5 @@ func immediateTask() {
 
 func longTask() {
 	time.Sleep(500 * time.Millisecond)
-	fmt.Println("I executed in 500ms")
+	fmt.Println("I executed after 500ms")
 }

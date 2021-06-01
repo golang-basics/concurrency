@@ -23,6 +23,7 @@ func main() {
 	var wg sync.WaitGroup
 	max, processed := 10, 0
 	for _, r := range requests {
+		// adjust this to process 10 requests at a time
 		if processed > max-1 {
 			break
 		}
