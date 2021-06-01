@@ -250,3 +250,4 @@ and then a new one every 20 minutes.
 - [clearpools - sync.Pool, GC - Go source code](https://github.com/golang/go/blob/master/src/runtime/mgc.go#L1547)
 - [poolCleanup - sync.Pool - Go source code](https://github.com/golang/go/blob/master/src/sync/pool.go#L233)
 - [Using Sync Pool](https://developer20.com/using-sync-pool/)
+- [Concurrency in Go eBook - Amazon](https://www.amazon.com/Concurrency-Go-Tools-Techniques-Developers-ebook/dp/B0742NH2SG)
