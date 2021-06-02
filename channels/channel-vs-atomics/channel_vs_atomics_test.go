@@ -27,7 +27,7 @@ func BenchmarkChannel(b *testing.B) {
 			defer wg.Done()
 			op := set{
 				value: i,
-				done: make(chan struct{}),
+				done:  make(chan struct{}),
 			}
 			setChan <- op
 			<-op.done

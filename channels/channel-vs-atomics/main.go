@@ -6,7 +6,7 @@ import (
 
 type set struct {
 	value int32
-	done chan struct{}
+	done  chan struct{}
 }
 
 type get struct {
@@ -34,7 +34,7 @@ func main() {
 		go func(i int32) {
 			op := set{
 				value: i,
-				done: make(chan struct{}),
+				done:  make(chan struct{}),
 			}
 			setChan <- op
 			<-op.done
