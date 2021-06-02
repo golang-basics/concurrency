@@ -2,38 +2,32 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 )
 
-// try running the example like: go run -race main.go
+// try running the example like this: go run -race main.go
 func main() {
 	c := newChanCache()
 	var wg sync.WaitGroup
 
-	wg.Add(5)
-	go func() {
-		c.set("k", "v1")
-		wg.Done()
-	}()
-	go func() {
-		c.set("k", "v2")
-		wg.Done()
-	}()
-	go func() {
-		c.set("k", "v3")
-		wg.Done()
-	}()
-	go func() {
-		c.set("k", "v4")
-		wg.Done()
-	}()
-	go func() {
-		fmt.Println(c.get("k"))
-		wg.Done()
-	}()
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			c.set("k", "v"+strconv.Itoa(i))
+		}(i)
+	}
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			fmt.Println(c.get("k"))
+		}()
+	}
 	wg.Wait()
-	c.set("kn", "vn")
 
+	c.set("kn", "vn")
 	fmt.Println(c.get("k"))
 	fmt.Println(c.get("kn"))
 }
