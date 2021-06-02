@@ -1,15 +1,14 @@
-// cd into benchmarks
-// go test -bench=.
-
 package benchmarks
 
 import (
-	"fmt"
 	"sync"
 	"testing"
 )
 
+// to run the benchmarks cd into "atomics/benchmarks" an run:
+// go test -bench=.
 func BenchmarkMutexNumber(b *testing.B) {
+	b.ReportAllocs()
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	var v int64
@@ -25,10 +24,14 @@ func BenchmarkMutexNumber(b *testing.B) {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("v", v)
+	// to avoid compile errors
+	v = v
 }
 
+// to run the benchmarks cd into "atomics/benchmarks" an run:
+// go test -bench=.
 func BenchmarkMutexStruct(b *testing.B) {
+	b.ReportAllocs()
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	cfg := Config{}
@@ -46,5 +49,6 @@ func BenchmarkMutexStruct(b *testing.B) {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("cfg", cfg)
+	// to avoid compile errors
+	cfg = cfg
 }

@@ -1,16 +1,15 @@
-// cd into benchmarks
-// go test -bench=.
-
 package benchmarks
 
 import (
-	"fmt"
 	"sync"
 	"sync/atomic"
 	"testing"
 )
 
+// to run the benchmarks cd into "atomics/benchmarks" an run:
+// go test -bench=.
 func BenchmarkAtomicNumber(b *testing.B) {
+	b.ReportAllocs()
 	var wg sync.WaitGroup
 	var v int64
 	for i := 0; i < 5; i++ {
@@ -23,10 +22,14 @@ func BenchmarkAtomicNumber(b *testing.B) {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("v", v)
+	// to avoid compile errors
+	v = v
 }
 
+// to run the benchmarks cd into "atomics/benchmarks" an run:
+// go test -bench=.
 func BenchmarkAtomicStruct(b *testing.B) {
+	b.ReportAllocs()
 	var wg sync.WaitGroup
 	var v atomic.Value
 	for i := 0; i < 5; i++ {
@@ -41,5 +44,6 @@ func BenchmarkAtomicStruct(b *testing.B) {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("cfg", v.Load())
+	// to avoid compile errors
+	v = v
 }
