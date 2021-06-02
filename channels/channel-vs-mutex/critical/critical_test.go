@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// to run the benchmarks, cd into critical directory and run:
+// to run the benchmarks, cd into "critical" directory and run:
 // go test -bench=.
 func BenchmarkCriticalMutexCache(b *testing.B) {
 	cache := newMutexCache()
@@ -15,7 +15,7 @@ func BenchmarkCriticalMutexCache(b *testing.B) {
 	}
 }
 
-// to run the benchmarks, cd into critical directory and run:
+// to run the benchmarks, cd into "critical" directory and run:
 // go test -bench=.
 func BenchmarkCriticalChannelCache(b *testing.B) {
 	cache := newChannelCache()
