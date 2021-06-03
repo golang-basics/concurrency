@@ -1,43 +1,19 @@
-package main
+package digestion
 
 import (
 	"crypto/md5"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sort"
 	"sync"
 )
 
-func main() {
-	// Calculate the MD5 sum of all files under the specified directory,
-	// then print the results sorted by path name.
-	m, err := MD5All(os.Args[1])
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	var paths []string
-	for path := range m {
-		paths = append(paths, path)
-	}
-
-	sort.Strings(paths)
-	for _, path := range paths {
-		fmt.Printf("%x  %s\n", m[path], path)
-	}
-}
-
-type MD5Result map[string][md5.Size]byte
-
-// MD5All reads all the files in the file tree rooted at root and returns a map
+// MD5AllBoundedParallelism reads all the files in the file tree rooted at root and returns a map
 // from file path to the MD5 sum of the file's contents.  If the directory walk
 // fails or any read operation fails, MD5All returns an error.  In that case,
 // MD5All does not wait for inflight read operations to complete.
-func MD5All(root string) (MD5Result, error) {
+func MD5AllBoundedParallelism(root string) (MD5Result, error) {
 	done := make(chan struct{})
 	defer close(done)
 
@@ -103,13 +79,6 @@ func walkFiles(done <-chan struct{}, root string) (<-chan string, <-chan error) 
 		})
 	}()
 	return pathsChan, errChan
-}
-
-// result represents the product of reading and summing a file using MD5.
-type result struct {
-	path string
-	sum  [md5.Size]byte
-	err  error
 }
 
 // digester reads path names from paths and sends digests of the corresponding
