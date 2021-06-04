@@ -15,9 +15,15 @@ var (
 )
 
 func main() {
+	done := make(chan struct{})
+	defer close(done)
+
 	odd := intGen(20)
-	c1, c2, c3 := fanOut(odd), fanOut(odd), fanOut(odd)
-	for v := range fanIn(c1, c2, c3) {
+	c1 := fanOut(done, odd)
+	c2 := fanOut(done, odd)
+	c3 := fanOut(done, odd)
+
+	for v := range fanIn(done, c1, c2, c3) {
 		fmt.Println("value:", v)
 	}
 }

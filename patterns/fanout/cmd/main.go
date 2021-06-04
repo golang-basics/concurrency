@@ -8,11 +8,15 @@ import (
 )
 
 func main() {
+	done := make(chan struct{})
+	defer close(done)
+
 	odd := generator.OddIntGen(10)
-	c1 := fanout.FanOut(odd)
-	c2 := fanout.FanOut(odd)
-	c3 := fanout.FanOut(odd)
-	c4 := fanout.FanOut(odd)
+	c1 := fanout.FanOut(done, odd)
+	c2 := fanout.FanOut(done, odd)
+	c3 := fanout.FanOut(done, odd)
+	c4 := fanout.FanOut(done, odd)
+
 	display(c1, "c1")
 	display(c2, "c2")
 	display(c3, "c3")

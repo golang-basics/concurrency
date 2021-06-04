@@ -14,20 +14,23 @@ var (
 )
 
 func main() {
+	done := make(chan struct{})
+	defer close(done)
+
 	// 1, 2, 3
-	nums := gen(1, 2, 3)
+	nums := gen(done, 1, 2, 3)
 	// 2, 3, 4
-	incremented := inc(nums)
+	incremented := inc(done, nums)
 	// 4, 9, 16
-	squared := sq(incremented)
+	squared := sq(done, incremented)
 	// 3, 8, 15
-	res := dec(squared)
+	res := dec(done, squared)
 	for n := range res {
 		fmt.Println(n)
 	}
 
 	fmt.Println("the same exact result using nested calls")
-	for n := range dec(sq(inc(gen(1, 2, 3)))) {
+	for n := range dec(done, sq(done, inc(done, gen(done, 1, 2, 3)))) {
 		fmt.Println(n)
 	}
 

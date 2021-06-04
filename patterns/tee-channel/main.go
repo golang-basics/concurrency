@@ -16,16 +16,16 @@ func main() {
 	done := make(chan struct{})
 	defer close(done)
 
-	nums := pipeline.Gen(1, 2, 3, 4)
+	nums := pipeline.Gen(done, 1, 2, 3, 4)
 	out := tee(done, nums, 3)
 
-	for v := range pipeline.Inc(out[0]) {
+	for v := range pipeline.Inc(done, out[0]) {
 		fmt.Println("incremented:", v)
 	}
-	for v := range pipeline.Dec(out[1]) {
+	for v := range pipeline.Dec(done, out[1]) {
 		fmt.Println("decremented:", v)
 	}
-	for v := range pipeline.Sq(out[2]) {
+	for v := range pipeline.Sq(done, out[2]) {
 		fmt.Println("squared:", v)
 	}
 }

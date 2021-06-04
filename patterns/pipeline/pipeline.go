@@ -44,49 +44,65 @@ func (p *IntPipeline) Square() *IntPipeline {
 	return p
 }
 
-func (p *IntPipeline) Result() chan int {
+func (p *IntPipeline) Result() <-chan int {
 	close(p.out)
 	return p.out
 }
 
-func Gen(vs ...int) chan int {
+func Gen(done chan struct{}, vs ...int) <-chan int {
 	out := make(chan int)
 	go func() {
 		for _, n := range vs {
-			out <- n
+			select {
+			case <-done:
+				return
+			case out <- n:
+			}
 		}
 		close(out)
 	}()
 	return out
 }
 
-func Inc(in <-chan int) chan int {
+func Inc(done chan struct{}, in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		for i := range in {
-			out <- i + 1
+			select {
+			case <-done:
+				return
+			case out <- i + 1:
+			}
 		}
 		close(out)
 	}()
 	return out
 }
 
-func Dec(in <-chan int) chan int {
+func Dec(done chan struct{}, in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		for i := range in {
-			out <- i - 1
+			select {
+			case <-done:
+				return
+			case out <- i - 1:
+			}
 		}
 		close(out)
 	}()
 	return out
 }
 
-func Sq(in <-chan int) chan int {
+func Sq(done chan struct{}, in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		for i := range in {
-			out <- i * i
+			select {
+			case <-done:
+				return
+			case out <- i * i:
+			}
 		}
 		close(out)
 	}()

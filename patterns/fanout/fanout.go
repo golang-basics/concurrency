@@ -4,11 +4,15 @@ package fanout
 // The FAN-OUT pattern states that multiple invocation of this function
 // will generate multiple go routines to read from the same channel till the input channel is closed
 // This allows for better work distribution
-func FanOut(input <-chan int) <-chan int {
+func FanOut(done chan struct{}, input <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		for v := range input {
-			out <- v
+			select {
+			case <-done:
+				return
+			case out <- v:
+			}
 		}
 		close(out)
 	}()
