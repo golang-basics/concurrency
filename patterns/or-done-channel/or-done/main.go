@@ -12,6 +12,9 @@ import (
 
 func main() {
 	done := make(chan struct{})
+	// try to close the channel right away
+	// you'll see no values being produced
+	// close(done)
 	go func() {
 		time.Sleep(100 * time.Millisecond)
 		close(done)
@@ -46,11 +49,13 @@ func orDone(done chan struct{}, in <-chan int) <-chan int {
 func gen(nums ...int) chan int {
 	out := make(chan int, len(nums))
 	go func() {
+		defer close(out)
 		for _, n := range nums {
 			out <- n
+			// you can comment the below
+			// to check if or-done channel works
 			time.Sleep(50 * time.Millisecond)
 		}
-		close(out)
 	}()
 	return out
 }
