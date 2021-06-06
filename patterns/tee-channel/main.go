@@ -1,7 +1,7 @@
 // The tee channel pattern works exactly like the Linux tee command.
 // The tee command writes the output to STDOUT and a list of specified FILES.
 // Respectively the tee channel will take an input channel and clone that into a
-// specified number of channel for further pipeline operations.
+// specified number of channels for further pipeline operations.
 
 package main
 
@@ -18,14 +18,15 @@ func main() {
 
 	nums := pipeline.Gen(done, 1, 2, 3, 4)
 	out := tee(done, nums, 3)
+	ch1, ch2, ch3 := out[0], out[1], out[2]
 
-	for v := range pipeline.Inc(done, out[0]) {
+	for v := range pipeline.Inc(done, ch1) {
 		fmt.Println("incremented:", v)
 	}
-	for v := range pipeline.Dec(done, out[1]) {
+	for v := range pipeline.Dec(done, ch2) {
 		fmt.Println("decremented:", v)
 	}
-	for v := range pipeline.Sq(done, out[2]) {
+	for v := range pipeline.Sq(done, ch3) {
 		fmt.Println("squared:", v)
 	}
 }
