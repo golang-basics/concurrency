@@ -1,44 +1,40 @@
+//go:generate go run ../../codegen/main.go -tpl=fanin -type=int
+//go:generate go run ../../codegen/main.go -tpl=repeatfn -type=int
+//go:generate go run ../../codegen/main.go -tpl=take -type=int
 package main
 
 import (
-	"concurrency/patterns/fanin"
 	"fmt"
 	"math/rand"
 	"runtime"
 	"time"
-
-	"concurrency/patterns/generators"
 )
 
-var (
-	take     = generators.Take
-	toInt    = generators.ToInt
-	repeatFn = generators.RepeatFn
-)
-
+// before running main.go, make sure to run:
+// go generate main.go
 func main() {
 	done := make(chan struct{})
 	defer close(done)
-	random := func() interface{} {
+	random := func() int {
 		return rand.Intn(50000000)
 	}
 	start := time.Now()
-	randIntStream := toInt(done, repeatFn(done, random))
+	randIntStream := RepeatFn(done, random)
 	numFinders := runtime.NumCPU()
 	finders := make([]<-chan int, numFinders)
 	for i := 0; i < numFinders; i++ {
-		finders[i] = toInt(done, primeFinder(done, randIntStream))
+		finders[i] = primeFinder(done, randIntStream)
 	}
 
 	fmt.Println("primes:")
-	for prime := range take(done, fanin.FanIn(done, finders...), 10) {
+	for prime := range Take(done, FanIn(done, finders...), 10) {
 		fmt.Println("prime:", prime)
 	}
 	fmt.Printf("search took: %v", time.Since(start))
 }
 
-func primeFinder(done <-chan struct{}, intStream <-chan int) <-chan interface{} {
-	primeStream := make(chan interface{})
+func primeFinder(done <-chan struct{}, intStream <-chan int) <-chan int {
+	primeStream := make(chan int)
 	go func() {
 		defer close(primeStream)
 		for integer := range intStream {
