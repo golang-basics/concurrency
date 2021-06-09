@@ -75,6 +75,8 @@ func locale(ctx context.Context) (string, error) {
 	timeout := 5 * time.Second
 	// return early if context work should be cancelled
 	// instead of waiting for the context deadline to pass
+	// As you can see the official docs say the same
+	// https://github.com/golang/go/blob/master/src/context/context.go#L66
 	if deadline, ok := ctx.Deadline(); ok {
 		if deadline.Sub(time.Now().Add(timeout)) <= 0 {
 			return "", context.DeadlineExceeded
