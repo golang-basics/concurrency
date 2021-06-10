@@ -56,7 +56,7 @@ func BenchmarkBufferedChannel(b *testing.B) {
 	go reader(done, ch)
 
 	var size int
-	if b.N - bufferSize < 0 {
+	if b.N-bufferSize < 0 {
 		size = b.N
 	} else {
 		size = bufferSize
