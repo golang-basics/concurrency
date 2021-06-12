@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,7 +11,6 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/steevehook/http/controllers"
-	"github.com/steevehook/http/db"
 	"github.com/steevehook/http/logging"
 	"github.com/steevehook/http/repositories"
 	"github.com/steevehook/http/services"
@@ -21,16 +20,14 @@ type App struct {
 	Server *http.Server
 }
 
-func Init(db db.DB) (*App, error) {
+func Init(repo repositories.BookingsRepository) (*App, error) {
 	err := logging.Init()
 	if err != nil {
-		log.Fatalf("could not initialize logging: %v", err)
+		return nil, fmt.Errorf("%v: %w", "could not initialize logger", err)
 	}
 
-	repo := repositories.NewBookings(db)
 	service := services.NewBookings(repo)
 	router := controllers.NewRouter(service)
-
 	app := &App{
 		Server: &http.Server{
 			Addr:         ":8080",

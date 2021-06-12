@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"github.com/steevehook/http/logging"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -17,6 +18,7 @@ type bookingGetter interface {
 
 func getBooking(service bookingGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		logger := logging.Logger()
 		id := routeParam(r, "id")
 		_, err := uuid.Parse(id)
 		if err != nil {
@@ -36,6 +38,7 @@ func getBooking(service bookingGetter) http.HandlerFunc {
 			return
 		}
 
+		logger.Info("successfully fetched booking")
 		transport.SendJSON(w, http.StatusOK, booking)
 	}
 }

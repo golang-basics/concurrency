@@ -53,3 +53,12 @@ func (e ResourceNotFoundError) Error() string {
 	}
 	return e.Message
 }
+
+// HotelFullError is returned when no more bookings can be made
+type HotelFullError struct {
+	HotelID string
+}
+
+func (e HotelFullError) Error() string {
+	return fmt.Sprintf("the hotel with id '%s' is full", e.HotelID)
+}

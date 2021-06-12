@@ -7,6 +7,7 @@ import (
 
 	"github.com/steevehook/http/app"
 	"github.com/steevehook/http/db"
+	"github.com/steevehook/http/repositories"
 	"github.com/steevehook/http/worker"
 )
 
@@ -16,12 +17,17 @@ func main() {
 		log.Fatalf("could not initialize database: %v", err)
 	}
 
-	a, err := app.Init(d)
+	repo := repositories.NewBookings(d)
+	err = repo.Init(70)
+	if err != nil {
+		log.Fatalf("could not initialize repository: %v", err)
+	}
+	a, err := app.Init(repo)
 	if err != nil {
 		log.Fatalf("could not initialize application: %v", err)
 	}
 
-	w, err := worker.Init(d)
+	w, err := worker.Init(repo)
 	if err != nil {
 		log.Fatalf("could not initialize worker: %v", err)
 	}

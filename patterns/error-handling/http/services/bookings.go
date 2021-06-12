@@ -13,7 +13,7 @@ import (
 
 type repo interface {
 	GetBooking(ctx context.Context, id string) (models.Booking, error)
-	CreateBooking(ctx context.Context, booking models.Booking) error
+	CreateBooking(ctx context.Context, booking models.Booking) (models.Booking, error)
 }
 
 // NewBookings creates a new instance of BookingService
@@ -25,21 +25,35 @@ func NewBookings(r repo) BookingService {
 
 // BookingService represents the booking service that interacts with booking repositories
 type BookingService struct {
-	repo
+	repo repo
 }
 
 // CreateBooking creates a booking from the repository
-func (r BookingService) CreateBooking(ctx context.Context, req models.CreateBookingRequest) (models.Booking, error) {
+func (s BookingService) CreateBooking(ctx context.Context, req models.CreateBookingRequest) (models.Booking, error) {
 	logger := logging.Logger()
 	id := uuid.New()
 	booking := models.Booking{
 		ID:        id.String(),
-		StartsAt:  req.Start,
-		EndsAt:    req.End,
+		HotelID:   req.HotelID,
+		StartsAt:  req.Start.UTC(),
+		EndsAt:    req.End.UTC(),
 		CreatedAt: time.Now().UTC(),
 	}
 
-	err := r.repo.CreateBooking(ctx, booking)
+	if time.Now().UTC().After(booking.StartsAt) {
+		err := models.DataValidationError{
+			Message: "start cannot be smaller than current time",
+		}
+		return models.Booking{}, err
+	}
+	if booking.StartsAt.Add(24 * time.Hour).After(booking.EndsAt) {
+		err := models.DataValidationError{
+			Message: "end must be at least 24 hours greater than start",
+		}
+		return models.Booking{}, err
+	}
+
+	booking, err := s.repo.CreateBooking(ctx, booking)
 	if err != nil {
 		logger.Error("could not create booking", zap.Error(err))
 		return models.Booking{}, err
@@ -49,10 +63,9 @@ func (r BookingService) CreateBooking(ctx context.Context, req models.CreateBook
 }
 
 // GetBooking fetches a booking from the repository
-func (r BookingService) GetBooking(ctx context.Context, req models.GetBookingRequest) (models.Booking, error) {
+func (s BookingService) GetBooking(ctx context.Context, req models.GetBookingRequest) (models.Booking, error) {
 	logger := logging.Logger()
-
-	booking, err := r.repo.GetBooking(ctx, req.ID)
+	booking, err := s.repo.GetBooking(ctx, req.ID)
 	if err != nil {
 		logger.Error("could not fetch booking", zap.Error(err))
 		return models.Booking{}, err
