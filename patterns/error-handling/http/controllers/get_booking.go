@@ -2,12 +2,9 @@ package controllers
 
 import (
 	"context"
-	"fmt"
-	"github.com/steevehook/http/logging"
 	"net/http"
 
-	"github.com/google/uuid"
-
+	"github.com/steevehook/http/logging"
 	"github.com/steevehook/http/models"
 	"github.com/steevehook/http/transport"
 )
@@ -19,19 +16,11 @@ type bookingGetter interface {
 func getBooking(service bookingGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := logging.Logger()
-		id := routeParam(r, "id")
-		_, err := uuid.Parse(id)
-		if err != nil {
-			e := models.FormatValidationError{
-				Message: fmt.Sprintf("invalid uuid: %s", id),
-			}
-			transport.SendHTTPError(w, e)
-			return
-		}
-
+		id := routeParam(r, idRouteParam)
 		req := models.GetBookingRequest{
 			ID: id,
 		}
+
 		booking, err := service.GetBooking(r.Context(), req)
 		if err != nil {
 			transport.SendHTTPError(w, err)

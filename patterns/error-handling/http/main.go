@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not initialize repository: %v", err)
 	}
+
 	a, err := app.Init(repo)
 	if err != nil {
 		log.Fatalf("could not initialize application: %v", err)

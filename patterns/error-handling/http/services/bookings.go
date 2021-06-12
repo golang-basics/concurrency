@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -26,6 +27,26 @@ func NewBookings(r repo) BookingService {
 // BookingService represents the booking service that interacts with booking repositories
 type BookingService struct {
 	repo repo
+}
+
+// GetBooking fetches a booking from the repository
+func (s BookingService) GetBooking(ctx context.Context, req models.GetBookingRequest) (models.Booking, error) {
+	logger := logging.Logger()
+	_, err := uuid.Parse(req.ID)
+	if err != nil {
+		e := models.FormatValidationError{
+			Message: fmt.Sprintf("invalid uuid: %s", req.ID),
+		}
+		return models.Booking{}, e
+	}
+
+	booking, err := s.repo.GetBooking(ctx, req.ID)
+	if err != nil {
+		logger.Error("could not fetch booking", zap.Error(err))
+		return models.Booking{}, err
+	}
+
+	return booking, nil
 }
 
 // CreateBooking creates a booking from the repository
@@ -56,18 +77,6 @@ func (s BookingService) CreateBooking(ctx context.Context, req models.CreateBook
 	booking, err := s.repo.CreateBooking(ctx, booking)
 	if err != nil {
 		logger.Error("could not create booking", zap.Error(err))
-		return models.Booking{}, err
-	}
-
-	return booking, nil
-}
-
-// GetBooking fetches a booking from the repository
-func (s BookingService) GetBooking(ctx context.Context, req models.GetBookingRequest) (models.Booking, error) {
-	logger := logging.Logger()
-	booking, err := s.repo.GetBooking(ctx, req.ID)
-	if err != nil {
-		logger.Error("could not fetch booking", zap.Error(err))
 		return models.Booking{}, err
 	}
 
