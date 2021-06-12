@@ -12,15 +12,15 @@ import (
 	"github.com/steevehook/http/transport"
 )
 
-type notesCreator interface {
-	CreateNote(ctx context.Context, req models.CreateNoteRequest) (models.Note, error)
+type bookingCreator interface {
+	CreateBooking(ctx context.Context, req models.CreateBookingRequest) (models.Booking, error)
 }
 
-func createNote(service notesCreator) http.HandlerFunc {
+func createBooking(service bookingCreator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := logging.Logger()
 
-		var req models.CreateNoteRequest
+		var req models.CreateBookingRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			logger.Error("could not decode json", zap.Error(err))
@@ -31,12 +31,12 @@ func createNote(service notesCreator) http.HandlerFunc {
 			return
 		}
 
-		note, err := service.CreateNote(r.Context(), req)
+		booking, err := service.CreateBooking(r.Context(), req)
 		if err != nil {
 			transport.SendHTTPError(w, err)
 			return
 		}
 
-		transport.SendJSON(w, http.StatusCreated, note)
+		transport.SendJSON(w, http.StatusCreated, booking)
 	}
 }

@@ -4,10 +4,11 @@ import (
 	"time"
 )
 
-// Note represents the Note model, everyone operates with
-type Note struct {
-	ID          string    `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"created_at"`
+// Booking represents the Booking model
+type Booking struct {
+	ID         string    `json:"id"`
+	RoomNumber int       `json:"room_number"`
+	CreatedAt  time.Time `json:"created_at"`
+	StartsAt   time.Time `json:"starts_at"`
+	EndsAt     time.Time `json:"ends_at"`
 }

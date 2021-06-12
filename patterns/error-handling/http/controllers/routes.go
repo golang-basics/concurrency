@@ -7,15 +7,15 @@ import (
 )
 
 type service interface {
-	notesGetter
-	notesCreator
+	bookingGetter
+	bookingCreator
 }
 
 func NewRouter(svc service) *httprouter.Router {
 	router := httprouter.New()
 
-	router.Handler(http.MethodGet, "/notes/:id", getNote(svc))
-	router.Handler(http.MethodPost, "/notes", createNote(svc))
+	router.Handler(http.MethodGet, "/bookings/:id", getBooking(svc))
+	router.Handler(http.MethodPost, "/bookings", createBooking(svc))
 	router.NotFound = notFound()
 
 	return router

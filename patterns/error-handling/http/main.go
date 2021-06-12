@@ -2,50 +2,34 @@ package main
 
 import (
 	"log"
-	"net/http"
-	"time"
+	"os"
+	"syscall"
 
-	"github.com/boltdb/bolt"
-	"go.uber.org/zap"
-
-	"github.com/steevehook/http/controllers"
-	"github.com/steevehook/http/logging"
-	"github.com/steevehook/http/repositories"
-	"github.com/steevehook/http/services"
+	"github.com/steevehook/http/app"
+	"github.com/steevehook/http/worker"
 )
 
 func main() {
-	err := logging.Init()
+	a, err := app.Init()
 	if err != nil {
-		log.Fatalf("could not initialize logging: %v", err)
+		log.Fatalf("could not initialize application: %v", err)
 	}
 
-	logger := logging.Logger()
-	db, err := bolt.Open(
-		"notes.db",
-		0600,
-		&bolt.Options{
-			Timeout: 1 * time.Second,
-		},
-	)
-	defer func() {
-		err := db.Close()
-		if err != nil {
-			logger.Error("could not close bold db file database", zap.Error(err))
+	w, err := worker.Init()
+	if err != nil {
+		log.Fatalf("could not initialize worker: %v", err)
+	}
+
+	go func() {
+		if err := a.Start(); err != nil {
+			log.Fatalf("could not start application: %v", err)
 		}
 	}()
-	if err != nil {
-		logger.Error("could not open bold db file database", zap.Error(err))
-	}
+	go func() {
+		if err := w.Start(); err != nil {
+			log.Fatalf("could not start worker: %v", err)
+		}
+	}()
 
-	repo := repositories.NewNotes(db)
-	service := services.NewNotes(repo)
-	router := controllers.NewRouter(service)
-	port := ":8080"
-
-	logger.Info("server is up and running on port " + port)
-	err = http.ListenAndServe(port, router)
-	if err != nil {
-		log.Fatalf("could run http server: %v", err)
-	}
+	app.ListenToSignals([]os.Signal{os.Interrupt, syscall.SIGTERM}, a, w)
 }

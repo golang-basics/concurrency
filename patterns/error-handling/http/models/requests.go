@@ -1,12 +1,16 @@
 package models
 
-// CreateNoteRequest represents the request for creating a note
-type CreateNoteRequest struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
+import (
+	"time"
+)
+
+// CreateBookingRequest represents the request for creating a booking
+type CreateBookingRequest struct {
+	Start time.Time `json:"start"`
+	End   time.Time `json:"end"`
 }
 
-// GetNoteRequest represents the request for fetching a note
-type GetNoteRequest struct {
+// GetBookingRequest represents the request for fetching a booking
+type GetBookingRequest struct {
 	ID string `json:"id"`
 }

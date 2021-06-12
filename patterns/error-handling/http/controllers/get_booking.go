@@ -11,11 +11,11 @@ import (
 	"github.com/steevehook/http/transport"
 )
 
-type notesGetter interface {
-	GetNote(ctx context.Context, req models.GetNoteRequest) (models.Note, error)
+type bookingGetter interface {
+	GetBooking(ctx context.Context, req models.GetBookingRequest) (models.Booking, error)
 }
 
-func getNote(service notesGetter) http.HandlerFunc {
+func getBooking(service bookingGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := routeParam(r, "id")
 		_, err := uuid.Parse(id)
@@ -27,15 +27,15 @@ func getNote(service notesGetter) http.HandlerFunc {
 			return
 		}
 
-		req := models.GetNoteRequest{
+		req := models.GetBookingRequest{
 			ID: id,
 		}
-		note, err := service.GetNote(r.Context(), req)
+		booking, err := service.GetBooking(r.Context(), req)
 		if err != nil {
 			transport.SendHTTPError(w, err)
 			return
 		}
 
-		transport.SendJSON(w, http.StatusOK, note)
+		transport.SendJSON(w, http.StatusOK, booking)
 	}
 }
