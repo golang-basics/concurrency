@@ -83,3 +83,7 @@ func (r BookingsRepository) GetBooking(ctx context.Context, id string) (models.B
 
 	return booking, nil
 }
+
+func (r BookingsRepository) DeleteExpiredBookings(ctx context.Context) error {
+	return nil
+}

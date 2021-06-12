@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/boltdb/bolt"
 	"go.uber.org/zap"
 
 	"github.com/steevehook/http/controllers"
+	"github.com/steevehook/http/db"
 	"github.com/steevehook/http/logging"
 	"github.com/steevehook/http/repositories"
 	"github.com/steevehook/http/services"
@@ -19,25 +19,12 @@ import (
 
 type App struct {
 	Server *http.Server
-	db     *bolt.DB
 }
 
-func Init() (*App, error) {
+func Init(db db.DB) (*App, error) {
 	err := logging.Init()
 	if err != nil {
 		log.Fatalf("could not initialize logging: %v", err)
-	}
-
-	logger := logging.Logger()
-	db, err := bolt.Open(
-		"bookings.db",
-		0600,
-		&bolt.Options{
-			Timeout: 1 * time.Second,
-		},
-	)
-	if err != nil {
-		logger.Error("could not open bold db file database", zap.Error(err))
 	}
 
 	repo := repositories.NewBookings(db)
@@ -45,7 +32,6 @@ func Init() (*App, error) {
 	router := controllers.NewRouter(service)
 
 	app := &App{
-		db: db,
 		Server: &http.Server{
 			Addr:         ":8080",
 			Handler:      router,
@@ -81,14 +67,6 @@ func (a App) Stop() error {
 		return err
 	}
 	logger.Info("http server was successfully shut down")
-
-	logger.Info("closing the database")
-	err := a.db.Close()
-	if err != nil {
-		logger.Error("could not close the database", zap.Error(err))
-		return err
-	}
-	logger.Info("database was successfully closed")
 
 	return nil
 }
