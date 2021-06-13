@@ -17,7 +17,7 @@ func main() {
 }
 
 func request(ctx context.Context) {
-	if deadline(ctx, 500 * time.Millisecond) {
+	if deadline(ctx, 500*time.Millisecond) {
 		return
 	}
 
@@ -31,7 +31,7 @@ func request(ctx context.Context) {
 }
 
 func controller(ctx context.Context) {
-	if deadline(ctx, 800 * time.Millisecond) {
+	if deadline(ctx, 800*time.Millisecond) {
 		return
 	}
 
@@ -45,7 +45,7 @@ func controller(ctx context.Context) {
 }
 
 func service(ctx context.Context) {
-	if deadline(ctx, 900 * time.Millisecond) {
+	if deadline(ctx, 900*time.Millisecond) {
 		return
 	}
 
@@ -59,7 +59,7 @@ func service(ctx context.Context) {
 }
 
 func repository(ctx context.Context) {
-	if deadline(ctx, 900 * time.Millisecond) {
+	if deadline(ctx, 900*time.Millisecond) {
 		return
 	}
 
