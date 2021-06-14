@@ -56,6 +56,10 @@ func newMultiLimiter(limiters ...RateLimiter) *multiLimiter {
 		return limiters[i].Limit() < limiters[j].Limit()
 	}
 	sort.Slice(limiters, byLimit)
+	fmt.Println("LIMITS:")
+	for _, l := range limiters {
+		fmt.Println("limit:", l.Limit())
+	}
 	return &multiLimiter{
 		limiters: limiters,
 	}
@@ -82,19 +86,29 @@ func open() *apiConnection {
 	per := func(eventCount int, duration time.Duration) rate.Limit {
 		return rate.Every(duration / time.Duration(eventCount))
 	}
-	secondLimit := rate.NewLimiter(per(3, time.Second), 1)
-	minuteLimit := rate.NewLimiter(per(10, time.Minute), 10)
 	return &apiConnection{
-		rateLimiter: newMultiLimiter(secondLimit, minuteLimit),
+		apiLimit: newMultiLimiter(
+			rate.NewLimiter(per(2, time.Second), 1),
+			rate.NewLimiter(per(10, time.Minute), 10),
+		),
+		diskLimit: newMultiLimiter(
+			rate.NewLimiter(rate.Limit(1), 1),
+		),
+		networkLimit: newMultiLimiter(
+			rate.NewLimiter(per(3, time.Second), 3),
+		),
 	}
 }
 
 type apiConnection struct {
-	rateLimiter RateLimiter
+	diskLimit,
+	networkLimit,
+	apiLimit RateLimiter
 }
 
 func (a *apiConnection) readFile(ctx context.Context) error {
-	if err := a.rateLimiter.Wait(ctx); err != nil {
+	limiter := newMultiLimiter(a.apiLimit, a.diskLimit)
+	if err := limiter.Wait(ctx); err != nil {
 		return err
 	}
 	// do some work here
@@ -102,7 +116,8 @@ func (a *apiConnection) readFile(ctx context.Context) error {
 }
 
 func (a *apiConnection) httpCall(ctx context.Context) error {
-	if err := a.rateLimiter.Wait(ctx); err != nil {
+	limiter := newMultiLimiter(a.apiLimit, a.networkLimit)
+	if err := limiter.Wait(ctx); err != nil {
 		return err
 	}
 	// do some work here

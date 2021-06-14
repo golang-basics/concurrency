@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	//limiter := rate.NewLimiter(rate.Every(time.Second), 1)
 	defer fmt.Println("done")
 	log.SetOutput(os.Stdout)
 	log.SetFlags(log.Ltime | log.LUTC)
