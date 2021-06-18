@@ -2,13 +2,6 @@
 
 ### Summary
 
-- Topic1
-- Topic2
-- Topic3
-- ...
-
-### Zip Archives
-
 - [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/-9CbX2MncZg) - [[Download]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
 
 ### Examples
