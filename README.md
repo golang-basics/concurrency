@@ -2,7 +2,7 @@
 
 ### Summary
 
-- [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
+- [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
 
 ### Examples
 
