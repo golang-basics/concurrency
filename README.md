@@ -4,7 +4,14 @@
 
 ### Summary
 
-- [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
+- <div> 
+    <a href="https://youtu.be/_uQgGS_VIXM" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %231 -- Introduction to Concurrency-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+</div>
 
 ### Coding Examples
 
