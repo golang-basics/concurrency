@@ -4,7 +4,7 @@
 
 ### Summary
 
-- <div> 
+<div> 
     <a href="https://youtu.be/_uQgGS_VIXM" target="_blank">
         <img src="https://img.shields.io/badge/Concurrency in Go %231 -- Introduction to Concurrency-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
     </a>
