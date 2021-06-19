@@ -80,8 +80,8 @@ func createTmpFiles() {
 }
 
 func clearTmpFiles() {
-	//err := os.RemoveAll(tmpDir)
-	//if err != nil {
-	//	log.Fatalf("could not remove temporary directory: %v", err)
-	//}
+	err := os.RemoveAll(tmpDir)
+	if err != nil {
+		log.Fatalf("could not remove temporary directory: %v", err)
+	}
 }
