@@ -7,7 +7,7 @@
 - [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
 
 <div>
-  &nbsp;&nbsp; <a target="_blank">
+  &nbsp;&nbsp; <a href="https://youtu.be/_uQgGS_VIXM" target="_blank">
       <img src="https://img.shields.io/badge/Introduction to Concurrency -- Concurrency in Go %231 - Download-%2324292e.svg?&style=for-the-badge&logo=youtube&logoColor=white&link=http://left&link=http://right" alt="youtube"/>
   </a>
 </div>
