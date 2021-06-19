@@ -1,5 +1,7 @@
 # Concurrency in Go
 
+<img alt="cover image" src="https://github.com/golang-basics/concurrency/blob/master/cover.jpg?raw=true" width="800"/>
+
 ### Summary
 
 - [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
