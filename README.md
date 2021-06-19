@@ -43,11 +43,6 @@
 
 - [Concurrency in Go #1 - Introduction to Concurrency](https://github.com/golang-basics/concurrency/raw/master/presentations/1_introduction-to-concurrency)
 
-### Concurrency vs Parallelism
-
-Concurrency is a property of the code; parallelism is
-a property of the running program.
-
 ### Go routines
 
 A go routines can block for one of these reasons:
@@ -102,23 +97,6 @@ Here are couple of simple rules to make sure channels are used correctly
 - Global Run queue
 - Network Poller
 - Work Stealing
-
-### OSX `sysctl`
-
-```bash
-# get the number of logical CPU cores
-sysctl hw.logicalcpu
-
-# get the number of physical CPU cores
-sysctl hw.physicalcpu
-
-# get the number of logical cores
-sysctl hw.ncpu
-
-# get the number of physical/logical cores
-# also thread count meaning the total count of running threads in parallel
-sysctl -a | grep machdep.cpu | grep count
-```
 
 #### Deadlocks
 
