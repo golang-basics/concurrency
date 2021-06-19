@@ -5,13 +5,14 @@ import (
 	"time"
 )
 
-func work() {
-	time.Sleep(500 * time.Millisecond)
-	fmt.Println("printing stuff")
+func main() {
+	go work() // fork point
+	time.Sleep(100*time.Millisecond)
+	fmt.Println("done waiting, main exits")
+	// join point
 }
 
-func main() {
-	go work()
-	time.Sleep(100 * time.Millisecond)
-	fmt.Println("done waiting, main exits")
+func work() {
+	time.Sleep(500*time.Millisecond)
+	fmt.Println("printing some stuff")
 }
