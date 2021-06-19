@@ -12,7 +12,7 @@ For more info check out the [archives](https://github.com/golang-basics/concurre
 - [Go Routines](https://github.com/golang-basics/concurrency/tree/master/go-routines)
 - [Channels](https://github.com/golang-basics/concurrency/tree/master/channels)
 - [Select](https://github.com/golang-basics/concurrency/tree/master/select)
-- [Concurrency Patterns](https://github.com/golang-basics/tree/master/concurrency/tree/master/patterns)
+- [Concurrency Patterns](https://github.com/golang-basics/concurrency/tree/master/patterns)
 - [Atomics](https://github.com/golang-basics/concurrency/tree/master/atomics)
 - [Wait Groups - sync.WaitGroup](https://github.com/golang-basics/concurrency/tree/master/wait-groups)
 - [Mutexes - sync.Mutex](https://github.com/golang-basics/concurrency/tree/master/mutexes)
