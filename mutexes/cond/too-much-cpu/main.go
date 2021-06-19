@@ -13,7 +13,7 @@ func main() {
 	wg.Add(3)
 	go func() {
 		defer wg.Done()
-		// the above for loop makes the CPU consume all cycles on 1 CORE
+		// the below for loop makes the CPU consume all cycles on 1 CORE
 		for {
 			if atomic.LoadInt32(&condition) == 1 {
 				fmt.Println("go routine 1: done")
@@ -23,7 +23,7 @@ func main() {
 	}()
 	go func() {
 		defer wg.Done()
-		// the above for loop makes the CPU consume all cycles on 1 CORE
+		// the below for loop makes the CPU consume all cycles on 1 CORE
 		for {
 			if atomic.LoadInt32(&condition) == 1 {
 				fmt.Println("go routine 2: done")

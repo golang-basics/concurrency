@@ -1,4 +1,4 @@
-package mutex_vs_rwmutex
+package benchmarks
 
 import (
 	"testing"
