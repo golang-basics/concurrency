@@ -6,8 +6,6 @@
 
 - [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
 
-For more info check out the [archives](https://github.com/golang-basics/concurrency/archives) directory
-
 ### Coding Examples
 
 - [Introduction to Concurrency](https://github.com/golang-basics/concurrency/tree/master/intro)
