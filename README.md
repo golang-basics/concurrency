@@ -4,15 +4,36 @@
 
 - [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
 
-### Examples
+For more info check out the [archives](https://github.com/golang-basics/concurrency/archives) directory
 
-- Link to directory of examples 1
-- Link to directory of examples 2
-- Link to directory of examples 3
-- ...
+### Coding Examples
 
-Note: place a readme inside each directory
-with its own summary
+- [Introduction to Concurrency](https://github.com/golang-basics/concurrency/intro)
+- [Go Routines](https://github.com/golang-basics/concurrency/go-routines)
+- [Channels](https://github.com/golang-basics/concurrency/channels)
+- [Select](https://github.com/golang-basics/concurrency/select)
+- [Concurrency Patterns](https://github.com/golang-basics/concurrency/patterns)
+- [Atomics](https://github.com/golang-basics/concurrency/atomics)
+- [Wait Groups - sync.WaitGroup](https://github.com/golang-basics/concurrency/wait-groups)
+- [Mutexes - sync.Mutex](https://github.com/golang-basics/concurrency/mutexes)
+- [Pool - sync.Pool](https://github.com/golang-basics/concurrency/pool)
+- [Map - sync.Map](https://github.com/golang-basics/concurrency/mutexes/syncmap)
+- [Cond - sync.Cond](https://github.com/golang-basics/concurrency/mutexes/cond)
+- [Once - sync.Once](https://github.com/golang-basics/concurrency/mutexes/once)
+- [Locker - sync.Locker](https://github.com/golang-basics/concurrency/synclocker)
+- [Deadlocks](https://github.com/golang-basics/concurrency/deadlocks)
+- [Livelocks](https://github.com/golang-basics/concurrency/livelocks)
+- [Starvation](https://github.com/golang-basics/concurrency/starvation)
+- [Race Conditions](https://github.com/golang-basics/concurrency/go-routines/race-condition)
+- [Threads](https://github.com/golang-basics/concurrency/threads)
+- [GOMAXPROCS](https://github.com/golang-basics/concurrency/gomaxprocs)
+- [Testing](https://github.com/golang-basics/concurrency/testing)
+- [Profiling](https://github.com/golang-basics/concurrency/profiling)
+- [AWS S3 Bucket Clone](https://github.com/golang-basics/concurrency/s3)
+
+### Presentation Notes
+
+- [Concurrency in Go #1 - Introduction to Concurrency](https://github.com/golang-basics/concurrency/raw/master/presentations/1_introduction-to-concurrency)
 
 ### Concurrency vs Parallelism
 
