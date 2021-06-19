@@ -5,7 +5,7 @@
 - [Simple Example](https://github.com/golang-basics/concurrency/blob/master/go-routines/simple/main.go)
 - [Anonymous](https://github.com/golang-basics/concurrency/blob/master/go-routines/anonymous/main.go)
 - [Closures - Anonymous vs Named](https://github.com/golang-basics/concurrency/blob/master/go-routines/closures/anonymous-vs-named/main.go)
-- [Closures - Passed by Value](https://github.com/golang-basics/concurrency/blob/master/go-routines/closures/passed-by-values/main.go)
+- [Closures - Passed by Value](https://github.com/golang-basics/concurrency/blob/master/go-routines/closures/passed-by-value/main.go)
 - [Closures - Loops](https://github.com/golang-basics/concurrency/blob/master/go-routines/closures/loops/main.go)
 - [Consecutive Order - Channels](https://github.com/golang-basics/concurrency/blob/master/go-routines/consecutive-order-channels/main.go)
 - [Consecutive Order - Wait Groups](https://github.com/golang-basics/concurrency/blob/master/go-routines/consecutive-order-waitgroups/main.go)
