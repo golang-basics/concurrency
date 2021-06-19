@@ -13,7 +13,7 @@
 - [Queue Example](https://github.com/golang-basics/concurrency/blob/master/pool/queue/main.go)
 - [Connections Example](https://github.com/golang-basics/concurrency/blob/master/pool/connections/main.go)
 - [Connections Benchmark](https://github.com/golang-basics/concurrency/blob/master/pool/connections/connections_test.go)
-- [Server Example](https://github.com/golang-basics/concurrency/blob/master/pool/server/main.go)
+- [Server Example](https://github.com/golang-basics/concurrency/blob/master/pool/server/server.go)
 - [Server Benchmark](https://github.com/golang-basics/concurrency/blob/master/pool/server/server_test.go)
 
 [Home](https://github.com/golang-basics/concurrency)
