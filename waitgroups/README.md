@@ -82,6 +82,32 @@ which also means, combining several atomic operations does not necessarily produ
 
 ### WaitGroup Overview
 
+In order to achieve tasks like:
+
+- Waiting on Concurrent Operations to finish
+- Rate Limiting the amount of max Concurrent Operations
+- Preserve Concurrent Operations order
+
+and a bunch of other things, we can simply make use os the `sync.WaitGroup` type.
+
+Using a `sync.WaitGroup` is fairly simple, all we need to do is make sure to:
+
+1. Create a `sync.WaitGroup`
+2. Call the `Add()`
+3. Call the `Done()` method inside each concurrent operation, once it's done
+4. Call the `Wait()` method at the waiting point
+
+Using a `sync.WaitGroup` in your code may cause a wide variety of issues,
+this is why here are some golden rules I recommend everyone who works with WaitGroup(s)
+
+- `Done()` MUST be called as many times as `Add()`
+- If calls to `Done()` are less than calls to `Add()` => deadlock
+- If calls to `Done()` are more than calls to `Add()` => panic
+- Calling `Wait()` without calling `Add()` will return immediately
+- `sync.WaitGroup` MUST always be passed by **reference** (as pointer) => (possible panic)
+- Calling another `Wait()` before the previous one returns => panic
+- Call `Add(n)` when you can, as opposed to `Add(1)` multiple times => (a little faster)
+
 ### WaitGroup Implementation
 
 ### Examples

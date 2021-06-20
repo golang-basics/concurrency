@@ -11,7 +11,7 @@ func main() {
 	// 3. Call Wait() where you want to wait for the execution of all go routines
 
 	// RULES
-	// 1. Done() MUST be called as many times as the Add()
+	// 1. Done() MUST be called as many times as Add()
 	// 2. If calls to Done() are less than calls to Add(), it will result in a deadlock
 	// 3. If calls to Done() are more than calls to Add, it will result in panic
 	// 4. Calling Wait() without calling Add() will return immediately
