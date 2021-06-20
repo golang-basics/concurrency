@@ -110,6 +110,35 @@ this is why here are some golden rules I recommend everyone who works with WaitG
 
 ### WaitGroup Implementation
 
+It's fairly easy to implement a WaitGroup. We only need couple of functionalities:
+
+1. We need an `Add` method to increment the internal state counter (Atomically)
+2. We need a `Done` method to decrement the internal state counter (Atomically)
+3. We need a `Wait` method to infinitely wait till the internal state counter reaches 0 (Atomically)
+
+### Tips
+
+To test programs for race conditions, just use the `-race` flag
+before running:
+
+```shell script
+cd into/the/example/dir
+
+go run -race main.go
+```
+
+To run the benchmarks:
+
+```shell script
+cd benchmarks
+
+# run all the benchmarks in the current directory
+go test -bench=.
+
+# run the benchmarks for 3s, by default it runs them for 1s
+go test -bench=. -benchtime=3s
+```
+
 ### Examples
 
 - [No WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-waitgroup/main.go)
@@ -125,5 +154,9 @@ this is why here are some golden rules I recommend everyone who works with WaitG
 - [Atomic WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/atomic-waitgroup/main.go)
 - [WaitGroup Implementation](https://github.com/golang-basics/concurrency/blob/master/waitgroups/waitgroup-implementation/main.go)
 - [Benchmark - WaitGroup Add-One vs Add-Many](https://github.com/golang-basics/concurrency/blob/master/waitgroups/benchmarks/add1_vs_addmany_test.go)
+
+### Resources
+
+- [Link to source code]()
 
 [Home](https://github.com/golang-basics/concurrency)
