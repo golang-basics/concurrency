@@ -26,6 +26,45 @@ the amount of concurrent operations happening in our system.
 Luckily there's no need to reinvent the wheel, Go introduces the `sync.WaitGroup` type,
 which does exactly all the above mentioned.
 
+### Go Concurrency Philosophy
+
+Go is a powerful language, and it gained its popularity because people hear
+its Concurrency model is one of the best. While Go has quite an elegant way
+of doing Concurrency, Go did not give up the Classic way of doing Concurrency.
+
+In Go there are 2 ways of making sure concurrent code executes correctly and safely:
+
+1. Concurrency Primitives
+2. Channels
+
+Very important to stress out, it's not one versus the other, and there's no better
+way of executing concurrent code using one or the other. It all depends on the
+type of scenario and use case. Generally everything that can be achieved with channels
+can be achieved with `sync` Concurrency Primitives as well. It's a matter of choice depending on
+Complexity,Composition,Performance or in general on what's being done with the data.
+
+### Concurrency Primitives
+
+All of Go's Concurrency Primitives are stored inside the `sync` package, which stands for
+Synchronization, because most of the times that's what we as developer do with the
+executing concurrent code.
+
+These are all the available types under the `sync` package:
+
+- `WaitGroup`
+- `Mutex`
+- `RWMutex`
+- `Locker`
+- `Cond`
+- `Map`
+- `Pool`
+
+### Atomicity
+
+### WaitGroup Overview
+
+### WaitGroup Implementation
+
 ### Examples
 
 - [No WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-waitgroup/main.go)
@@ -33,7 +72,7 @@ which does exactly all the above mentioned.
 - [WaitGroup Parallel](https://github.com/golang-basics/concurrency/blob/master/waitgroups/waitgroup-parallel/main.go)
 - [Deadlock](https://github.com/golang-basics/concurrency/blob/master/waitgroups/deadlock/main.go)
 - [Passed by Value](https://github.com/golang-basics/concurrency/blob/master/waitgroups/passed-by-value/main.go)
-- [WaitGroup Reuse before return](https://github.com/golang-basics/concurrency/blob/master/waitgroups/wg-reuse/main.go)
+- [WaitGroup reuse before Wait() return](https://github.com/golang-basics/concurrency/blob/master/waitgroups/wg-reuse/main.go)
 - [Too many calls to Done()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/done-too-many-times/main.go)
 - [No calls to Add()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-add/main.go)
 - [Limit Go Routines](https://github.com/golang-basics/concurrency/blob/master/waitgroups/limit-goroutines/main.go)
