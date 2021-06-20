@@ -61,6 +61,25 @@ These are all the available types under the `sync` package:
 
 ### Atomicity
 
+An operation is considered Atomic, if within the context it is operating it is Indivisible or Uninterruptible.
+The word that's important here is Context. Something may be atomic in one context but not in another.
+
+Operations that are Atomic in the Context of your Process, may not be atomic in the context of the Operating System.
+Operations that are atomic in the Context of your Operating System, may not be Atomic in the Context of your Machine,
+and Operations that are Atomic in the Context of your Machine, may not be Atomic in the Context of your Application.
+
+Indivisible and Uninterruptible means, that within the Context you've defined something that is Atomic
+WILL HAPPEN in its ENTIRETY, without anything else HAPPENING SIMULTANEOUSLY in the same context.
+
+Let's take for example the statement `i++`. This may look like one Atomic operation, but in reality this happens:
+
+1. Retrieve the value of `i`
+2. Increment the value of `i`
+3. Store the value of `i`
+
+While each of the operations above are atomic, the combination of these in a certain Context may not be,
+which also means, combining several atomic operations does not necessarily produce a bigger atomic operation.
+
 ### WaitGroup Overview
 
 ### WaitGroup Implementation
