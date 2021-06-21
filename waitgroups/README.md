@@ -80,6 +80,8 @@ Let's take for example the statement `i++`. This may look like one Atomic operat
 While each of the operations above are atomic, the combination of these in a certain Context may not be,
 which also means, combining several atomic operations does not necessarily produce a bigger atomic operation.
 
+### Synchronization
+
 ### WaitGroup Overview
 
 In order to achieve tasks like:
@@ -157,6 +159,10 @@ go test -bench=. -benchtime=3s
 
 ### Resources
 
-- [Link to source code]()
+- [WaitGroup type declaration](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L20)
+- [WaitGroup `Add()` method](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L53)
+- [WaitGroup `Done()` method](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L98)
+- [WaitGroup `Wait()` method](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L103)
+- [`Wait()` synchronized with `Add`](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L124)
 
 [Home](https://github.com/golang-basics/concurrency)
