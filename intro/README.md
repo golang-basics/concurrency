@@ -190,4 +190,19 @@ Writing concurrent code does not always look as normal synchronous code. Sometim
 - [Fork Join - WaitGroup Join Point](https://github.com/golang-basics/concurrency/blob/master/intro/fork-join/wg-join-point/main.go)
 - [Fork Join - Channel Join Point](https://github.com/golang-basics/concurrency/blob/master/intro/fork-join/channel-join-point/main.go)
 
+### Resources
+
+- [Fork-Join Model - Wiki](https://en.wikipedia.org/wiki/Fork%E2%80%93join_model)
+- [Hyper-Threading - Wiki](https://en.wikipedia.org/wiki/Hyper-threading)
+- [Threads - Wiki](https://en.wikipedia.org/wiki/Thread_(computing))
+- [Concurrency is not Parallelism](https://blog.golang.org/waza-talk)
+- [Concurrent Computing - Wiki](https://en.wikipedia.org/wiki/Concurrent_computing)
+- [Parallel Computing - Wiki](https://en.wikipedia.org/wiki/Parallel_computing)
+- [Context Switching - Wiki](https://en.wikipedia.org/wiki/Context_switch#:~:text=In%20computing%2C%20a%20context%20switch,of%20a%20multitasking%20operating%20system.)
+- [Race Condition - Wiki](https://en.wikipedia.org/wiki/Race_condition#:~:text=A%20race%20condition%20or%20race,the%20possible%20behaviors%20is%20undesirable.)
+- [Deadlock - Wiki](https://en.wikipedia.org/wiki/Deadlock)
+- [Livelock - Wiki](https://en.wikipedia.org/wiki/Deadlock#Livelock)
+- [Livelock - StackOverflow](https://stackoverflow.com/questions/6155951/whats-the-difference-between-deadlock-and-livelock)
+- [Starvation - Wiki](https://en.wikipedia.org/wiki/Starvation_(computer_science))
+
 [Home](https://github.com/golang-basics/concurrency)
