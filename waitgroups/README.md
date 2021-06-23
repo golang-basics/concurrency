@@ -152,6 +152,13 @@ go test -bench=.
 
 # run the benchmarks for 3s, by default it runs them for 1s
 go test -bench=. -benchtime=3s
+
+# run the program by tracing the Go Scheduler
+GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 go run main.go
+
+# run the program by tracing the Go Scheduler on already built binary
+go build -o exec
+GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 ```
 
 ### Presentations
@@ -170,7 +177,8 @@ go test -bench=. -benchtime=3s
 - [Too many calls to Done()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/done-too-many-times/main.go)
 - [No calls to Add()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-add/main.go)
 - [Limit Go Routines](https://github.com/golang-basics/concurrency/blob/master/waitgroups/limit-goroutines/main.go)
-- [Go Routines Order](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/main.go)
+- [Go Routines Order - Simple](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/simple/main.go)
+- [Go Routines Order - Different Workloads](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/different-workloads/main.go)
 - [Atomic WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/atomic-waitgroup/main.go)
 - [WaitGroup Implementation](https://github.com/golang-basics/concurrency/blob/master/waitgroups/waitgroup-implementation/main.go)
 - [Benchmark - WaitGroup Add-One vs Add-Many](https://github.com/golang-basics/concurrency/blob/master/waitgroups/benchmarks/add1_vs_addmany_test.go)
