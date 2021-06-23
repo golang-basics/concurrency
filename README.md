@@ -87,8 +87,6 @@ Here are couple of simple rules to make sure channels are used correctly
 
 ### Mutexes
 
-### Wait Groups
-
 ### Atomics
 
 #### Poll Order
