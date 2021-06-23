@@ -152,7 +152,11 @@ go test -bench=.
 
 # run the benchmarks for 3s, by default it runs them for 1s
 go test -bench=. -benchtime=3s
+```
 
+To run your programs by tracing your go routines, and the way they're scheduled:
+
+```shell script
 # run the program by tracing the Go Scheduler
 GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 go run main.go
 
