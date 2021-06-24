@@ -32,7 +32,7 @@ Go is a powerful language, and it gained its popularity because people hear
 its **Concurrency Model** is one of the best. While Go has quite an elegant way
 of doing Concurrency, Go did not give up the Classic way of doing Concurrency.
 
-In Go there are **2 ways** of making sure concurrent code **executes correctly** and safely:
+In Go there are **2 ways** of making sure **concurrent code** executes **correctly** and **safely**:
 
 1. `Concurrency Primitives`
 2. `Channels`
@@ -99,7 +99,7 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 
 In order to achieve tasks like:
 
-- **Waiting** on Concurrent Operations to finish
+- **Waiting** on a **Condition** (concurrent operations) to finish
 - **Rate Limiting** the amount of max Concurrent Operations
 - **Preserve** Concurrent Operations **order**
 
@@ -181,6 +181,7 @@ GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 - [Too many calls to Done()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/done-too-many-times/main.go)
 - [No calls to Add()](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-add/main.go)
 - [Limit Go Routines](https://github.com/golang-basics/concurrency/blob/master/waitgroups/limit-goroutines/main.go)
+- [Rate Liming Example](https://github.com/golang-basics/concurrency/blob/master/waitgroups/rate-limiting/main.go)
 - [Go Routines Order - Simple](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/simple/main.go)
 - [Go Routines Order - Different Workloads](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/different-workloads/main.go)
 - [Atomic WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/atomic-waitgroup/main.go)
