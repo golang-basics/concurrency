@@ -12,8 +12,10 @@ import (
 // GOMAXPROCS=1 GOGC=off GODEBUG=schedtrace=1000,scheddetail=1 ./io
 func main() {
 	// keep in mind the values from:
-	// P0: syscalltick
 	// P0: schedtick
+	// P0: syscalltick
+	// https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L608
+	// https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L609
 	var wg sync.WaitGroup
 	wg.Add(3)
 	go func() {
