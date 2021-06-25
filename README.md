@@ -132,6 +132,11 @@ Primarily the Go scheduler has the opportunity to get triggered on these events:
 
 #### P, M, G
 
+G - goroutine
+M - worker thread, or machine
+P - processor, a resource that is required to execute Go code.
+    M must have an associated P to execute Go code
+
 Once the syscall exists Go tries to apply one of the rules:
 
 - try to acquire the exact same P, and resume the execution

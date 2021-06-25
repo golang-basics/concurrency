@@ -3,14 +3,38 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
+	"strings"
+	"sync"
+	"time"
 )
 
+// go build
+// GOMAXPROCS=1 GOGC=off GODEBUG=schedtrace=1000,scheddetail=1 ./io
 func main() {
-	runtime.GOMAXPROCS(1)
-	go fmt.Println("I will print in a different thread")
-	// the call below is a syscall, meaning it is a synchronous call
-	// a separate thread will take care of it to avoid blocking the existing thread
-	// try a long running write operation
-	_, _ = os.Create("test.txt")
+	// keep in mind the values from:
+	// P0: syscalltick
+	// P0: schedtick
+	var wg sync.WaitGroup
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		time.Sleep(1 * time.Second)
+		fmt.Println("go routine 1: done")
+	}()
+	go func() {
+		defer wg.Done()
+		time.Sleep(2 * time.Second)
+		fmt.Println("go routine 2: done")
+	}()
+	go func() {
+		defer wg.Done()
+		file, _ := os.CreateTemp("", "test.txt")
+		// 1GB write
+		_, _ = file.Write([]byte(strings.Repeat("a", 1_000_000_000)))
+		fmt.Println("done writing")
+	}()
+	wg.Wait()
+
+	// wait for one more Tracing event
+	time.Sleep(2*time.Second)
 }

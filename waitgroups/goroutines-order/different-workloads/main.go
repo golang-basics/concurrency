@@ -9,7 +9,8 @@ import (
 )
 
 // To have a look at how things get scheduled run the following command:
-// GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 go run main.go
+// go build main.go
+// GOMAXPROCS=1 GOGC=off GODEBUG=schedtrace=200,scheddetail=1 ./main
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(5)
