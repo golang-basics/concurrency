@@ -160,6 +160,5 @@ GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 - [`Wait()` synchronized with `Add`](https://github.com/golang/go/blob/master/src/sync/waitgroup.go#L124)
 - [WaitGroups - GoByExample](https://gobyexample.com/waitgroups)
 - [WaitGroups - CalHoun](https://www.calhoun.io/concurrency-patterns-in-go-sync-waitgroup/)
-- [Mutex - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
 
 [Home](https://github.com/golang-basics/concurrency)

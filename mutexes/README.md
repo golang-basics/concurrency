@@ -36,6 +36,10 @@ The **Lock** can only be **acquired** by **only 1 go routine** at a time, thus m
 space** in the **context** of an operation is considered to be **Atomic**, resulting in **deterministic** and **correct** results when
 **multiple concurrent operations** are involved in the game.
 
+### Presentations
+
+- [Concurrency in Go #3 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/3_mutexes)
+
 ### Examples
 
 - [Atomic WaitGroup](https://github.com/golang-basics/concurrency/blob/master/mutexes/atomic-waitgroup/main.go)
@@ -63,5 +67,9 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 - [sync.Cond vs Channel - Signal](https://github.com/golang-basics/concurrency/blob/master/mutexes/cond/cond-vs-channel/signal/main.go)
 - [sync.Cond vs Channel - Broadcast](https://github.com/golang-basics/concurrency/blob/master/mutexes/cond/cond-vs-channel/broadcast/main.go)
 - [sync.Cond vs Channel - Benchmarks](https://github.com/golang-basics/concurrency/blob/master/mutexes/cond/cond-vs-channel/benchmarks/cond_vs_channel_test.go)
+
+### Resources
+
+- [Mutex - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
 
 [Home](https://github.com/golang-basics/concurrency)
