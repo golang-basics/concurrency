@@ -171,9 +171,9 @@ GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 
 ### Examples
 
-- [No WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/no-waitgroup/main.go)
+- [No WaitGroup](https://github.com/golang-basics/concurrency/blob/master/waitgroups/without-waitgroup/main.go)
 - [Basic Example](https://github.com/golang-basics/concurrency/blob/master/waitgroups/basic/main.go)
-- [WaitGroup Parallel](https://github.com/golang-basics/concurrency/blob/master/waitgroups/waitgroup-parallel/main.go)
+- [WaitGroup Parallel](https://github.com/golang-basics/concurrency/blob/master/waitgroups/with-waitgroup/main.go)
 - [Deadlock](https://github.com/golang-basics/concurrency/blob/master/waitgroups/deadlock/main.go)
 - [Passed by Value](https://github.com/golang-basics/concurrency/blob/master/waitgroups/passed-by-value/main.go)
 - [WaitGroup reuse before Wait() return - simple](https://github.com/golang-basics/concurrency/blob/master/waitgroups/wg-reuse/simple/main.go)
