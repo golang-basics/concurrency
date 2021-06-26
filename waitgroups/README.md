@@ -147,6 +147,7 @@ GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 - [Limit Go Routines](https://github.com/golang-basics/concurrency/blob/master/waitgroups/limit-goroutines/main.go)
 - [Rate Liming Example](https://github.com/golang-basics/concurrency/blob/master/waitgroups/rate-limiting/main.go)
 - [Go Routines Order - Simple](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/simple/main.go)
+- [Go Routines Order - Preserve Order](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/preserve-order/main.go)
 - [Go Routines Order - Different Workloads](https://github.com/golang-basics/concurrency/blob/master/waitgroups/goroutines-order/different-workloads/main.go)
 - [WaitGroup Implementation](https://github.com/golang-basics/concurrency/blob/master/waitgroups/waitgroup-implementation/main.go)
 - [Benchmark - WaitGroup Add-One vs Add-Many](https://github.com/golang-basics/concurrency/blob/master/waitgroups/benchmarks/add1_vs_addmany_test.go)
