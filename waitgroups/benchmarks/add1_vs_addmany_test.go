@@ -5,6 +5,9 @@ import (
 	"testing"
 )
 
+// run all the benchmarks in the current directory
+// cd benchmarks
+// go test -bench=.
 func BenchmarkAddOne(b *testing.B) {
 	var count int
 	var wg sync.WaitGroup
@@ -18,6 +21,9 @@ func BenchmarkAddOne(b *testing.B) {
 	wg.Wait()
 }
 
+// run all the benchmarks in the current directory
+// cd benchmarks
+// go test -bench=.
 func BenchmarkAddMany(b *testing.B) {
 	var count int
 	var wg sync.WaitGroup
