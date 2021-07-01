@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// move inside mutexes
+
 // to run the benchmarks cd into "atomics/benchmarks" an run:
 // go test -bench=.
 func BenchmarkMutexNumber(b *testing.B) {

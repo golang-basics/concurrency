@@ -4,8 +4,9 @@ import "fmt"
 
 func main() {
 	c := make(chan int, 100)
-	for i := 0; i < 34; i++ {
-		c <- 0
+	for i := 0; i < 20; i++ {
+		c <- i
 	}
-	fmt.Println(len(c))
+	fmt.Println("channel capacity", cap(c))
+	fmt.Println("channel length", len(c))
 }
