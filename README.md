@@ -8,7 +8,25 @@
     <a href="https://youtu.be/_uQgGS_VIXM" target="_blank">
         <img src="https://img.shields.io/badge/Concurrency in Go %231 -- Introduction to Concurrency-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
     </a>
-    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz">
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+    <a href="https://youtu.be/srb6fbioEY4" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %232 -- WaitGroups Part 1-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+    <a href="https://youtu.be/zAMUKb6fCO0" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %233 -- WaitGroups Part 2-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+    <a href="https://youtu.be/_QNcn7LAANY" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %234 -- WaitGroups Part 3-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
         <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
     </a>
 </div>
