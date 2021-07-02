@@ -20,13 +20,13 @@
     <a href="https://youtu.be/zAMUKb6fCO0" target="_blank">
         <img src="https://img.shields.io/badge/Concurrency in Go %233 -- WaitGroups Part 2-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
     </a>
-    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-3.tar.gz">
         <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
     </a>
     <a href="https://youtu.be/_QNcn7LAANY" target="_blank">
         <img src="https://img.shields.io/badge/Concurrency in Go %234 -- WaitGroups Part 3-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
     </a>
-    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz">
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-4.tar.gz">
         <img src="https://img.shields.io/badge/Download Zip 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
     </a>
 </div>
