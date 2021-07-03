@@ -177,6 +177,10 @@ When **1 of multiple concurrent processes** involved **abuses the CPU**, thus ca
 Writing concurrent code does not always look as normal synchronous code. Sometimes complexity
 **grows naturally** just because of the **concurrent complex nature**, thus requiring **shifting the code design**.
 
+### Zip Archives
+
+- [Concurrency in Go #1 - Introduction to Concurrency](https://youtu.be/_uQgGS_VIXM) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-1.tar.gz)
+
 ### Presentations
 
 - [Concurrency in Go #1 - Introduction to Concurrency](https://github.com/golang-basics/concurrency/raw/master/presentations/1_introduction-to-concurrency)

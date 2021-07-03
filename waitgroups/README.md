@@ -129,9 +129,15 @@ go build -o exec
 GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 ```
 
+### Zip Archives
+
+- [Concurrency in Go #2 - WaitGroups (Part 1)](https://youtu.be/srb6fbioEY4) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-2.tar.gz)
+- [Concurrency in Go #3 - WaitGroups (Part 2)](https://youtu.be/zAMUKb6fCO0) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-3.tar.gz)
+- [Concurrency in Go #4 - WaitGroups (Part 3)](https://youtu.be/_QNcn7LAANY) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-4.tar.gz)
+
 ### Presentations
 
-- [Concurrency in Go #2 - WaitGroups](https://github.com/golang-basics/concurrency/raw/master/presentations/2_waitgroups)
+- [Concurrency in Go #2, #3, #4 - WaitGroups](https://github.com/golang-basics/concurrency/raw/master/presentations/2_waitgroups)
 
 ### Examples
 
