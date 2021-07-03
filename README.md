@@ -43,7 +43,7 @@
 - [Select](https://github.com/golang-basics/concurrency/tree/master/select)
 - [Concurrency Patterns](https://github.com/golang-basics/concurrency/tree/master/patterns)
 - [Atomics](https://github.com/golang-basics/concurrency/tree/master/atomics)
-- [Wait Groups - sync.WaitGroup](https://github.com/golang-basics/concurrency/tree/master/waitgroups)
+- [WaitGroup(s) - sync.WaitGroup](https://github.com/golang-basics/concurrency/tree/master/waitgroups)
 - [Mutexes - sync.Mutex](https://github.com/golang-basics/concurrency/tree/master/mutexes)
 - [Pool - sync.Pool](https://github.com/golang-basics/concurrency/tree/master/pool)
 - [Map - sync.Map](https://github.com/golang-basics/concurrency/tree/master/mutexes/syncmap)
