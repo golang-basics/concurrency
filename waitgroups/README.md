@@ -1,4 +1,4 @@
-# Wait Groups
+# WaitGroup(s) - `sync.WaitGroup`
 
 ### The Problem
 
