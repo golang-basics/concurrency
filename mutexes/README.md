@@ -38,7 +38,7 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 
 ### Presentations
 
-- [Concurrency in Go #3 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/3_mutexes)
+- [Concurrency in Go #6 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/6_mutexes)
 
 ### Examples
 

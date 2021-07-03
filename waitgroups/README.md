@@ -137,7 +137,7 @@ GOMAXPROCS=1 GODEBUG=schedtrace=5000,scheddetail=1 ./exec
 
 ### Presentations
 
-- [Concurrency in Go #2, #3, #4 - WaitGroups](https://github.com/golang-basics/concurrency/raw/master/presentations/2_waitgroups)
+- [Concurrency in Go #2, #3, #4 - WaitGroups](https://github.com/golang-basics/concurrency/raw/master/presentations/2_3_4_waitgroups)
 
 ### Examples
 
