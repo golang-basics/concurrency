@@ -3,13 +3,24 @@
 ### Tips
 
 ```shell script
-# compile the go program and generate an object file
+# generate object file from Go's pseudo assembly instructions
+go tool asm arithmetics.s
+
+# compiles the go program and generates an object file
 # with pseudo assembly instructions
 go tool compile -S main.go
-go tool compile -S main.go > main.asm
 
-# check out what gets put in the binary
+# compiles the go program and generates an object file
+# with pseudo assembly instructions
+# and saves the instructions in the specified file
+go tool compile -S main.go > main.s
+
+# generate a binary from the specified object file
+go tool link main.o
+
+# compiles and generates a binary from main.go
 go build -o exec main.go
+# dumps the assembly instructions from the generated binary
 go tool objdump -s main.main exec
 ```
 
@@ -45,13 +56,20 @@ For more checkout out
 - [Processor Register - Wiki](https://en.wikipedia.org/wiki/Processor_register)
 - [Assembly Language - Wiki](https://en.wikipedia.org/wiki/Assembly_language)
 - [Linker - Wiki](https://en.wikipedia.org/wiki/Linker_(computing))
-- [Go Assembler - golang.org](https://golang.org/doc/asm)
+- [Go Compiler Intrinsics - Dave Cheney](https://dave.cheney.net/2019/08/20/go-compiler-intrinsics)
+- [Go Assembler Docs - golang.org](https://golang.org/doc/asm)
+- [Go Tool (asm) - golang.org](https://golang.org/cmd/asm/)
+- [Go Tool (compile) - golang.org](https://golang.org/cmd/compile/)
+- [Go Tool (link) - golang.org](https://golang.org/cmd/link/)
 - [Atomic Source Code](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L28)
 - [Atomic ASM - Loadint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L19)
 - [Atomic ASM - Load64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_386.s#L220)
 - [Atomic ASM - Storeint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L180)
 - [386 Ops - Source](https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/386Ops.go#L30)
+- [386 Instructions - Source](https://github.com/golang/go/blob/release-branch.go1.5/src/cmd/internal/obj/x86/anames.go#L8)
 - [arch.Set - Internal Source](https://github.com/golang/go/blob/master/src/cmd/asm/internal/arch/arch.go#L53)
 - [arch.archX86 - Internal Source](https://github.com/golang/go/blob/master/src/cmd/asm/internal/arch/arch.go#L102)
+- [go build - Internal Source](https://github.com/golang/go/blob/master/src/cmd/go/internal/work/build.go#L366)
+- [Function declarations - Spec](https://golang.org/ref/spec#Function_declarations)
 
 [Home](https://github.com/golang-basics/concurrency)
