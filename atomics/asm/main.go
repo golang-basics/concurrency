@@ -4,16 +4,18 @@ import (
 	"fmt"
 )
 
-func Abs(x float64) float64
-func Sqrt(x float64) float64
-func ASMWelcome()
+func Abs(float64) float64
+func Sqrt(float64) float64
+func ASMPrintResult(float64, float64)
 
-func welcome() {
-	fmt.Println("welcome")
+func printResult(absRes, sqrtRes float64) {
+	fmt.Println("abs result", absRes)
+	fmt.Println("sqrt result", sqrtRes)
 }
 
+// to run this example run the following commands:
+// go build -o exec
+// ./exec
 func main() {
-	ASMWelcome()
-	fmt.Println(Abs(-12))
-	fmt.Println(Sqrt(25))
+	ASMPrintResult(Abs(-12), Sqrt(25))
 }
