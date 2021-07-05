@@ -63,6 +63,8 @@ For more checkout out
 - [Go Tool (link) - golang.org](https://golang.org/cmd/link/)
 - [Atomic Source Code](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L28)
 - [Atomic ASM - Loadint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L19)
+- [`sync/runtime/internal/atomic/atomic_amd64` - Store64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L171)
+- [`sync/atomic/asm.s` - LoadInt64 Source](https://github.com/golang/go/blob/master/src/sync/atomic/asm.s#L61)
 - [Atomic ASM - Load64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_386.s#L220)
 - [Atomic ASM - Storeint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L180)
 - [386 Ops - Source](https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/386Ops.go#L30)

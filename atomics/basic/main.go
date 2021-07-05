@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// to test for race condition, run this example with the -race flag
+// go run -race main.go
 func main() {
 	var count int64 = 0
 	var wg sync.WaitGroup
