@@ -30,6 +30,11 @@ func BenchmarkStoreValue(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		go func(i int) {
 			defer wg.Done()
+			// In a real world it would take even more time
+			// because you have to do type conversion
+			// from interface{} to whatever you think it's stored there
+			// something like the following
+			// _ = v.Load().(int64)
 			v.Store(int64(i))
 		}(i)
 	}
