@@ -49,6 +49,10 @@ For more checkout out
 - [Atomicity](https://github.com/golang-basics/concurrency/blob/master/atomics/atomicity/main.go)
 - [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic/main.go)
 - [atomic.Value](https://github.com/golang-basics/concurrency/blob/master/atomics/value/main.go)
+- [Calculator Example](https://github.com/golang-basics/concurrency/blob/master/atomics/calculator/main.go)
+- [ASM Example](https://github.com/golang-basics/concurrency/blob/master/atomics/asm/main.go)
+- [Atomic Implementation](https://github.com/golang-basics/concurrency/blob/master/atomics/atomic-implementation/main.go)
+- [Benchmarks](https://github.com/golang-basics/concurrency/blob/master/atomics/benchmarks/number_vs_value_test.go)
 
 ### Resources
 
