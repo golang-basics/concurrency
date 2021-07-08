@@ -1,5 +1,9 @@
 # Atomic(s) - `sync/atomic`
 
+### atomic
+
+`sync.Value` => `sync.Map` uses `sync.Value`
+
 ### Tips
 
 ```shell script
@@ -48,7 +52,9 @@ For more checkout out
 
 - [Atomicity](https://github.com/golang-basics/concurrency/blob/master/atomics/atomicity/main.go)
 - [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic/main.go)
-- [atomic.Value](https://github.com/golang-basics/concurrency/blob/master/atomics/value/main.go)
+- [atomic.Value - panic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/panic/main.go)
+- [atomic.Value - reader/writer](https://github.com/golang-basics/concurrency/blob/master/atomics/value/reader-writer/main.go)
+- [atomic.Value - not atomic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/not-atomic/main.go)
 - [Calculator Example](https://github.com/golang-basics/concurrency/blob/master/atomics/calculator/main.go)
 - [ASM Example](https://github.com/golang-basics/concurrency/blob/master/atomics/asm/main.go)
 - [Atomic Implementation](https://github.com/golang-basics/concurrency/blob/master/atomics/atomic-implementation/main.go)
