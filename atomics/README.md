@@ -40,6 +40,10 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 
 `sync.Value` => `sync.Map` uses `sync.Value`
 
+A 64-bit register can theoretically reference 18,446,744,073,709,551,616 bytes,
+or 17,179,869,184 gigabytes (16 exabytes) of memory.
+This is several million times more than an average workstation would need to access.
+
 ### Tips
 
 ```shell script
