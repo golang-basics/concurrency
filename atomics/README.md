@@ -144,7 +144,7 @@ For more checkout out
 
 ### Examples
 
-- [Atomicity](https://github.com/golang-basics/concurrency/blob/master/atomics/atomicity/main.go)
+- [Race Example](https://github.com/golang-basics/concurrency/blob/master/atomics/race/main.go)
 - [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic/main.go)
 - [atomic.Value - panic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/panic/main.go)
 - [atomic.Value - reader/writer](https://github.com/golang-basics/concurrency/blob/master/atomics/value/reader-writer/main.go)
