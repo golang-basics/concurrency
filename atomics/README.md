@@ -1,5 +1,24 @@
 # Atomic(s) - `sync/atomic`
 
+High Level languages are cool, but nothing beats code that executes directly on the CPU Level.
+In Go those are atomic(s). Running concurrent code can both be: Slow and Cumbersome
+(due to the synchronisation involved). However, the `atomic.Value` type is the best
+of both worlds: blazing fast and less cumbersome compared to other sync types.
+
+When you think of Atomic(s), it's nothing fancy or anything Go related,
+it's really something which is as close as possible to the CPU Level,
+which works directly with CPU registers, hence the blazing fast speed.
+
+When you think of Atoms, these are the smallest Indivisible units. The same approach
+pretty much is valid when it comes to Concurrency.
+
+These are some examples of the simplest Atomic Operations: `+`, `-`, `*`, `/`, `=`
+that respect all principles of Atomicity. 
+
+So why is it called Atomic, and what exactly does the term ATOMIC mean?
+Something is Atomic, if it happens from point A to point Z in its ENTIRETY
+without being interrupted by other process in the same Context.
+
 ### Atomicity
 
 An operation is considered **Atomic**, if within the **context** it is operating it is `Indivisible` or `Uninterruptible`.
@@ -36,9 +55,44 @@ The **Lock** can only be **acquired** by **only 1 go routine** at a time, thus m
 space** in the **context** of an operation is considered to be **Atomic**, resulting in **deterministic** and **correct** results when
 **multiple concurrent operations** are involved in the game.
 
-### atomic
+### `sync/atomic`
+
+Most functionalities provided by the `sync/atomic` package are there to work with numbers.
+Types like:
+
+- `int32`
+- `int64`
+- `uint32`
+- `uint64`
+- `uintptr`
+- `Pointer`
+
+Respectively available functions for each of those types:
+
+- `Load__`
+- `Add__`
+- `Store__`
+- `Swap__`
+- `CompareAndSwap__`
+
+
+Besides, working mostly with numbers (except `Pointer`) the `sync/atomic` package
+also provides the `atomic.Value` type which has the handy methods:
+
+- `Store`
+- `Load`
+
+which facilitates Concurrency for a more complex/hybrid type.
 
 `sync.Value` => `sync.Map` uses `sync.Value`
+
+### Behind the Scenes
+
+#### 32bit vs 64bit
+
+#### CPU Registers
+
+#### Cross Compilation Workflow
 
 A 64-bit register can theoretically reference 18,446,744,073,709,551,616 bytes,
 or 17,179,869,184 gigabytes (16 exabytes) of memory.
