@@ -1,23 +1,23 @@
 # Atomic(s) - `sync/atomic`
 
-High Level languages are cool, but nothing beats code that executes directly on the CPU Level.
-In Go those are atomic(s). Running concurrent code can both be: Slow and Cumbersome
-(due to the synchronisation involved). However, the `atomic.Value` type is the best
-of both worlds: blazing fast and less cumbersome compared to other sync types.
+**High Level languages** are cool, but nothing beats code that executes directly on the **CPU Level**.
+In Go those are ***atomic(s)***. Running concurrent code can both be: **Slow** and **Cumbersome**
+(due to the **synchronisation** involved). However, the `atomic.Value` type is the best
+of both worlds: **blazing fast** and **less cumbersome** compared to other **sync types**.
 
-When you think of Atomic(s), it's nothing fancy or anything Go related,
-it's really something which is as close as possible to the CPU Level,
-which works directly with CPU registers, hence the blazing fast speed.
+When you think of **Atomic(s)**, it's nothing fancy or anything Go related,
+it's really something which is as **close** as possible to the **CPU Level**,
+which works directly with **CPU registers**, hence the blazing fast speed.
 
-When you think of Atoms, these are the smallest Indivisible units. The same approach
+When you think of **Atoms**, these are the **smallest** **Indivisible** units. The same approach
 pretty much is valid when it comes to Concurrency.
 
-These are some examples of the simplest Atomic Operations: `+`, `-`, `*`, `/`, `=`
-that respect all principles of Atomicity. 
+These are some examples of the simplest **Atomic Operations**: `+`, `-`, `*`, `/`, `=`
+that respect all principles of **Atomicity**. 
 
-So why is it called Atomic, and what exactly does the term ATOMIC mean?
-Something is Atomic, if it happens from point A to point Z in its ENTIRETY
-without being interrupted by other process in the same Context.
+So why is it called **Atomic**, and what exactly does the term **ATOMIC** mean?
+Something is Atomic, if it **HAPPENS** from point A to point Z in its **ENTIRETY**
+**WITHOUT BEING INTERRUPTED** by other processes in the same **Context**.
 
 ### Atomicity
 
@@ -57,8 +57,8 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 
 ### `sync/atomic`
 
-Most functionalities provided by the `sync/atomic` package are there to work with numbers.
-Types like:
+Most functionalities provided by the `sync/atomic` package are there to work with **numbers**.
+These types are:
 
 - `int32`
 - `int64`
@@ -82,18 +82,150 @@ also provides the `atomic.Value` type which has the handy methods:
 - `Store`
 - `Load`
 
-which facilitates Concurrency for a more complex/hybrid type.
+which facilitate Concurrency for a more complex/hybrid type.
 
-`sync.Value` => `sync.Map` uses `sync.Value`
+**Note:** A more complex type `sync.Map` provided by the sync package
+also makes use of `atomic.Value`
+
+### Atomic(s) Downsides
+
+- Mostly works with **Numbers**
+- `atomic.Value` is generic (**type assertion** required)
+- `atomic.Value` has **Limited Context** (cumbersome/impossible to use on sequential data)
+- `atomic.Value` is **not always Atomic** (if not careful, we may run into race conditions)
 
 ### Behind the Scenes
 
-#### 32bit vs 64bit
+Whether an operation executes concurrently or not, it has to either to with
+some kind of **computation/calculus** or **memory access**. In the computers' era,
+things are controlled and coordinated by the CPU, whether it's memory or computation.
 
 #### CPU Registers
 
+Alongside many things a CPU has, one of the most important things
+are its **registers**. Some of these registers are:
+
+- `Memory Address Register` (MAR)
+- `Stack Control Register` (ACR)
+- `Memory Data Register` (MDR)
+- `Flag Register` (FR)
+- `Accumulator Register` (AC)
+- `Instruction Pointer Register` (IPR)
+- `Data Register`
+- `Address or Segment Register` (AR or SR)
+- `Memory Buffer Register` (MBR)
+- `Index Register`
+- `Program Counter` (PC)
+
+Shortly every **memory/computation** operation has to deal with **registers**.
+A register can either be **used** or **not used**. What that means for concurrent code,
+is that every process will get its turn to work with the register and there's
+no need for any kind of **memory access synchronization** or other types of
+measures we usually take in a high level language which executes concurrent code.
+
+If we go back to **Atomic(s)**, these are **Go ASM (Assembly)** routines that execute directly on CPU
+thus, **not needing** any kind of **memory access synchronisation**, and they are **blazing fast**
+if benchmarked against other types in the sync package.
+
 #### Cross Compilation Workflow
 
+Along with many other reasons why people choose Go, it also provides a beautiful and super
+elegant code **cross compilation model**, which works beautifully pretty much on **any
+operating system** and **architecture** available nowadays.
+
+When you think of architectures, there's plenty of them. These are the ones Go supports:
+
+- `386`
+- `amd64`
+- `arm`
+- `arm64`
+- `mips`
+- `mipsle`
+- `mips64`
+- `mipsle64`
+- `ppc64`
+- `ppc64le`
+- `riscv64`
+- `s390x`
+- `wasm`
+
+Here's a small overview of how things really happen under the hood, from **compiling** your
+Go source code, till you have a **generated binary**, that actually gets to be executed on
+your **specific OS** and **Architecture**:
+
+1. Go source Code (obviously :D)
+2. The `$GOOS` and `$GOARCH` variables, accepting a bunch of OSes and Architectures
+3. `Go Compiler` which compiles your code given the Go Code and `$GOOS` & `$GOARCH`
+4. Once the compiler is done, it'll generate a `main.s`, which are `Go` pseudo `ASM` (Assembly) instructions
+5. That is then picked up by the Go ASM (Assembler) tool and goes through the `obj` library
+6. The `obj` library maps the **pseudo instructions** to **real architecture instructions**
+generating an object file i.e `main.o` (this process is called assembling)
+7. Then the `Go Linker` tool will pick the object file and **generate a binary** out of it (this process is called linking)
+8. The generated binary is nothing but 0s and 1s, which is the only thing the CPU gets to eat
+
+#### `go build` Workflow
+
+When running the `go build` command, pretty much the exact same process described before happens.
+
+1. Apply the **Cross Compilation** phase for the `main` package usually the `main.go` containing the `main()` func
+2. Look for any **Go ASM files**, usually the ones that end with `.s` for the provided specific architecture.
+3. **Create object files** for those ASM files
+4. **Link** all **objects** and **generate** the final **binary**.
+
+If your regular good old Go code, contains `functions` with `missing body`, the code
+will expect some **external ASM declarations**, pretty much like is done in most C/C++ code.
+This is crucial to making the **link between Go code and ASM code**.
+
+Just like regular go files (`.go`) the ASM ones (`.s`) the same
+`name_$GOOS_GOARCH.go` and respectively `name_$GOOS_GOARCH.s` rules apply.
+Naming your files using the `$GOOS_$GOARCH` combination, will make the
+build tool pick only the ones for the provided **OS** and respective **Architecture**.
+
+For a more detailed example, have a look [here](https://github.com/golang-basics/concurrency/blob/master/atomics/asm/main.go)
+
+#### Go ASM
+
+Most statically typed languages only have 3 phases: `Compilation`->`Assembling`->`Linking`
+
+Go has obviously more phases, to easier **accommodate multiple architectures** and make **cross
+compilation** easy & make **builds faster** by eliminating some heavy work on
+the assembly process.
+
+**Go** has its own **Assembler**, which as I mentioned before generates **ASM like instructions**
+which are pretty **architecture agnostic** and are pretty much pseudo instructions
+meant to be used internally by the `obj` library, which then **maps** against **real
+architecture instructions** and generates real **ASM instructions** for your
+specific **OS** and **Architecture**.
+
+Here are some ASM symbols and abbreviations Go uses internally
+
+- `FP` Frame pointer: arguments and locals.
+- `PC` Program counter: jumps and branches.
+- `SB` Static base pointer: global symbols.
+- `SP` Stack pointer: top of stack.
+
+For more checkout out
+
+- `$GOROOT/src/cmd/asm/internal/arch`
+- `$GOROOT/src/cmd/internal/obj`
+
+#### 32bit vs 64bit
+
+Most Operating Systems out there run on either **32bit** or **64bit** architecture.
+The question is, which one is better?
+
+The answer is pretty simple, obviously 64bit.
+
+There are 2 significant differences.
+
+1. **Maximum number of ALU operations** performed: `32` and `64` respectively.
+
+Which means, the CPU will be able to process that many **arithmetic** and **logical**
+operations in a 32bit and respectively 64bit system.
+
+2. **Max RAM memory available**: `3.25 GB` and respectively `16 EB` (16B GB)
+
+Which of course means **larger CPU registers** 32bit vs 64bit values.
 A 64-bit register can theoretically reference 18,446,744,073,709,551,616 bytes,
 or 17,179,869,184 gigabytes (16 exabytes) of memory.
 This is several million times more than an average workstation would need to access.
@@ -125,25 +257,13 @@ go build -o exec main.go
 go tool objdump -s main.main exec
 ```
 
-Here are some symbols and abbreviations Go uses internally
-
-- FP: Frame pointer: arguments and locals.
-- PC: Program counter: jumps and branches.
-- SB: Static base pointer: global symbols.
-- SP: Stack pointer: top of stack.
-
-For more checkout out
-
-- `$GOROOT/src/cmd/asm/internal/arch`
-- `$GOROOT/src/cmd/internal/obj`
-
 ### Zip Archives
 
 - [Concurrency in Go #5 - Atomics](https://youtu.be/srb6fbioEY4) - [[Download Zip]](https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-5.tar.gz)
 
 ### Presentations
 
-- [Concurrency in Go #5 - Atomics](https://github.com/golang-basics/concurrency/raw/master/presentations/5_6_atomics)
+- [Concurrency in Go #5, #6 - Atomics](https://github.com/golang-basics/concurrency/raw/master/presentations/5_6_atomics)
 
 ### Examples
 
@@ -161,6 +281,7 @@ For more checkout out
 
 - [Atomicity - Wiki](https://en.wikipedia.org/wiki/Linearizability#Atomic)
 - [Processor Register - Wiki](https://en.wikipedia.org/wiki/Processor_register)
+- [CPU Registers](https://sciencerack.com/types-of-cpu-registers/)
 - [Assembly Language - Wiki](https://en.wikipedia.org/wiki/Assembly_language)
 - [Linker - Wiki](https://en.wikipedia.org/wiki/Linker_(computing))
 - [Go Compiler Intrinsics - Dave Cheney](https://dave.cheney.net/2019/08/20/go-compiler-intrinsics)

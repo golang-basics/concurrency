@@ -109,10 +109,6 @@ Here are couple of simple rules to make sure channels are used correctly
 - Reading from a closed channel won't have any effects
 - A channel close, is considered a write operation
 
-### Mutexes
-
-### Atomics
-
 #### Poll Order
 
 - Local Run queue
