@@ -103,7 +103,17 @@ things are controlled and coordinated by the CPU, whether it's memory or computa
 #### CPU Registers
 
 Alongside many things a CPU has, one of the most important things
-are its **registers**. Some of these registers are:
+are its **registers**.
+
+What is a Register?
+CPU registers are high-speed storage locations inside the microprocessor used
+for **Memory Addressing**, **Data Operation**, and **Processing**.
+
+A register is a **small** **high-speed memory** inside the **CPU**. It is used to **store** **temporary results**.
+Registers are designed to be assessed at a much **higher speed** than conventional memory.
+Some registers are **general purpose**, while others are **classified** according to the function they perform.
+
+Some of these registers are:
 
 - `Memory Address Register` (MAR)
 - `Stack Control Register` (ACR)
@@ -126,6 +136,8 @@ measures we usually take in a high level language which executes concurrent code
 If we go back to **Atomic(s)**, these are **Go ASM (Assembly)** routines that execute directly on CPU
 thus, **not needing** any kind of **memory access synchronisation**, and they are **blazing fast**
 if benchmarked against other types in the sync package.
+
+For more on what kind of registers are available check out the [CPU Registers](./registers.md)
 
 #### Cross Compilation Workflow
 
@@ -282,6 +294,7 @@ go tool objdump -s main.main exec
 - [Atomicity - Wiki](https://en.wikipedia.org/wiki/Linearizability#Atomic)
 - [Processor Register - Wiki](https://en.wikipedia.org/wiki/Processor_register)
 - [CPU Registers](https://sciencerack.com/types-of-cpu-registers/)
+- [CPU Registers & Memory](https://www.doc.ic.ac.uk/~eedwards/compsys/memory/index.html#:~:text=Registers%20are%20memories%20located%20within,than%2064%20bits%20in%20size.)
 - [Assembly Language - Wiki](https://en.wikipedia.org/wiki/Assembly_language)
 - [Linker - Wiki](https://en.wikipedia.org/wiki/Linker_(computing))
 - [Go Compiler Intrinsics - Dave Cheney](https://dave.cheney.net/2019/08/20/go-compiler-intrinsics)
