@@ -143,7 +143,7 @@ For more checkout out
 
 ### Presentations
 
-- [Concurrency in Go #5 - Atomics](https://github.com/golang-basics/concurrency/raw/master/presentations/5_atomics)
+- [Concurrency in Go #5 - Atomics](https://github.com/golang-basics/concurrency/raw/master/presentations/5_6_atomics)
 
 ### Examples
 
@@ -189,5 +189,6 @@ For more checkout out
 - [arch.archX86 - Internal Source](https://github.com/golang/go/blob/master/src/cmd/asm/internal/arch/arch.go#L102)
 - [386 Ops - Source](https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/386Ops.go#L30)
 - [386 Instructions - Source](https://github.com/golang/go/blob/master/src/cmd/internal/obj/x86/anames.go#L8)
+- [`sync.Map` - `atomic.Value` - Source Code](https://github.com/golang/go/blob/master/src/sync/map.go#L39)
 
 [Home](https://github.com/golang-basics/concurrency)
