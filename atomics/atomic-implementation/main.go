@@ -6,6 +6,14 @@ import (
 )
 
 // taken from the source code
+// LoadInt64
+// https://github.com/golang/go/blob/master/src/sync/atomic/doc.go#L114
+// https://github.com/golang/go/blob/master/src/sync/atomic/asm.s#L61
+// https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L28
+
+// StoreInt64
+// https://github.com/golang/go/blob/master/src/sync/atomic/doc.go#L132
+// https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L101
 // https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L171
 func StoreInt64(addr *int64, value int64)
 

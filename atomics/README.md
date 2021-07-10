@@ -101,8 +101,11 @@ This is several million times more than an average workstation would need to acc
 ### Tips
 
 ```shell script
+# cd into asm directory
+cd asm
+
 # generate object file from Go's pseudo assembly instructions
-go tool asm arithmetics.s
+go tool asm sqrt_amd64.s
 
 # compiles the go program and generates an object file
 # with pseudo assembly instructions
@@ -145,11 +148,11 @@ For more checkout out
 ### Examples
 
 - [Race Example](https://github.com/golang-basics/concurrency/blob/master/atomics/race/main.go)
-- [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic/main.go)
+- [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic-counter/main.go)
+- [atomic.Value - Reader/Writer Example](https://github.com/golang-basics/concurrency/blob/master/atomics/value/reader-writer/main.go)
+- [atomic.Value - Calculator Example](https://github.com/golang-basics/concurrency/blob/master/atomics/value/calculator/main.go)
 - [atomic.Value - panic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/panic/main.go)
-- [atomic.Value - reader/writer](https://github.com/golang-basics/concurrency/blob/master/atomics/value/reader-writer/main.go)
 - [atomic.Value - not atomic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/not-atomic/main.go)
-- [Calculator Example](https://github.com/golang-basics/concurrency/blob/master/atomics/calculator/main.go)
 - [ASM Example](https://github.com/golang-basics/concurrency/blob/master/atomics/asm/main.go)
 - [Atomic Implementation](https://github.com/golang-basics/concurrency/blob/master/atomics/atomic-implementation/main.go)
 - [Benchmarks](https://github.com/golang-basics/concurrency/blob/master/atomics/benchmarks/number_vs_value_test.go)
@@ -165,11 +168,20 @@ For more checkout out
 - [Go Tool (asm) - golang.org](https://golang.org/cmd/asm/)
 - [Go Tool (compile) - golang.org](https://golang.org/cmd/compile/)
 - [Go Tool (link) - golang.org](https://golang.org/cmd/link/)
-- [Atomic Source Code](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L28)
+- [`math.Sqrt` - Source Code Go](https://github.com/golang/go/blob/master/src/math/sqrt.go#L92)
+- [`math.Sqrt` - Source Code ASM Go](https://github.com/golang/go/blob/master/src/math/sqrt_asm.go#L12)
+- [`math.Sqrt` - Source Code ASM](https://github.com/golang/go/blob/master/src/math/sqrt_amd64.s#L8)
+- [`math.Floor` - Source Code Go](https://github.com/golang/go/blob/master/src/math/floor.go#L13)
+- [`math.Floor` - Source Code ASM Go](https://github.com/golang/go/blob/master/src/math/floor_asm.go#L12)
+- [`math.Floor` - Source Code ASM](https://github.com/golang/go/blob/master/src/math/floor_amd64.s#L10)
+- [Atomic Source Code - Doc Go - LoadInt64](https://github.com/golang/go/blob/master/src/sync/atomic/doc.go#L114)
+- [Atomic Source Code - ASM - LoadInt64](https://github.com/golang/go/blob/master/src/sync/atomic/asm.s#L61)
+- [Atomic Source Code - Internal Go - LoadInt64](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L28)
 - [Atomic ASM - Loadint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L19)
 - [`sync/runtime/internal/atomic/atomic_amd64` - Store64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L171)
-- [`sync/atomic/asm.s` - LoadInt64 Source](https://github.com/golang/go/blob/master/src/sync/atomic/asm.s#L61)
-- [Atomic ASM - Load64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_386.s#L220)
+- [Atomic Source Code - Doc Go - StoreInt64](https://github.com/golang/go/blob/master/src/sync/atomic/doc.go#L132)
+- [Atomic Source Code - Internal Go - StoreInt64](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.go#L101)
+- [Atomic Source Code - ASM - StoreInt64](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L171)
 - [Atomic ASM - Storeint64 Source](https://github.com/golang/go/blob/master/src/runtime/internal/atomic/atomic_amd64.s#L180)
 - [386 Ops - Source](https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/386Ops.go#L30)
 - [386 Instructions - Source](https://github.com/golang/go/blob/release-branch.go1.5/src/cmd/internal/obj/x86/anames.go#L8)
