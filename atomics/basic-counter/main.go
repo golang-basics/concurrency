@@ -15,19 +15,19 @@ func main() {
 
 	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		time.Sleep(10 * time.Millisecond)
-		fmt.Println(atomic.LoadInt64(&count))
-		wg.Done()
+		fmt.Println("count in go routine", atomic.LoadInt64(&count))
 	}()
 
+	wg.Add(50)
 	for i := 0; i < 50; i++ {
-		wg.Add(1)
 		go func() {
+			defer wg.Done()
 			time.Sleep(10 * time.Millisecond)
 			atomic.AddInt64(&count, 1)
-			wg.Done()
 		}()
 	}
 	wg.Wait()
-	fmt.Println(count)
+	fmt.Println("count in main", count)
 }

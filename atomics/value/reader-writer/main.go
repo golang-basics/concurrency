@@ -35,6 +35,7 @@ func main() {
 	wg.Add(5)
 	for i := 0; i < 5; i++ {
 		go func() {
+			defer wg.Done()
 			// we're gonna get a panic this way
 			// cfg := v.Load().(Config)
 			cfg, ok := v.Load().(Config)
@@ -42,7 +43,6 @@ func main() {
 				log.Fatalf("received different type: %T", cfg)
 			}
 			fmt.Println("cfg", cfg)
-			wg.Done()
 		}()
 	}
 	wg.Wait()

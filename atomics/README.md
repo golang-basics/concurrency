@@ -281,6 +281,7 @@ go tool objdump -s main.main exec
 
 - [Race Example](https://github.com/golang-basics/concurrency/blob/master/atomics/race/main.go)
 - [Basic Counter](https://github.com/golang-basics/concurrency/blob/master/atomics/basic-counter/main.go)
+- [Race Fixed Example](https://github.com/golang-basics/concurrency/blob/master/atomics/race-fixed/main.go)
 - [atomic.Value - Reader/Writer Example](https://github.com/golang-basics/concurrency/blob/master/atomics/value/reader-writer/main.go)
 - [atomic.Value - Calculator Example](https://github.com/golang-basics/concurrency/blob/master/atomics/value/calculator/main.go)
 - [atomic.Value - panic](https://github.com/golang-basics/concurrency/blob/master/atomics/value/panic/main.go)
