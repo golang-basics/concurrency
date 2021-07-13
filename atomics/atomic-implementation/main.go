@@ -25,7 +25,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(100)
-	for i:=0;i<100;i++ {
+	for i := 0; i < 100; i++ {
 		go func(i int) {
 			defer wg.Done()
 			StoreInt64(&count, int64(i+1))

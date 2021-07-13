@@ -13,7 +13,7 @@ func main() {
 	wg.Add(10)
 	now := time.Now()
 	for i := 0; i < 10; i++ {
-		go work(&wg, i + 1)
+		go work(&wg, i+1)
 	}
 	wg.Wait()
 	fmt.Println("elapsed:", time.Since(now))

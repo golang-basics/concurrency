@@ -21,13 +21,13 @@ func main() {
 }
 
 func task1(done chan struct{}) {
-	time.Sleep(100*time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	fmt.Println("task1")
 	done <- struct{}{}
 }
 
 func task2(done chan struct{}) {
-	time.Sleep(200*time.Millisecond)
+	time.Sleep(200 * time.Millisecond)
 	fmt.Println("task2")
 	done <- struct{}{}
 }
@@ -38,7 +38,7 @@ func task3(done chan struct{}) {
 }
 
 func task4(done chan struct{}) {
-	time.Sleep(100*time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	fmt.Println("task4")
 	done <- struct{}{}
 }

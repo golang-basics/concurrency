@@ -38,5 +38,5 @@ func main() {
 	wg.Wait()
 
 	// wait for one more Tracing event
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 }

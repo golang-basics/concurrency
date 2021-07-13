@@ -12,7 +12,8 @@ func main() {
 	runtime.GOMAXPROCS(32)
 	for i := 0; i < 32; i++ {
 		go func() {
-			for{}
+			for {
+			}
 		}()
 	}
 	time.Sleep(time.Minute)

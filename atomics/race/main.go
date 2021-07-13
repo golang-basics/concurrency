@@ -13,11 +13,11 @@ func main() {
 	wg.Add(5)
 	go func() {
 		defer wg.Done()
-		count+=10
+		count += 10
 	}()
 	go func() {
 		defer wg.Done()
-		count-=15
+		count -= 15
 	}()
 	go func() {
 		defer wg.Done()
