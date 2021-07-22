@@ -33,6 +33,20 @@
         <img src="https://img.shields.io/badge/Download Zip %234 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
     </a>
     <br/>
+    <a href="https://youtu.be/nVjAS0uEnVM" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %235 -- Atomics Part 1-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-5.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip %235 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+    <br/>
+    <a href="https://youtu.be/lKds8lAzt6s" target="_blank">
+        <img src="https://img.shields.io/badge/Concurrency in Go %236 -- Atomics Part 2-0B0B0B?&style=for-the-badge&logo=youtube&logoColor=white" alt="youtube"/>
+    </a>
+    <a href="https://github.com/golang-basics/concurrency/raw/master/archives/concurrency-6.tar.gz">
+        <img src="https://img.shields.io/badge/Download Zip %236 📦-00C853?&style=for-the-badge&logoColor=white" alt="zip archive"/>
+    </a>
+    <br/>
 </div>
 
 ### Coding Examples
