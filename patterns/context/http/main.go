@@ -38,7 +38,6 @@ func main() {
 			errChan <- err
 		}
 	}()
-	signal.Notify(quitChan, syscall.SIGINT, os.Interrupt)
 
 	select {
 	case <-quitChan:
