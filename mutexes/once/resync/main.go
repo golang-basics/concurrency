@@ -29,30 +29,28 @@ func (o *once) Do(fn func()) {
 	}
 }
 
+// https://github.com/matryer/resync
+func (o *once) Reset() {
+	o.mu.Lock()
+	defer o.mu.Unlock()
+	atomic.StoreUint32(&o.done, 0)
+}
+
 // try running this with the -race flag
 // go run -race main.go
 func main() {
+	var i int
 	var o once
-	f := func(i int) func() {
+	add := func(n int) func() {
 		return func() {
-			fmt.Println("printing once:", i)
+			i+=n
 		}
 	}
 
-	var wg sync.WaitGroup
-	wg.Add(3)
-	go func() {
-		defer wg.Done()
-		o.Do(f(1))
-	}()
-	go func() {
-		defer wg.Done()
-		o.Do(f(2))
-	}()
-	go func() {
-		defer wg.Done()
-		o.Do(f(3))
-	}()
+	o.Do(add(10))
+	o.Reset()
+	o.Do(add(-5))
+	o.Do(add(100))
 
-	wg.Wait()
+	fmt.Println("i:", i)
 }
