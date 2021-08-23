@@ -11,8 +11,8 @@
 - [Caching - Bad Example](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/bad/main.go)
 - [Caching - Bad Benchmark](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/bad/bad_test.go)
 - [Caching - Good Example](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/good/main.go)
-- [Caching - Good Benchmark](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/bad/good_test.go)
+- [Caching - Good Benchmark](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/good/good_test.go)
 - [Caching - Better Example](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/better/main.go)
-- [Caching - Better Benchmark](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/bad/better_test.go)
+- [Caching - Better Benchmark](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/caching/better/better_test.go)
 
 [Home](https://github.com/golang-basics/concurrency)
