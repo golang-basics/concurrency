@@ -16,7 +16,7 @@ import (
 // which results in wg.Wait() call waiting forever, thus resulting in a deadlock
 // In the below example we used 2 wait groups
 // 1. For making sure all go routines are ready and waiting for the rendezvous
-// 2. For making sure we wait till all workers/go routines execute before
+// 2. For making sure we wait till all workers / go routines execute before
 // exiting the main function
 func main() {
 	cond := sync.NewCond(&sync.Mutex{})
