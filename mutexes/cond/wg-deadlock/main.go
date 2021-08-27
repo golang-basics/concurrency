@@ -27,6 +27,6 @@ func main() {
 	wg.Wait()
 	// Looks like the call to Broadcast is way too fast
 	// Whoa, slow down. Looks like not all go routines are ready
-	// You missed some Done calls ;)
+	// You missed some Done() calls ;)
 	cond.Broadcast()
 }

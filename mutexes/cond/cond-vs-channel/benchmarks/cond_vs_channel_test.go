@@ -6,8 +6,9 @@ import (
 )
 
 // cd into benchmarks
-// go test -bench=.
+// go test -bench .
 func BenchmarkSignalCond(b *testing.B) {
+	b.ReportAllocs()
 	cond := sync.NewCond(&sync.Mutex{})
 	var wg sync.WaitGroup
 	for i := 0; i < b.N; i++ {
@@ -26,6 +27,7 @@ func BenchmarkSignalCond(b *testing.B) {
 }
 
 func BenchmarkBroadcastCond(b *testing.B) {
+	b.ReportAllocs()
 	cond := sync.NewCond(&sync.Mutex{})
 	var wg sync.WaitGroup
 	for i := 0; i < b.N; i++ {
@@ -42,6 +44,7 @@ func BenchmarkBroadcastCond(b *testing.B) {
 }
 
 func BenchmarkSignalChannel(b *testing.B) {
+	b.ReportAllocs()
 	signal := make(chan struct{})
 	var wg sync.WaitGroup
 	for i := 0; i < b.N; i++ {
@@ -58,21 +61,17 @@ func BenchmarkSignalChannel(b *testing.B) {
 }
 
 func BenchmarkBroadcastChannel(b *testing.B) {
-	cond, broadcast := make(chan struct{}), make(chan struct{})
+	b.ReportAllocs()
+	broadcast := make(chan struct{})
 	var wg sync.WaitGroup
 	for i := 0; i < b.N; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			<-cond
+			<-broadcast
 		}()
 	}
-	go func() {
-		<-broadcast
-		for i := 0; i < b.N; i++ {
-			cond <- struct{}{}
-		}
-	}()
-	broadcast <- struct{}{}
+
+	close(broadcast)
 	wg.Wait()
 }
