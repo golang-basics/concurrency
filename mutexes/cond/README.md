@@ -20,5 +20,6 @@
 ### Resources
 
 [Infinite Loop - Wiki](https://en.wikipedia.org/wiki/Infinite_loop)
+[sync.Cond](https://lukechampine.com/cond.html)
 
 [Home](https://github.com/golang-basics/concurrency)
