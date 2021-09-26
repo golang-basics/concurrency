@@ -3,24 +3,27 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
-// make sure the run the below program using the -race flag
-// go run -race main.go
 func main() {
 	d := newDB()
 	var wg sync.WaitGroup
+	now := time.Now()
 	wg.Add(2)
 	go func() {
-		d.set("k1", "v1")
-		wg.Done()
+		defer wg.Done()
+		fmt.Println("before getting k1")
+		d.get("k1")
 	}()
+	time.Sleep(time.Second)
 	go func() {
-		d.set("k1", "v2")
-		wg.Done()
+		defer wg.Done()
+		fmt.Println("before setting k1")
+		d.set("k1", "v1")
 	}()
 	wg.Wait()
-	fmt.Println(d.get("k1"))
+	fmt.Println("elapsed", time.Since(now))
 }
 
 func newDB() db {
@@ -34,12 +37,16 @@ type db struct {
 
 func (d *db) set(key, value string) {
 	d.mu.Lock()
+	fmt.Println("setting", key)
+	time.Sleep(2 * time.Second)
 	defer d.mu.Unlock()
 	d.values[key] = value
 }
 
 func (d *db) get(key string) string {
 	d.mu.RLock()
+	fmt.Println("getting", key)
+	time.Sleep(10 * time.Second)
 	defer d.mu.RUnlock()
 	return d.values[key]
 }
