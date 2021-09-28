@@ -8,12 +8,11 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	var lock sync.Mutex
+	var mu sync.Mutex
 
 	wg.Add(2)
-	go greedy(&wg, &lock)
-	go polite(&wg, &lock)
-
+	go greedy(&wg, &mu)
+	go polite(&wg, &mu)
 	wg.Wait()
 }
 
@@ -37,13 +36,13 @@ func polite(wg *sync.WaitGroup, lock *sync.Mutex) {
 	var count int
 	for begin := time.Now(); time.Since(begin) < time.Second; {
 		lock.Lock()
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(time.Nanosecond)
 		lock.Unlock()
 		lock.Lock()
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(time.Nanosecond)
 		lock.Unlock()
 		lock.Lock()
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(time.Nanosecond)
 		lock.Unlock()
 		count++
 	}

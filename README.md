@@ -66,7 +66,6 @@
 - [Locker - sync.Locker](https://github.com/golang-basics/concurrency/tree/master/mutexes/synclocker)
 - [Deadlocks](https://github.com/golang-basics/concurrency/tree/master/deadlocks)
 - [Livelocks](https://github.com/golang-basics/concurrency/tree/master/livelocks)
-- [Starvation](https://github.com/golang-basics/concurrency/tree/master/starvation)
 - [Race Conditions](https://github.com/golang-basics/concurrency/tree/master/go-routines/race-condition)
 - [Threads](https://github.com/golang-basics/concurrency/tree/master/threads)
 - [GOMAXPROCS](https://github.com/golang-basics/concurrency/tree/master/gomaxprocs)
