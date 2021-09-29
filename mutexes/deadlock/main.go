@@ -9,6 +9,16 @@ import (
 // that will result in a deadlock
 func main() {
 	var mu sync.Mutex
+	//mu.Lock()
+	//mu.Lock()
+	adultsOnly(10, &mu)
+	adultsOnly(18, &mu)
+}
+
+func adultsOnly(age int, mu *sync.Mutex) {
 	mu.Lock()
-	mu.Lock()
+	if age < 18 {
+		return
+	}
+	mu.Unlock()
 }
