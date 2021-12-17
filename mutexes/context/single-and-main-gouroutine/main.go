@@ -14,6 +14,8 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		// G1 will attempt a read operation
+		//fmt.Println(count)
 		// G1 will attempt a write operation
 		count++
 	}()

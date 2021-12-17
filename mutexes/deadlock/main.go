@@ -5,12 +5,19 @@ import (
 )
 
 // Every Lock() call must have a corresponding Unlock() call
-// If the method Lock() 2 times in a row without the lock being released
+// If the method Lock() more times in a row without the lock being released
 // that will result in a deadlock
+// The same is true for RWMutex, any RLock or Lock MUST be followed by an Unlock() call.
+// If either the read or write lock is called more times in a row
+// it will also result in a deadlock
 func main() {
 	var mu sync.Mutex
-	//mu.Lock()
-	//mu.Lock()
+	// mu.Lock()
+	// mu.Lock()
+	// var mu sync.Mutex
+	// mu.RLock()
+	// mu.Lock()
+
 	adultsOnly(10, &mu)
 	adultsOnly(18, &mu)
 }
