@@ -64,7 +64,6 @@
 - [Cond - sync.Cond](https://github.com/golang-basics/concurrency/tree/master/mutexes/cond)
 - [Once - sync.Once](https://github.com/golang-basics/concurrency/tree/master/mutexes/once)
 - [Locker - sync.Locker](https://github.com/golang-basics/concurrency/tree/master/mutexes/synclocker)
-- [Deadlocks](https://github.com/golang-basics/concurrency/tree/master/deadlocks)
 - [Livelocks](https://github.com/golang-basics/concurrency/tree/master/livelocks)
 - [Race Conditions](https://github.com/golang-basics/concurrency/tree/master/go-routines/race-condition)
 - [Threads](https://github.com/golang-basics/concurrency/tree/master/threads)
@@ -195,6 +194,8 @@ will double until it reaches 10ms.
 If your application does not have many system calls or long-running goroutines,
 the thread should back off to a 10ms delay most of its time, giving
 a very light overhead to your application.
+
+For the implementation details checkout [`sysmon` source code](https://github.com/golang/go/blob/35ea62468bf7e3a79011c3ad713e847daa9a45a2/src/runtime/proc.go#L4245)
 
 The thread is also able to detect when it should not run. Here are two cases:
 

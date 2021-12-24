@@ -50,6 +50,11 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 - [sync.Locker](https://github.com/golang-basics/concurrency/blob/master/mutexes/mutex-vs-rwmutex/synclocker/main.go)
 - [Lock Contention](https://github.com/golang-basics/concurrency/blob/master/mutexes/lock-contention/main.go)
 - [Starvation](https://github.com/golang-basics/concurrency/blob/master/mutexes/starvation/main.go)
+- [Deadlock - Circular Wait](https://github.com/golang-basics/concurrency/blob/master/mutexes/deadlocks/circular-wait/main.go)
+- [Deadlock - Mutual Exclusion](https://github.com/golang-basics/concurrency/blob/master/mutexes/deadlocks/mutual-exclusion/main.go)
+- [Deadlock - Hold and Wait](https://github.com/golang-basics/concurrency/blob/master/mutexes/deadlocks/hold-and-wait/main.go)
+- [Deadlock - No Preemption](https://github.com/golang-basics/concurrency/blob/master/mutexes/deadlocks/no-preemption/main.go)
+- [Deadlock - `runtime.Goexit()`](https://github.com/golang-basics/concurrency/blob/master/mutexes/deadlocks/goexit/main.go)
 - [`sync.Once` - Simple Example](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/simple/main.go)
 - [`sync.Once` - Increment/Decrement Example](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/inc-dec/main.go)
 - [`sync.Once` - Race](https://github.com/golang-basics/concurrency/blob/master/mutexes/once/race/main.go)
@@ -80,5 +85,10 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 ### Resources
 
 - [Mutex - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
+- [Deadlock - Wiki](https://en.wikipedia.org/wiki/Deadlock)
+- [Mutual Exclusion - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
+- [Dining Philosophers Problem - Wiki](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
+- [Test and Set - Wiki](https://en.wikipedia.org/wiki/Test-and-set)
+- [Concurrency Control - Wiki](https://en.wikipedia.org/wiki/Concurrency_control)
 
 [Home](https://github.com/golang-basics/concurrency)
