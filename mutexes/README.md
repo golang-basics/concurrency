@@ -85,10 +85,17 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 ### Resources
 
 - [Mutex - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
+- [Reentrant/Recursive Mutex - Wiki](https://en.wikipedia.org/wiki/Reentrant_mutex)
 - [Deadlock - Wiki](https://en.wikipedia.org/wiki/Deadlock)
 - [Mutual Exclusion - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
 - [Dining Philosophers Problem - Wiki](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
 - [Test and Set - Wiki](https://en.wikipedia.org/wiki/Test-and-set)
 - [Concurrency Control - Wiki](https://en.wikipedia.org/wiki/Concurrency_control)
+- [Tuple Space - Wiki](https://en.wikipedia.org/wiki/Tuple_space)
+- [Message Passing - Wiki](https://en.wikipedia.org/wiki/Message_passing)
+- [Semaphore - Wiki](https://en.wikipedia.org/wiki/Semaphore_(programming))
+- [Pessimistic vs Optimistic Locking - StackOverflow](https://stackoverflow.com/questions/129329/optimistic-vs-pessimistic-locking)
+- [Pessimistic vs Optimistic Locking - StackOverflow Explanation](https://stackoverflow.com/a/58952004)
+- [Check Deadlock - Go Source Code](https://github.com/golang/go/blob/35ea62468bf7e3a79011c3ad713e847daa9a45a2/src/runtime/proc.go#L4159-L4233)
 
 [Home](https://github.com/golang-basics/concurrency)
