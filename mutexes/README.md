@@ -36,6 +36,28 @@ The **Lock** can only be **acquired** by **only 1 go routine** at a time, thus m
 space** in the **context** of an operation is considered to be **Atomic**, resulting in **deterministic** and **correct** results when
 **multiple concurrent operations** are involved in the game.
 
+#### Benefits of Serializability
+
+Let’s first understand the difference between a serial and non-serial schedule for a better understanding of the benefits
+that serializability provides. In the case of a serial schedule, the multiple transactions involved are executed one
+after the other sequentially with no overlap. This helps maintain the consistency in the database but limits the scope
+of concurrency and often a smaller transaction might end up waiting for a long time due to an execution of a previous
+longer transaction. Serial schedule also consumes a lot of CPU resources which gets wasted due to the serial execution.
+
+In the case with a non-serial schedule, the multiple transactions executed are interleaved leading to inconsistency in
+the database but at the same time helps overcome the disadvantages of a serial schedule such as concurrent execution
+and wastage of CPU resources.
+
+It’s established that the execution of multiple transactions in a non-serial schedule takes place concurrently.
+And because of the multiple combinations involved, the output obtained may be incorrect at times which cannot be afforded.
+This is where serializability comes into the picture and help us determine if the output obtained from a parallelly
+executed schedule is correct or not.
+
+In other words, Serializability serves as a measure of correctness for the transactions executed concurrently.
+It serves a major role in concurrency control that is crucial for the database and is considered to provide
+maximum isolation between the multiple transactions involved. The process of Serializability can also help in achieving
+the database consistency which otherwise is not possible for a non-serial schedule.
+
 ### Presentations
 
 - [Concurrency in Go #6 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/6_mutexes)
@@ -90,10 +112,17 @@ space** in the **context** of an operation is considered to be **Atomic**, resul
 - [Mutual Exclusion - Wiki](https://en.wikipedia.org/wiki/Mutual_exclusion)
 - [Dining Philosophers Problem - Wiki](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
 - [Test and Set - Wiki](https://en.wikipedia.org/wiki/Test-and-set)
-- [Concurrency Control - Wiki](https://en.wikipedia.org/wiki/Concurrency_control)
 - [Tuple Space - Wiki](https://en.wikipedia.org/wiki/Tuple_space)
 - [Message Passing - Wiki](https://en.wikipedia.org/wiki/Message_passing)
 - [Semaphore - Wiki](https://en.wikipedia.org/wiki/Semaphore_(programming))
+- [Concurrency Control - Wiki](https://en.wikipedia.org/wiki/Concurrency_control)
+- [Serializability - Wiki](https://en.wikipedia.org/wiki/Serializability)
+- [Serializability in DBMS - Educba](https://www.educba.com/serializability-in-dbms/)
+- [Result Serializability - Geeks for Geeks](https://www.geeksforgeeks.org/result-serializability-in-dbms/)
+- [Schedule - Wiki](https://en.wikipedia.org/wiki/Schedule_(computer_science))
+- [Recoverability - Wiki](https://en.wikipedia.org/wiki/Schedule_(computer_science)#Recoverable)
+- [2PL - Wiki](https://en.wikipedia.org/wiki/Two-phase_locking)
+- [Transaction Processing - Wiki](https://en.wikipedia.org/wiki/Transaction_processing)
 - [Pessimistic vs Optimistic Locking - StackOverflow](https://stackoverflow.com/questions/129329/optimistic-vs-pessimistic-locking)
 - [Pessimistic vs Optimistic Locking - StackOverflow Explanation](https://stackoverflow.com/a/58952004)
 - [Check Deadlock - Go Source Code](https://github.com/golang/go/blob/35ea62468bf7e3a79011c3ad713e847daa9a45a2/src/runtime/proc.go#L4159-L4233)
