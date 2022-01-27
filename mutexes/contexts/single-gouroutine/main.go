@@ -17,8 +17,9 @@ func main() {
 		// Only the G1 go routine will do the write operation, thus it's safe
 		count++
 	}()
-	// Main G does not read or write while G1 is running
-	// So this will not run in a race condition
+	// Main G does not read or write while G1 is running,
+	// so this will not run in a race condition.
+	// Or we could just move count++ inside main, which will execute in its own go routine
 
 	wg.Wait()
 	fmt.Println("count", count)

@@ -16,9 +16,7 @@ func main() {
 			defer wg.Done()
 			var localCount int
 			mu.Lock()
-			localCount = count+1
-			mu.Unlock()
-			mu.Lock()
+			localCount = count + 1
 			count = localCount
 			mu.Unlock()
 		}()

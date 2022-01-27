@@ -60,7 +60,7 @@ the database consistency which otherwise is not possible for a non-serial schedu
 
 ### Presentations
 
-- [Concurrency in Go #6 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/6_mutexes)
+- [Concurrency in Go #7 - Mutexes](https://github.com/golang-basics/concurrency/raw/master/presentations/7_mutexes)
 
 ### Examples
 

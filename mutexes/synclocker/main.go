@@ -7,7 +7,7 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	mu := &locker{}
+	mu := &myLock{}
 	// mu := &sync.Mutex{}
 	// rwMu := &sync.RWMutex{}
 	// calls RLock and RUnlock inside Lock and Unlock
@@ -30,16 +30,16 @@ func main() {
 	wg.Wait()
 }
 
-type locker struct {
+type myLock struct {
 	sync.Mutex
 }
 
-func (l *locker) Lock() {
+func (l *myLock) Lock() {
 	fmt.Println("locking")
 	l.Mutex.Lock()
 }
 
-func (l *locker) Unlock() {
+func (l *myLock) Unlock() {
 	fmt.Println("unlocking")
 	l.Mutex.Unlock()
 }

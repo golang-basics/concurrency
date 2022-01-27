@@ -63,7 +63,6 @@
 - [Map - sync.Map](https://github.com/golang-basics/concurrency/tree/master/mutexes/syncmap)
 - [Cond - sync.Cond](https://github.com/golang-basics/concurrency/tree/master/mutexes/cond)
 - [Once - sync.Once](https://github.com/golang-basics/concurrency/tree/master/mutexes/once)
-- [Locker - sync.Locker](https://github.com/golang-basics/concurrency/tree/master/mutexes/synclocker)
 - [Race Conditions](https://github.com/golang-basics/concurrency/tree/master/go-routines/race-condition)
 - [Threads](https://github.com/golang-basics/concurrency/tree/master/threads)
 - [GOMAXPROCS](https://github.com/golang-basics/concurrency/tree/master/gomaxprocs)

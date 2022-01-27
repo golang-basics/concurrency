@@ -16,7 +16,7 @@ func main() {
 			defer wg.Done()
 			// Each go routine only reads the count data and does not expose its data outside
 			var localCount int
-			localCount += count+i+1
+			localCount += count + i + 1
 			fmt.Println("local count", localCount)
 		}(i)
 	}

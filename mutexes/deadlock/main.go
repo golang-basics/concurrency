@@ -24,7 +24,9 @@ func main() {
 
 func adultsOnly(age int, mu *sync.Mutex) {
 	mu.Lock()
+	// defer mu.Unlock()
 	if age < 18 {
+		// this is like a small jump out the window :D
 		return
 	}
 	mu.Unlock()

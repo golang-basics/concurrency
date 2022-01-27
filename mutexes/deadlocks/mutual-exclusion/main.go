@@ -9,7 +9,7 @@ import (
 // only 1 process can hold the resource at a time (has exclusive rights) -> non-shareable
 func main() {
 	mu := &sync.Mutex{}
-	res := resource{mu:mu}
+	res := resource{mu: mu}
 
 	// suppose there's process p_main in the operating system acquiring
 	// an exclusive resource, and it does not plan on releasing it
@@ -20,7 +20,7 @@ func main() {
 	// acquire the same resource through the lock that has not been released by p_main
 	var wg sync.WaitGroup
 	wg.Add(100)
-	for i:=0;i<100;i++ {
+	for i := 0; i < 100; i++ {
 		go func(i int) {
 			defer wg.Done()
 			mu.Lock()
@@ -32,8 +32,8 @@ func main() {
 }
 
 type resource struct {
-	mu *sync.Mutex
-	acquired int32
+	mu        *sync.Mutex
+	acquired  int32
 	processID string
 }
 

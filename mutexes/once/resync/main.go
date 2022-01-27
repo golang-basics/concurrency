@@ -43,7 +43,7 @@ func main() {
 	var o once
 	add := func(n int) func() {
 		return func() {
-			i+=n
+			i += n
 		}
 	}
 
