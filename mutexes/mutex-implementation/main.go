@@ -15,16 +15,18 @@ func main() {
 	var wg sync.WaitGroup
 
 	// if we increase the number of go routines
-	// this will quickly start to fail
-	// due to go routines status being awake
-	wg.Add(100)
-	for i := 0; i < 100; i++ {
-		go func(i int) {
+	// this could quickly be detected as a race condition
+	// due to too many go routines' status being awake
+	// Also there's no way we can control the go routines queue
+	// or have access to the runtime internals
+	wg.Add(1000)
+	for i := 0; i < 1000; i++ {
+		go func() {
 			defer wg.Done()
 			mu.Lock()
-			count = i
+			count++
 			mu.Unlock()
-		}(i)
+		}()
 	}
 	wg.Wait()
 
@@ -40,7 +42,6 @@ func (mu *mutex) Lock() {
 		return
 	}
 	for {
-		// continue
 		atomic.AddInt32(&mu.state, 1)
 		s := atomic.LoadInt32(&mu.state)
 		if s > 1 {
@@ -53,7 +54,7 @@ func (mu *mutex) Lock() {
 }
 
 func (mu *mutex) Unlock() {
-	if atomic.CompareAndSwapInt32(&mu.state, 1, 0) {
+	for atomic.CompareAndSwapInt32(&mu.state, 1, 0) {
 		return
 	}
 	panic("unlock of unlocked mutex")

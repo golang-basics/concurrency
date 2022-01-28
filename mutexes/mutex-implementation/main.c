@@ -33,14 +33,14 @@ void * pingpong(void * p) {
   } // for
 } // pingpong
 
-// gcc mutex.c -o exec
+// gcc main.c -o exec
 // ./exec
 int main() {
   setvbuf(stdout, NULL, _IONBF, 0);
-  pthread_t ping;
-  pthread_t pong;
-  pthread_create(&ping, NULL, pingpong, PING);
-  pthread_create(&pong, NULL, pingpong, PONG);
+  pthread_t ping_thread;
+  pthread_t pong_thread;
+  pthread_create(&ping_thread, NULL, pingpong, PING);
+  pthread_create(&pong_thread, NULL, pingpong, PONG);
   for(;;);
   return 0;
 }
