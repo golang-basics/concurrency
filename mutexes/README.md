@@ -134,5 +134,6 @@ the database consistency which otherwise is not possible for a non-serial schedu
 - [raceacquire - Go Source Code](https://github.com/golang/go/blob/master/src/runtime/race.go#L515)
 - [racecall - Go Source Code](https://github.com/golang/go/blob/master/src/runtime/race.go#L348)
 - [racecall - GOASM Source Code](https://github.com/golang/go/blob/master/src/runtime/race_amd64.s#L384)
+- [RWMutex - Go Source Code](https://github.com/golang/go/blob/master/src/sync/rwmutex.go#L28)
 
 [Home](https://github.com/golang-basics/concurrency)

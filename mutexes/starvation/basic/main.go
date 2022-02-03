@@ -29,7 +29,7 @@ func main() {
 			time.Sleep(100 * time.Microsecond)
 			mu.Unlock()
 		}
-		fmt.Println("count in g1", count)
+		fmt.Println("g1 acquired:", count)
 	}()
 	go func() {
 		defer wg.Done()
@@ -40,7 +40,7 @@ func main() {
 			count++
 			mu.Unlock()
 		}
-		fmt.Println("count in g2", count)
+		fmt.Println("g2 acquired:", count)
 	}()
 
 	wg.Wait()

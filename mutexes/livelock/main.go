@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"sync"
-	"sync/atomic"
 	"time"
 )
 
+// Also try running this example with the -race flag
+// go run -race main.go
 func main() {
 	john := person{name: "John"}
 	alice := person{name: "Alice"}
@@ -49,7 +50,11 @@ func (p *person) step(directionName string, direction *int32) bool {
 	p.advance(direction, 1)
 
 	// nobody seems to have walked this direction, I can take it
-	if atomic.LoadInt32(direction) == 1 {
+	var d int32
+	p.mu.Lock()
+	d = *direction
+	p.mu.Unlock()
+	if d == 1 {
 		return true
 	}
 	time.Sleep(100 * time.Millisecond)
