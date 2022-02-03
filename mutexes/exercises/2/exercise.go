@@ -42,7 +42,7 @@ func exercise(c *catalog, ids ...string) {
 				c.get(id)
 			}
 			c.add("generated_"+strconv.Itoa(i), "generated product")
-		}(i+1)
+		}(i + 1)
 	}
 
 	wg.Wait()
@@ -57,7 +57,7 @@ func (c *catalog) add(id, product string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	// simulate load
-	time.Sleep(500*time.Nanosecond)
+	time.Sleep(500 * time.Nanosecond)
 	c.data[id] = product
 }
 
@@ -65,7 +65,7 @@ func (c *catalog) get(id string) string {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	// simulate load
-	time.Sleep(500*time.Nanosecond)
+	time.Sleep(500 * time.Nanosecond)
 	// avoid key existence check
 	return c.data[id]
 }

@@ -19,6 +19,7 @@ import (
 // GOFLAGS="-count=1" go test .
 
 func main() {
+	// p1 and p2 are the number of executions per process
 	p1, p2 := exercise(time.Second)
 	fmt.Println("p1:", p1)
 	fmt.Println("p2:", p2)

@@ -50,7 +50,7 @@ func exercise() int {
 			defer wg.Done()
 			muA.Lock()
 			defer muA.Unlock()
-			A+=5
+			A += 5
 		}()
 	}
 

@@ -18,6 +18,15 @@ import (
 // run the tests using:
 // GOFLAGS="-count=1" go test .
 
+// SOLUTION
+// The problem we're solving here is Starvation.
+// Even if all operations are equal in terms of time burst.
+// Because we have 3 calls to read and 1 call to write,
+// the mutex local to each call is being used more frequently,
+// thus allowing one process to acquire it way more often than the other.
+// The fix simply using the mutex evenly distributing it across workers/Gs.
+// In other words, just use the mutex directly, not inside the read call.
+// Always be careful with mutexes local to the methods and test for starvation.
 func main() {
 	p1, p2 := exercise(time.Second)
 	fmt.Println("p1:", p1)

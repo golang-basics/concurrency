@@ -17,6 +17,11 @@ import (
 // run the tests using:
 // GOFLAGS="-count=1" go test .
 
+// SOLUTION
+// The problem with this implementation is the fine-grained
+// defined context by the mutex, resulting in an undesired result.
+// All we really need to fix the problem is limit the context
+// of the mutex, which will also give us the expected result
 func main() {
 	now := time.Now()
 	count := exercise()
@@ -37,7 +42,7 @@ func exercise() int {
 			mu.Lock()
 			a = A
 			b = B
-			count += a+b
+			count += a + b
 			A++
 			B++
 			mu.Unlock()

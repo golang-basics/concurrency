@@ -16,6 +16,14 @@ import (
 
 // run the tests using:
 // GOFLAGS="-count=1" go test -race .
+
+// SOLUTION
+// The problem with this code is it has both:
+// a deadlock and a race condition.
+// The deadlock happens because we accidentally
+// forget to call Unlock().
+// The race condition happens because
+// we mix and match Atomics with Mutexes
 func main() {
 	clicks := exercise()
 	fmt.Println("total clicks:", clicks.total)

@@ -17,6 +17,14 @@ import (
 // run the tests using:
 // GOFLAGS="-count=1" go test .
 
+// SOLUTION
+// The problem with this code that uses 2 mutexes is the fact
+// That the second mutex depends on the use of the first mutex,
+// thus creating a perfect environment for lock contention.
+// Since operations on A and B are independent, solving this is
+// easy, all we have to do is release the mutex on A ASAP,
+// thus allowing the other go routine to use it immediately
+// and as a result the whole program executes faster
 func main() {
 	now := time.Now()
 	A := exercise()
@@ -50,7 +58,7 @@ func exercise() int {
 			defer wg.Done()
 			muA.Lock()
 			defer muA.Unlock()
-			A+=5
+			A += 5
 		}()
 	}
 

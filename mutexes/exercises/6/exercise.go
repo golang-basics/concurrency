@@ -10,6 +10,7 @@ import (
 // Find what's wrong in the exercise() function
 // Make sure all the tests are passing
 // DO NOT remove any Sleep() calls
+// DO NOT remove any steps, i.e: transfer, check, revert
 
 // try running this with the -race flag
 // go run -race exercise.go
@@ -18,24 +19,34 @@ import (
 // GOFLAGS="-count=1" go test .
 
 func main() {
-	exercise()
+	now := time.Now()
+	accounts := exercise()
+	for _, a := range accounts {
+		fmt.Printf("'%s' amount: $%v\n", a.id, a.amount)
+		fmt.Printf("'%s' transactions: %v\n", a.id, a.transactions)
+	}
+	fmt.Println("elapsed:", time.Since(now))
 }
 
-func exercise() {
+func exercise() []*account {
 	var mu sync.Mutex
-	var n1, n2 int
-	f1, f2 := file{mu: &mu, name: "f1"}, file{mu: &mu, name: "f2"}
-	//write := func(f *file, name1, name2 string) {
-	//	for i := 0; i < 5; i++ {
-	//		if  f.write([]byte(name1)) || f.write([]byte(name2)) {
-	//			return
-	//		}
-	//	}
-	//}
-	write := func(f *file, n1, n2 *int) {
+	accounts := []*account{
+		{id: "a1", amount: 5},
+		{id: "a2", amount: 10},
+	}
+	b1 := bank{mu: &mu, name: "bank1"}
+	b2 := bank{mu: &mu, name: "bank2"}
+	write := func(b *bank, amount float64, accounts ...*account) {
 		for i := 0; i < 5; i++ {
-			if  f.write(n1) || f.write(n2) {
-				fmt.Println(f.name, "successfully wrote to file")
+			ok := true
+			for _, a := range accounts {
+				if !b.transfer(a, amount) {
+					ok = false
+					break
+				}
+			}
+			if ok {
+				fmt.Printf("'%s' successfully transferred: $%v\n", b.name, amount)
 				return
 			}
 		}
@@ -45,48 +56,55 @@ func exercise() {
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		write(&f1, &n1, &n2)
+		// transfer $200 from bank1 to all accounts
+		write(&b1, 200, accounts...)
 	}()
 	go func() {
 		defer wg.Done()
-		write(&f2, &n1, &n2)
+		// transfer $100 from bank2 to all accounts
+		write(&b2, 100, accounts...)
 	}()
 
 	wg.Wait()
-	fmt.Println(n1)
-	fmt.Println(n2)
+	return accounts
 }
 
-type file struct {
+type account struct {
+	id           string
+	amount       float64
+	transactions []string
+}
+
+type bank struct {
 	name string
 	mu   *sync.Mutex
-	//data []byte
 }
 
-//func (f *file) write(data []byte) bool {
-func (f *file) write(n *int) bool {
-	fmt.Println(f.name, "trying to write", *n)
-	f.mu.Lock()
-	//f.data = data
-	*n += 1
-	f.mu.Unlock()
+func (b *bank) transfer(acc *account, amount float64) bool {
+	// transfer the money
+	fmt.Printf("'%s' trying to transfer: $%v to '%s'\n", b.name, amount, acc.id)
+	b.mu.Lock()
+	acc.amount += amount
+	b.mu.Unlock()
 	time.Sleep(500 * time.Millisecond)
 
-	f.mu.Lock()
-	//if bytes.Equal(f.data, data) {
-	if *n == 1 {
-		f.mu.Unlock()
+	// check if the money were transferred
+	b.mu.Lock()
+	// if current balance equals to previous account balance
+	if acc.amount == acc.amount-amount {
+		b.mu.Unlock()
+		tx := fmt.Sprintf("%s: $%v", b.name, amount)
+		acc.transactions = append(acc.transactions, tx)
 		return true
 	}
-	f.mu.Unlock()
-
+	b.mu.Unlock()
 
 	time.Sleep(100 * time.Millisecond)
 
-	f.mu.Lock()
-	//f.data = nil
-	*n -= 1
-	f.mu.Unlock()
+	// revert the transfer
+	b.mu.Lock()
+	acc.amount -= amount
+	b.mu.Unlock()
 	time.Sleep(500 * time.Millisecond)
 	return false
 }
