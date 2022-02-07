@@ -124,6 +124,8 @@ the database consistency which otherwise is not possible for a non-serial schedu
 - [Schedule - Wiki](https://en.wikipedia.org/wiki/Schedule_(computer_science))
 - [Recoverability - Wiki](https://en.wikipedia.org/wiki/Schedule_(computer_science)#Recoverable)
 - [2PL - Wiki](https://en.wikipedia.org/wiki/Two-phase_locking)
+- [2PC - Wiki](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
+- [Gossip Protocol - Wiki](https://en.wikipedia.org/wiki/Gossip_protocol)
 - [Transaction Processing - Wiki](https://en.wikipedia.org/wiki/Transaction_processing)
 - [Pessimistic vs Optimistic Locking - StackOverflow](https://stackoverflow.com/questions/129329/optimistic-vs-pessimistic-locking)
 - [Pessimistic vs Optimistic Locking - StackOverflow Explanation](https://stackoverflow.com/a/58952004)
