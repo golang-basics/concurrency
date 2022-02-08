@@ -16,28 +16,23 @@ type CacheRepository interface {
 	GetSummary() models.Summary
 }
 
-type PeersRepository interface {
-	Add(string)
-	Random() []string
-}
-
 type HTTPClient interface {
 	Gossip(peer string, summary models.Summary) error
 	Get(peer string, key string) (models.CacheItem, error)
 }
 
-func NewCache(cacheRepo CacheRepository, peersRepo PeersRepository, httpClient HTTPClient) CacheSvc {
+func NewCache(cacheRepo CacheRepository, httpClient HTTPClient, peers models.Peers) CacheSvc {
 	return CacheSvc{
 		cacheRepo:  cacheRepo,
-		peersRepo:  peersRepo,
 		httpClient: httpClient,
+		peers:      peers,
 	}
 }
 
 type CacheSvc struct {
 	cacheRepo  CacheRepository
-	peersRepo  PeersRepository
 	httpClient HTTPClient
+	peers      models.Peers
 }
 
 func (svc CacheSvc) Get(keys []string) []models.CacheItem {
@@ -54,7 +49,7 @@ func (svc CacheSvc) GossipSummary() {
 		return
 	}
 
-	peers := svc.peersRepo.Random()
+	peers := svc.peers.List(models.MinimumPeers)
 	log.Println("gossiping to:", strings.Join(peers, ","))
 	for _, peer := range peers {
 		if err := svc.httpClient.Gossip(peer, summary); err != nil {
@@ -65,7 +60,7 @@ func (svc CacheSvc) GossipSummary() {
 }
 
 func (svc CacheSvc) ResolveSummary(peer string, summary models.Summary) {
-	svc.peersRepo.Add(peer)
+	svc.peers.Add(peer)
 
 	for key, updatedAt := range summary {
 		oldCacheItem := svc.cacheRepo.Get(key)

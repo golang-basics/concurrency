@@ -2,6 +2,7 @@ package app
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -15,20 +16,19 @@ import (
 )
 
 func New() (*App, error) {
-	var peers models.StringList
+	peers := models.Peers{}
 	port := flag.Int("port", 8080, "the port of the running server")
 	flag.Var(&peers, "peer", "the list of peer servers to gossip to")
 
 	flag.Parse()
+	if len(peers) < models.MinimumPeers {
+		return nil, fmt.Errorf("need at least %d peer servers", models.MinimumPeers)
+	}
 
 	addr := ":" + strconv.Itoa(*port)
-	peersRepo, err := repositories.NewPeers(peers)
-	if err != nil {
-		return nil, err
-	}
 	cacheRepo := repositories.NewCache()
 	httpClient := clients.NewHTTP("localhost" + addr)
-	svc := services.NewCache(cacheRepo, peersRepo, httpClient)
+	svc := services.NewCache(cacheRepo, httpClient, peers)
 	router := controllers.NewRouter(svc)
 	srv := &http.Server{
 		Addr:    addr,

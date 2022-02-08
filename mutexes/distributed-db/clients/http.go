@@ -46,9 +46,7 @@ func (c *HTTPClient) Get(peer string, key string) (models.CacheItem, error) {
 }
 
 func (c *HTTPClient) Gossip(peer string, summary models.Summary) error {
-	body := models.GossipRequest{
-		Summary: summary,
-	}
+	body := models.GossipMessage{}
 	req, err := c.makeRequest(http.MethodPost, c.url(peer, "gossip"), body)
 	if err != nil {
 		return err

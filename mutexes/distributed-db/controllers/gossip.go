@@ -14,7 +14,7 @@ type cacheSummaryResolver interface {
 
 func gossip(svc cacheSummaryResolver) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req models.GossipRequest
+		var req models.GossipMessage
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			log.Printf("could not decode gossip request: %v", err)
@@ -22,6 +22,6 @@ func gossip(svc cacheSummaryResolver) http.HandlerFunc {
 			return
 		}
 
-		svc.ResolveSummary(r.Host, req.Summary)
+		svc.ResolveSummary(r.Host, models.Summary{})
 	}
 }

@@ -4,20 +4,17 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"distributed-db/models"
 )
 
 type cacheSetter interface {
 	Set(key, value string)
 }
 
-type setRequest struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
-
 func set(svc cacheSetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req setRequest
+		var req models.SetRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			log.Printf("could not decode set request: %v", err)
