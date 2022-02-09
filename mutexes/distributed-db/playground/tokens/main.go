@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"hash/fnv"
 	"math"
@@ -46,11 +48,17 @@ func main() {
 	}
 	tokens.AddNode(newNode)
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 50; i++ {
 		key := fmt.Sprintf("k%d", i+1)
 		sum := hash(key)
 		fmt.Println(key, sum, tokens.GetNode(sum).Name)
 	}
+
+	// the message is quite big,
+	// but it is exchanged only 1 time when a node joins
+	bs, _ := json.Marshal(tokens.Mappings)
+	// sending only the checksum can save a lot of space
+	fmt.Printf("%x", md5.Sum(bs))
 }
 
 func NewTokens(nodes []Node, numberOfTokenRanges int) Tokens {
