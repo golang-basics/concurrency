@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"time"
 
 	"distributed-db/models"
 )
@@ -22,11 +23,11 @@ type HTTPClient struct {
 	httpClient *http.Client
 }
 
-func (c *HTTPClient) Get(peer string, key string) (models.CacheItem, error) {
+func (c *HTTPClient) Get(node string, key string) (models.CacheItem, error) {
 	body := models.GetRequest{
 		Keys: []string{key},
 	}
-	req, err := c.makeRequest(http.MethodGet, c.url(peer, "get"), body)
+	req, err := c.makeRequest(http.MethodGet, c.url(node, "get"), body)
 	if err != nil {
 		return models.CacheItem{}, err
 	}
@@ -45,9 +46,13 @@ func (c *HTTPClient) Get(peer string, key string) (models.CacheItem, error) {
 	return cacheItem[0], nil
 }
 
-func (c *HTTPClient) Gossip(peer string, summary models.Summary) error {
-	body := models.GossipMessage{}
-	req, err := c.makeRequest(http.MethodPost, c.url(peer, "gossip"), body)
+func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) error {
+	body := models.GossipRequest{
+		Nodes:          nodes,
+		CreatedAt:      time.Now().UTC(),
+		TokensChecksum: tokensChecksum,
+	}
+	req, err := c.makeRequest(http.MethodPost, c.url(node, "gossip"), body)
 	if err != nil {
 		return err
 	}
@@ -60,10 +65,30 @@ func (c *HTTPClient) Gossip(peer string, summary models.Summary) error {
 	return nil
 }
 
-func (c *HTTPClient) url(peer, path string) string {
+func (c *HTTPClient) Tokens(node string) (models.TokenMappings, error) {
+	req, err := c.makeRequest(http.MethodGet, c.url(node, "tokens"), nil)
+	if err != nil {
+		return models.TokenMappings{}, err
+	}
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return models.TokenMappings{}, err
+	}
+
+	var tokensRes models.TokensResponse
+	err = json.NewDecoder(res.Body).Decode(&tokensRes)
+	if err != nil {
+		return models.TokenMappings{}, err
+	}
+
+	return tokensRes.Tokens, nil
+}
+
+func (c *HTTPClient) url(node, path string) string {
 	u := url.URL{
 		Scheme: "http",
-		Host:   peer,
+		Host:   node,
 		Path:   path,
 	}
 	return u.String()

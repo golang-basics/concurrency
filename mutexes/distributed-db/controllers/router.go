@@ -7,7 +7,8 @@ import (
 type CacheService interface {
 	cacheGetter
 	cacheSetter
-	cacheSummaryResolver
+	tokensGetter
+	tokensUpdater
 }
 
 func NewRouter(svc CacheService) http.Handler {
@@ -15,6 +16,7 @@ func NewRouter(svc CacheService) http.Handler {
 	mux.HandleFunc("/set", set(svc))
 	mux.HandleFunc("/get", get(svc))
 	mux.HandleFunc("/gossip", gossip(svc))
+	mux.HandleFunc("/tokens", tokens(svc))
 
 	return mux
 }

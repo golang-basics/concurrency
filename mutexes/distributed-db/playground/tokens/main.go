@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/json"
 	"fmt"
 	"hash/fnv"
 	"math"
@@ -53,12 +51,6 @@ func main() {
 		sum := hash(key)
 		fmt.Println(key, sum, tokens.GetNode(sum).Name)
 	}
-
-	// the message is quite big,
-	// but it is exchanged only 1 time when a node joins
-	bs, _ := json.Marshal(tokens.Mappings)
-	// sending only the checksum can save a lot of space
-	fmt.Printf("%x", md5.Sum(bs))
 }
 
 func NewTokens(nodes []Node, numberOfTokenRanges int) Tokens {
@@ -93,7 +85,7 @@ func NewTokens(nodes []Node, numberOfTokenRanges int) Tokens {
 		Ranges:   ranges,
 		Mappings: mappings,
 		Nodes: nodesMap,
-		NumberOfTokenRanges: numberOfTokenRanges,
+		numberOfTokenRanges: numberOfTokenRanges,
 	}
 	return tokens
 }
@@ -102,8 +94,7 @@ type Tokens struct {
 	Ranges              []uint64
 	Mappings            map[uint64]int
 	Nodes               map[int]Node
-	NumberOfTokenRanges int
-	rangeMax uint64
+	numberOfTokenRanges int
 }
 
 func (t *Tokens) GetNode(token uint64) Node {
@@ -116,9 +107,9 @@ func (t *Tokens) GetNode(token uint64) Node {
 
 func (t *Tokens) AddNode(node Node) {
 	t.Nodes[node.ID] = node
-	tokenRange := uint64(math.MaxInt / len(t.Nodes) / t.NumberOfTokenRanges)
-	newRanges := make([]uint64, 0, t.NumberOfTokenRanges)
-	for i := 0; i < len(t.Ranges)+t.NumberOfTokenRanges; i++ {
+	tokenRange := uint64(math.MaxInt / len(t.Nodes) / t.numberOfTokenRanges)
+	newRanges := make([]uint64, 0, t.numberOfTokenRanges)
+	for i := 0; i < len(t.Ranges)+t.numberOfTokenRanges; i++ {
 		if i < len(t.Ranges) {
 			r := t.Ranges[i]
 			decrement := r - tokenRange*(uint64(i+1))

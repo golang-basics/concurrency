@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	"distributed-db/clients"
 	"distributed-db/controllers"
@@ -16,19 +15,22 @@ import (
 )
 
 func New() (*App, error) {
-	peers := models.Peers{}
+	nodes := models.Nodes{Map: map[string]struct{}{}}
 	port := flag.Int("port", 8080, "the port of the running server")
-	flag.Var(&peers, "peer", "the list of peer servers to gossip to")
+	flag.Var(&nodes, "node", "the list of nodes to talk to")
 
 	flag.Parse()
-	if len(peers) < models.MinimumPeers {
-		return nil, fmt.Errorf("need at least %d peer servers", models.MinimumPeers)
+	if len(nodes.Map) < 1 {
+		return nil, fmt.Errorf("need at least 1 node to talk to")
 	}
 
-	addr := ":" + strconv.Itoa(*port)
+
+	addr := fmt.Sprintf("localhost:%d", *port)
+	nodes.CurrentNode = addr
+	tokens := models.NewTokens(nodes, 5)
 	cacheRepo := repositories.NewCache()
-	httpClient := clients.NewHTTP("localhost" + addr)
-	svc := services.NewCache(cacheRepo, httpClient, peers)
+	httpClient := clients.NewHTTP(addr)
+	svc := services.NewCache(cacheRepo, httpClient, tokens)
 	router := controllers.NewRouter(svc)
 	srv := &http.Server{
 		Addr:    addr,

@@ -8,13 +8,13 @@ import (
 	"distributed-db/models"
 )
 
-type cacheSummaryResolver interface {
-	ResolveSummary(peer string, summary models.Summary)
+type tokensUpdater interface {
+	UpdateTokens(node string, newNodes []string, tokensChecksum string) ([]string, error)
 }
 
-func gossip(svc cacheSummaryResolver) http.HandlerFunc {
+func gossip(svc tokensUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req models.GossipMessage
+		var req models.GossipRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			log.Printf("could not decode gossip request: %v", err)
@@ -22,6 +22,19 @@ func gossip(svc cacheSummaryResolver) http.HandlerFunc {
 			return
 		}
 
-		svc.ResolveSummary(r.Host, models.Summary{})
+		oldNodes, err := svc.UpdateTokens(r.Host, req.Nodes, req.TokensChecksum)
+		if err != nil {
+			log.Printf("could not update tokens: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		res := models.GossipResponse{Nodes: oldNodes}
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			log.Printf("could not encode gossip response: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }

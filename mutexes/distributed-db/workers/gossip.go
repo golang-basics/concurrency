@@ -8,7 +8,7 @@ import (
 const gossipPeriod = 3 * time.Second
 
 type gossiper interface {
-	GossipSummary()
+	Gossip()
 }
 
 func NewGossip(svc gossiper) Gossip {
@@ -24,7 +24,7 @@ type Gossip struct {
 func (g *Gossip) Start() {
 	log.Println("worker started successfully")
 	for {
-		g.svc.GossipSummary()
+		g.svc.Gossip()
 		time.Sleep(gossipPeriod)
 	}
 }
