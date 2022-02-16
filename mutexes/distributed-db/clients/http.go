@@ -46,7 +46,7 @@ func (c *HTTPClient) Get(node string, key string) (models.CacheItem, error) {
 	return cacheItem[0], nil
 }
 
-func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) error {
+func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) ([]string, error) {
 	body := models.GossipRequest{
 		Nodes:          nodes,
 		CreatedAt:      time.Now().UTC(),
@@ -54,15 +54,21 @@ func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) 
 	}
 	req, err := c.makeRequest(http.MethodPost, c.url(node, "gossip"), body)
 	if err != nil {
-		return err
+		return []string{}, err
 	}
 
-	_, err = c.httpClient.Do(req)
+	res, err := c.httpClient.Do(req)
 	if err != nil {
-		return err
+		return []string{}, err
 	}
 
-	return nil
+	var gossipRes models.GossipResponse
+	err = json.NewDecoder(res.Body).Decode(&gossipRes)
+	if err != nil {
+		return []string{}, err
+	}
+
+	return gossipRes.Nodes, nil
 }
 
 func (c *HTTPClient) Tokens(node string) (models.TokenMappings, error) {

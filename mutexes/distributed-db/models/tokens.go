@@ -6,49 +6,50 @@ import (
 	"fmt"
 	"hash/fnv"
 	"log"
+	"math"
 	"math/rand"
+	"reflect"
 	"sort"
 	"time"
 )
 
-type TokenMappings map[uint64]string
+type TokenMappings map[int]string
 
 type Tokens struct {
 	Mappings            TokenMappings
 	Nodes               Nodes
-	ranges              []uint64
+	ranges              []int
 	numberOfTokenRanges int
 }
 
-func NewTokens(nodes Nodes, numberOfTokenRanges int) Tokens {
-	numberOfNodes := len(nodes.Map)
-	tokenRange := uint64(200 / numberOfNodes / numberOfTokenRanges)
-	ranges := make([]uint64, 0, numberOfNodes*numberOfTokenRanges)
-	for i := 0; i < numberOfNodes; i++ {
+func NewTokens(nodes Nodes, numberOfTokenRanges int) *Tokens {
+	nodeList := append([]string{nodes.CurrentNode}, nodes.List(len(nodes.Map))...)
+	tokenRange := math.MaxInt / len(nodeList) / numberOfTokenRanges
+	ranges := make([]int, 0, len(nodeList)*numberOfTokenRanges)
+	for i := 0; i < len(nodeList); i++ {
 		for j := numberOfTokenRanges * i; j < numberOfTokenRanges*(i+1); j++ {
-			r := tokenRange * uint64(j+1)
+			r := tokenRange * (j + 1)
 			// produces a sorted ranges slice => needed for searching
 			ranges = append(ranges, r)
 		}
 	}
 
-	randomRanges := append([]uint64{}, ranges...)
+	randomRanges := append([]int{}, ranges...)
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(randomRanges), func(i, j int) {
 		randomRanges[i], randomRanges[j] = randomRanges[j], randomRanges[i]
 	})
 
-	i, mappings := 0, map[uint64]string{}
-	nodeList := nodes.List(len(nodes.Map))
+	i, mappings := 0, map[int]string{}
 	for _, r := range randomRanges {
 		mappings[r] = nodeList[i]
 		i++
-		if i == numberOfNodes {
+		if i == len(nodeList) {
 			i = 0
 		}
 	}
 
-	tokens := Tokens{
+	tokens := &Tokens{
 		Mappings:            mappings,
 		Nodes:               nodes,
 		ranges:              ranges,
@@ -57,38 +58,64 @@ func NewTokens(nodes Nodes, numberOfTokenRanges int) Tokens {
 	return tokens
 }
 
-func (t *Tokens) GetNode(token uint64) string {
-	idx := sort.Search(len(t.ranges)-1, func(i int) bool {
-		return t.ranges[i] >= token
-	})
+func (t *Tokens) GetNode(token int) string {
+	idx := sort.SearchInts(t.ranges, token)
 	node := t.Mappings[t.ranges[idx]]
 	return node
 }
 
-func (t *Tokens) AddNode(node string) {
-	_, ok := t.Nodes.Map[node]
-	if ok || node == t.Nodes.CurrentNode {
+func (t *Tokens) Merge(mappings map[int]string) {
+	newMappings := map[int]string{}
+	nodes := t.Nodes.WithCurrentNode()
+	ranges := t.ranges
+	m1, m2 := mappings, t.Mappings
+	if len(mappings) < len(t.Mappings) {
+		m1 = t.Mappings
+		m2 = mappings
+	}
+
+	newNodes := map[string]struct{}{}
+	newRanges := make([]int, 0)
+	for _, s := range mappings {
+		newNodes[s] = struct{}{}
+	}
+	for r := range m1 {
+		newRanges = append(newRanges, r)
+	}
+	sort.Ints(newRanges)
+	ranges = newRanges
+	nodes = newNodes
+
+	if reflect.DeepEqual(nodes, t.Nodes.Map) {
 		return
 	}
-	tokenRange := uint64(200 / len(t.Nodes.Map) / t.numberOfTokenRanges)
-	newRanges := make([]uint64, 0, t.numberOfTokenRanges)
-	for i := 0; i < len(t.ranges)+t.numberOfTokenRanges; i++ {
-		if i < len(t.ranges) {
-			r := t.ranges[i]
-			decrement := r - tokenRange*(uint64(i+1))
-			newRange := r - decrement
-			srv := t.Mappings[r]
 
-			delete(t.Mappings, r)
-			t.Mappings[newRange] = srv
-			t.ranges[i] = newRange
-		} else {
-			newRange := tokenRange * uint64(i+1)
-			t.Mappings[newRange] = node
-			newRanges = append(newRanges, newRange)
+	for s := range nodes {
+		_, ok := t.Nodes.WithCurrentNode()[s]
+		if ok {
+			delete(nodes, s)
 		}
 	}
-	t.ranges = append(t.ranges, newRanges...)
+
+	i := 0
+	numberOfNodes := len(nodes) + len(t.Nodes.WithCurrentNode())
+	tokenRange := math.MaxInt / numberOfNodes / t.numberOfTokenRanges
+	m1Nodes := map[string]struct{}{}
+	for r, s := range m1 {
+		m1Nodes[s] = struct{}{}
+		factor := sort.SearchInts(ranges, r) + 1
+		newMappings[factor*tokenRange] = s
+		i++
+	}
+	for _, s := range m2 {
+		_, ok := m1Nodes[s]
+		if ok {
+			continue
+		}
+		i++
+		newMappings[(i)*tokenRange] = s
+	}
+	t.Mappings = newMappings
 }
 
 func (t *Tokens) Checksum() string {

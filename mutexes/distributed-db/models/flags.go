@@ -5,7 +5,7 @@ import (
 )
 
 type Nodes struct {
-	Map       map[string]struct{}
+	Map         map[string]struct{}
 	CurrentNode string
 }
 
@@ -18,11 +18,21 @@ func (n Nodes) String() string {
 	return strings.Join(n.List(len(n.Map)), ",")
 }
 
-func (n Nodes) Add(node string) {
-	if node == n.CurrentNode {
-		return
+func (n Nodes) Add(nodes ...string) {
+	for _, node := range nodes {
+		if node == n.CurrentNode {
+			return
+		}
+		n.Map[node] = struct{}{}
 	}
-	n.Map[node] = struct{}{}
+}
+
+func (n Nodes) WithCurrentNode() map[string]struct{} {
+	nodes := map[string]struct{}{n.CurrentNode: {}}
+	for s := range n.Map {
+		nodes[s] = struct{}{}
+	}
+	return nodes
 }
 
 func (n Nodes) List(a int) []string {

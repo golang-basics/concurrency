@@ -24,10 +24,9 @@ func New() (*App, error) {
 		return nil, fmt.Errorf("need at least 1 node to talk to")
 	}
 
-
 	addr := fmt.Sprintf("localhost:%d", *port)
 	nodes.CurrentNode = addr
-	tokens := models.NewTokens(nodes, 5)
+	tokens := models.NewTokens(nodes, 256)
 	cacheRepo := repositories.NewCache()
 	httpClient := clients.NewHTTP(addr)
 	svc := services.NewCache(cacheRepo, httpClient, tokens)

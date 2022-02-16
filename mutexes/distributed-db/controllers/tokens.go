@@ -9,7 +9,7 @@ import (
 )
 
 type tokensGetter interface {
-	GetTokens() map[uint64]string
+	GetTokens() map[int]string
 }
 
 func tokens(svc tokensGetter) http.HandlerFunc {
