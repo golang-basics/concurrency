@@ -34,19 +34,7 @@ func (c *Cache) Set(key, value string) models.CacheItem {
 	return item
 }
 
-func (c *Cache) Get(key string) *models.CacheItem {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-
-	item, ok := c.data[key]
-	if !ok {
-		return nil
-	}
-
-	return &item
-}
-
-func (c *Cache) GetMany(keys []string) []models.CacheItem {
+func (c *Cache) Get(keys []string) []models.CacheItem {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 

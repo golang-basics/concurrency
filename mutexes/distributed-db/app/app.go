@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -37,26 +38,35 @@ func New() (*App, error) {
 	}
 	w := workers.NewGossip(svc)
 	a := &App{
-		Server: srv,
-		Worker: w,
+		Server:  srv,
+		Worker:  w,
 	}
 
 	return a, nil
 }
 
 type App struct {
-	Server *http.Server
-	Worker workers.Gossip
+	Server  *http.Server
+	Worker  workers.Gossip
 }
 
-func (a App) Start() error {
-	go a.Worker.Start()
+func (a App) Start(ctx context.Context) error {
+	go a.Worker.Start(ctx)
 
 	log.Println("server started on address", a.Server.Addr)
 	err := a.Server.ListenAndServe()
-	if err != nil {
+	if err != nil && err != http.ErrServerClosed {
 		return err
 	}
 
+	return nil
+}
+
+func (a App) Stop(ctx context.Context) error {
+	log.Println("shutting down the http server")
+	err := a.Server.Shutdown(ctx)
+	if err != nil && err != context.Canceled {
+		return fmt.Errorf("could not stop the http server: %w", err)
+	}
 	return nil
 }

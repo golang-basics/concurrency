@@ -1,6 +1,7 @@
 package workers
 
 import (
+	"context"
 	"log"
 	"time"
 )
@@ -21,10 +22,16 @@ type Gossip struct {
 	svc gossiper
 }
 
-func (g *Gossip) Start() {
+func (g *Gossip) Start(ctx context.Context) {
 	log.Println("worker started successfully")
+
 	for {
-		g.svc.Gossip()
-		time.Sleep(gossipPeriod)
+		select {
+		case <-ctx.Done():
+			log.Println("stopping the gossip worker")
+			return
+		case <-time.NewTicker(gossipPeriod).C:
+			g.svc.Gossip()
+		}
 	}
 }

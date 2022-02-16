@@ -9,8 +9,7 @@ import (
 )
 
 type CacheRepository interface {
-	Get(key string) *models.CacheItem
-	GetMany(keys []string) []models.CacheItem
+	Get(keys []string) []models.CacheItem
 	Set(key, value string) models.CacheItem
 }
 
@@ -57,7 +56,7 @@ func (svc CacheSvc) Get(keys []string) []models.CacheItem {
 	cacheItems := make([]models.CacheItem, 0)
 	for node, sums := range nodeToSums {
 		if node == svc.tokens.Nodes.CurrentNode {
-			items := svc.cacheRepo.GetMany(sums)
+			items := svc.cacheRepo.Get(sums)
 			for _, item := range items {
 				item.Node = node
 				cacheItems = append(cacheItems, item)
