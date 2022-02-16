@@ -58,8 +58,9 @@ func NewTokens(nodes Nodes, numberOfTokenRanges int) *Tokens {
 	return tokens
 }
 
-func (t *Tokens) GetNode(token int) string {
-	idx := sort.SearchInts(t.ranges, token)
+func (t *Tokens) GetNode(key string) string {
+	token := HashKey(key)
+	idx := sort.SearchInts(t.ranges, int(token))
 	node := t.Mappings[t.ranges[idx]]
 	return node
 }
@@ -128,7 +129,7 @@ func (t *Tokens) Checksum() string {
 	return fmt.Sprintf("%x", sum)
 }
 
-func hash(s string) uint64 {
+func HashKey(s string) uint64 {
 	h := fnv.New64a()
 	_, _ = h.Write([]byte(s))
 	return h.Sum64()

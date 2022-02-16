@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
-	"time"
 
 	"distributed-db/models"
 )
@@ -23,11 +22,12 @@ type HTTPClient struct {
 	httpClient *http.Client
 }
 
-func (c *HTTPClient) Get(node string, key string) (models.CacheItem, error) {
-	body := models.GetRequest{
-		Keys: []string{key},
+func (c *HTTPClient) Set(node string, key, value string) (models.CacheItem, error) {
+	body := models.SetRequest{
+		Key:   key,
+		Value: value,
 	}
-	req, err := c.makeRequest(http.MethodGet, c.url(node, "get"), body)
+	req, err := c.makeRequest(http.MethodPost, c.url(node, "set"), body)
 	if err != nil {
 		return models.CacheItem{}, err
 	}
@@ -37,19 +37,40 @@ func (c *HTTPClient) Get(node string, key string) (models.CacheItem, error) {
 		return models.CacheItem{}, err
 	}
 
-	var cacheItem []models.CacheItem
-	err = json.NewDecoder(res.Body).Decode(&cacheItem)
+	var item models.CacheItem
+	err = json.NewDecoder(res.Body).Decode(&item)
 	if err != nil {
 		return models.CacheItem{}, err
 	}
+	item.Node = node
 
-	return cacheItem[0], nil
+	return item, nil
+}
+
+func (c *HTTPClient) Get(node string, keys []string) ([]models.CacheItem, error) {
+	body := models.GetRequest{Keys: keys}
+	req, err := c.makeRequest(http.MethodGet, c.url(node, "get"), body)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	var cacheItems []models.CacheItem
+	err = json.NewDecoder(res.Body).Decode(&cacheItems)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	return cacheItems, nil
 }
 
 func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) ([]string, error) {
 	body := models.GossipRequest{
 		Nodes:          nodes,
-		CreatedAt:      time.Now().UTC(),
 		TokensChecksum: tokensChecksum,
 	}
 	req, err := c.makeRequest(http.MethodPost, c.url(node, "gossip"), body)

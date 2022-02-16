@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 type GetRequest struct {
 	Keys []string `json:"keys"`
 	// how many reads before returning
@@ -20,7 +16,6 @@ type SetRequest struct {
 }
 
 type GossipRequest struct {
-	CreatedAt      time.Time `json:"created_at"`
 	Nodes          []string  `json:"nodes"`
 	TokensChecksum string    `json:"tokens_checksum"`
 }

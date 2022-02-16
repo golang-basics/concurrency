@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -10,11 +11,12 @@ import (
 type CacheRepository interface {
 	Get(key string) *models.CacheItem
 	GetMany(keys []string) []models.CacheItem
-	Set(key, value string)
+	Set(key, value string) models.CacheItem
 }
 
 type HTTPClient interface {
-	Get(node string, key string) (models.CacheItem, error)
+	Set(node, key, value string) (models.CacheItem, error)
+	Get(node string, keys []string) ([]models.CacheItem, error)
 	Gossip(node string, nodes []string, tokensChecksum string) (oldNodes []string, err error)
 	Tokens(node string) (models.TokenMappings, error)
 }
@@ -34,11 +36,59 @@ type CacheSvc struct {
 }
 
 func (svc CacheSvc) Get(keys []string) []models.CacheItem {
-	return svc.cacheRepo.GetMany(keys)
+	keyToNode := map[string]string{}
+	sumToNode := map[string]string{}
+	for _, key := range keys {
+		sum := fmt.Sprintf("%d", models.HashKey(key))
+		node := svc.tokens.GetNode(key)
+		sumToNode[sum] = node
+		keyToNode[key] = node
+	}
+
+	nodeToSums := map[string][]string{}
+	for sum, node := range sumToNode {
+		nodeToSums[node] = append(nodeToSums[node], sum)
+	}
+	nodeToKeys := map[string][]string{}
+	for key, node := range keyToNode {
+		nodeToKeys[node] = append(nodeToKeys[node], key)
+	}
+
+	cacheItems := make([]models.CacheItem, 0)
+	for node, sums := range nodeToSums {
+		if node == svc.tokens.Nodes.CurrentNode {
+			items := svc.cacheRepo.GetMany(sums)
+			for _, item := range items {
+				item.Node = node
+				cacheItems = append(cacheItems, item)
+			}
+			continue
+		}
+
+		nodeKeys := nodeToKeys[node]
+		items, err := svc.httpClient.Get(node, nodeKeys)
+		if err != nil {
+			log.Printf("could not get cache items from node: %s, %v", node, err)
+		}
+
+		for _, item := range items {
+			item.Node = node
+			cacheItems = append(cacheItems, item)
+		}
+	}
+
+	return cacheItems
 }
 
-func (svc CacheSvc) Set(key, value string) {
-	svc.cacheRepo.Set(key, value)
+func (svc CacheSvc) Set(key, value string) (models.CacheItem, error) {
+	node := svc.tokens.GetNode(key)
+	if node == svc.tokens.Nodes.CurrentNode {
+		item := svc.cacheRepo.Set(key, value)
+		item.Node = node
+		return item, nil
+	}
+
+	return svc.httpClient.Set(node, key, value)
 }
 
 func (svc CacheSvc) Gossip() {

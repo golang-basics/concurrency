@@ -9,7 +9,7 @@ import (
 )
 
 type cacheSetter interface {
-	Set(key, value string)
+	Set(key, value string) (models.CacheItem, error)
 }
 
 func set(svc cacheSetter) http.HandlerFunc {
@@ -22,9 +22,18 @@ func set(svc cacheSetter) http.HandlerFunc {
 			return
 		}
 
-		svc.Set(req.Key, req.Value)
+		item, err := svc.Set(req.Key, req.Value)
+		if err != nil {
+			log.Printf("could not store cache item: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
-		log.Printf("successfully stored record with key: %s", req.Key)
-		w.WriteHeader(http.StatusOK)
+		log.Printf("successfully stored record with key: %s on: %s", item.Key, item.Node)
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(item)
+		if err != nil {
+			log.Printf("could not encode set response: %v", err)
+		}
 	}
 }

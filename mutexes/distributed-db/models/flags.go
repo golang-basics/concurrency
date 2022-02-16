@@ -21,8 +21,11 @@ func (n Nodes) String() string {
 func (n Nodes) Add(nodes ...string) {
 	for _, node := range nodes {
 		if node == n.CurrentNode {
-			return
+			continue
 		}
+		// update some kind of UpdateAt field for nodes health check
+		// change from map[string]struct{} to map[string]int => states: Up/Down
+		// a node is Down if it hasn't sent a gossip request in 10 seconds
 		n.Map[node] = struct{}{}
 	}
 }

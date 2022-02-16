@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -18,41 +19,44 @@ type Cache struct {
 	data    map[string]models.CacheItem
 }
 
-func (c *Cache) Set(key, value string) {
+func (c *Cache) Set(key, value string) models.CacheItem {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	cacheValue := models.CacheItem{
+	item := models.CacheItem{
 		Key:       key,
 		Value:     value,
 		UpdatedAt: time.Now().UTC(),
 	}
-	c.data[key] = cacheValue
+
+	sum := fmt.Sprintf("%d", models.HashKey(key))
+	c.data[sum] = item
+	return item
 }
 
 func (c *Cache) Get(key string) *models.CacheItem {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
-	val, ok := c.data[key]
+	item, ok := c.data[key]
 	if !ok {
 		return nil
 	}
 
-	return &val
+	return &item
 }
 
 func (c *Cache) GetMany(keys []string) []models.CacheItem {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
-	values := make([]models.CacheItem, 0)
-	for _, k := range keys {
-		v, ok := c.data[k]
+	items := make([]models.CacheItem, 0)
+	for _, key := range keys {
+		item, ok := c.data[key]
 		if ok {
-			values = append(values, v)
+			items = append(items, item)
 		}
 	}
 
-	return values
+	return items
 }
