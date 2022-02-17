@@ -18,17 +18,22 @@ import (
 func New() (*App, error) {
 	nodes := models.Nodes{Map: map[string]struct{}{}}
 	port := flag.Int("port", 8080, "the port of the running server")
+	dataDir := flag.String("data", "", "the data directory of the running server")
 	flag.Var(&nodes, "node", "the list of nodes to talk to")
 
 	flag.Parse()
+
+	addr := fmt.Sprintf("localhost:%d", *port)
 	if len(nodes.Map) < 1 {
 		return nil, fmt.Errorf("need at least 1 node to talk to")
 	}
+	if *dataDir == "" {
+		*dataDir = fmt.Sprintf(".data/%s", addr)
+	}
 
-	addr := fmt.Sprintf("localhost:%d", *port)
 	nodes.CurrentNode = addr
 	tokens := models.NewTokens(nodes, 256)
-	cacheRepo := repositories.NewCache()
+	cacheRepo := repositories.NewCache(*dataDir)
 	httpClient := clients.NewHTTP(addr)
 	svc := services.NewCache(cacheRepo, httpClient, tokens)
 	router := controllers.NewRouter(svc)
@@ -38,16 +43,22 @@ func New() (*App, error) {
 	}
 	w := workers.NewGossip(svc)
 	a := &App{
-		Server:  srv,
-		Worker:  w,
+		Server:    srv,
+		Worker:    w,
+		cacheRepo: cacheRepo,
 	}
 
 	return a, nil
 }
 
+type snapshotter interface {
+	Snapshot() error
+}
+
 type App struct {
-	Server  *http.Server
-	Worker  workers.Gossip
+	Server    *http.Server
+	Worker    workers.Gossip
+	cacheRepo snapshotter
 }
 
 func (a App) Start(ctx context.Context) error {
@@ -67,6 +78,12 @@ func (a App) Stop(ctx context.Context) error {
 	err := a.Server.Shutdown(ctx)
 	if err != nil && err != context.Canceled {
 		return fmt.Errorf("could not stop the http server: %w", err)
+	}
+
+	log.Println("taking a snapshot of the database")
+	err = a.cacheRepo.Snapshot()
+	if err != nil {
+		return fmt.Errorf("could not take database snapshot: %w", err)
 	}
 	return nil
 }

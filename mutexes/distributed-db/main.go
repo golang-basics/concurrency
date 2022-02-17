@@ -11,7 +11,6 @@ import (
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	//defer cancel()
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
