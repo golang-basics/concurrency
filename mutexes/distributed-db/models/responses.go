@@ -1,7 +1,7 @@
 package models
 
 type GossipResponse struct {
-	Nodes []string `json:"nodes"`
+	Nodes map[string]int `json:"nodes"`
 }
 
 type TokensResponse struct {

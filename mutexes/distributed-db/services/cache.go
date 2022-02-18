@@ -16,7 +16,7 @@ type CacheRepository interface {
 type HTTPClient interface {
 	Set(node, key, value string) (models.CacheItem, error)
 	Get(node string, keys []string) ([]models.CacheItem, error)
-	Gossip(node string, nodes []string, tokensChecksum string) (oldNodes []string, err error)
+	Gossip(node string, newNodes models.NodesMap, tokensChecksum string) (oldNodes models.NodesMap, err error)
 	Tokens(node string) (models.TokenMappings, error)
 }
 
@@ -55,7 +55,7 @@ func (svc CacheSvc) Get(keys []string) []models.CacheItem {
 
 	cacheItems := make([]models.CacheItem, 0)
 	for node, sums := range nodeToSums {
-		if node == svc.tokens.Nodes.CurrentNode {
+		if node == svc.tokens.Nodes.Current() {
 			items := svc.cacheRepo.Get(sums)
 			for _, item := range items {
 				item.Node = node
@@ -81,7 +81,7 @@ func (svc CacheSvc) Get(keys []string) []models.CacheItem {
 
 func (svc CacheSvc) Set(key, value string) (models.CacheItem, error) {
 	node := svc.tokens.GetNode(key)
-	if node == svc.tokens.Nodes.CurrentNode {
+	if node == svc.tokens.Nodes.Current() {
 		item := svc.cacheRepo.Set(key, value)
 		item.Node = node
 		return item, nil
@@ -91,33 +91,37 @@ func (svc CacheSvc) Set(key, value string) (models.CacheItem, error) {
 }
 
 func (svc CacheSvc) Gossip() {
-	nodes := svc.tokens.Nodes.List(2)
-	log.Println("gossiping to:", strings.Join(nodes, ","))
+	nodes := svc.tokens.Nodes.ListActive(2)
+	if len(nodes) == 0 {
+		return
+	}
 
-	allNodes := append([]string{}, svc.tokens.Nodes.List(len(svc.tokens.Nodes.Map))...)
-	allNodes = append(allNodes, svc.tokens.Nodes.CurrentNode)
+	log.Println("gossiping to:", strings.Join(nodes, ","))
 	for _, node := range nodes {
-		oldNodes, err := svc.httpClient.Gossip(node, allNodes, svc.tokens.Checksum())
+		oldNodes, err := svc.httpClient.Gossip(node, svc.tokens.Nodes.Map(), svc.tokens.Checksum())
 		if err != nil {
 			log.Printf("could not make http call for gossip: %v", err)
+			svc.tokens.Nodes.Fail(node)
 			continue
 		}
 
-		svc.tokens.Nodes.Add(oldNodes...)
+		svc.tokens.Nodes.Set(oldNodes)
 	}
 }
 
-func (svc CacheSvc) UpdateTokens(node string, newNodes []string, tokensChecksum string) ([]string, error) {
-	oldNodes := svc.tokens.Nodes.List(len(svc.tokens.Nodes.Map))
+func (svc CacheSvc) UpdateTokens(node string, newNodes models.NodesMap, tokensChecksum string) (models.NodesMap, error) {
+	svc.tokens.Nodes.Gossip(node)
+	svc.tokens.Nodes.Set(newNodes)
+
 	if svc.tokens.Checksum() != tokensChecksum {
-		svc.tokens.Nodes.Add(newNodes...)
 		tokens, err := svc.httpClient.Tokens(node)
 		if err != nil {
-			return []string{}, err
+			return models.NodesMap{}, err
 		}
 		svc.tokens.Merge(tokens)
 	}
-	return oldNodes, nil
+
+	return svc.tokens.Nodes.Map(), nil
 }
 
 func (svc CacheSvc) GetTokens() map[int]string {

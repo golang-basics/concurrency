@@ -9,7 +9,7 @@ import (
 )
 
 type tokensUpdater interface {
-	UpdateTokens(node string, newNodes []string, tokensChecksum string) ([]string, error)
+	UpdateTokens(node string, newNodes models.NodesMap, tokensChecksum string) (oldNodes models.NodesMap, err error)
 }
 
 func gossip(svc tokensUpdater) http.HandlerFunc {

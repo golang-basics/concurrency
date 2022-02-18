@@ -23,7 +23,7 @@ type Gossip struct {
 }
 
 func (g *Gossip) Start(ctx context.Context) {
-	log.Println("worker started successfully")
+	log.Println("gossip worker started successfully")
 
 	for {
 		select {

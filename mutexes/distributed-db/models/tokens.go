@@ -17,13 +17,13 @@ type TokenMappings map[int]string
 
 type Tokens struct {
 	Mappings            TokenMappings
-	Nodes               Nodes
+	Nodes               *Nodes
 	ranges              []int
 	numberOfTokenRanges int
 }
 
-func NewTokens(nodes Nodes, numberOfTokenRanges int) *Tokens {
-	nodeList := append([]string{nodes.CurrentNode}, nodes.List(len(nodes.Map))...)
+func NewTokens(nodes *Nodes, numberOfTokenRanges int) *Tokens {
+	nodeList := append([]string{nodes.Current()}, nodes.ListAll()...)
 	tokenRange := math.MaxInt / len(nodeList) / numberOfTokenRanges
 	ranges := make([]int, 0, len(nodeList)*numberOfTokenRanges)
 	for i := 0; i < len(nodeList); i++ {
@@ -67,7 +67,7 @@ func (t *Tokens) GetNode(key string) string {
 
 func (t *Tokens) Merge(mappings map[int]string) {
 	newMappings := map[int]string{}
-	nodes := t.Nodes.WithCurrentNode()
+	nodes := t.Nodes.Map()
 	ranges := t.ranges
 	m1, m2 := mappings, t.Mappings
 	if len(mappings) < len(t.Mappings) {
@@ -75,10 +75,10 @@ func (t *Tokens) Merge(mappings map[int]string) {
 		m2 = mappings
 	}
 
-	newNodes := map[string]struct{}{}
+	newNodes := map[string]int{}
 	newRanges := make([]int, 0)
 	for _, s := range mappings {
-		newNodes[s] = struct{}{}
+		newNodes[s] = NodeStatusUp
 	}
 	for r := range m1 {
 		newRanges = append(newRanges, r)
@@ -92,14 +92,14 @@ func (t *Tokens) Merge(mappings map[int]string) {
 	}
 
 	for s := range nodes {
-		_, ok := t.Nodes.WithCurrentNode()[s]
+		_, ok := t.Nodes.Map()[s]
 		if ok {
 			delete(nodes, s)
 		}
 	}
 
 	i := 0
-	numberOfNodes := len(nodes) + len(t.Nodes.WithCurrentNode())
+	numberOfNodes := len(nodes) + len(t.Nodes.Map())
 	tokenRange := math.MaxInt / numberOfNodes / t.numberOfTokenRanges
 	m1Nodes := map[string]struct{}{}
 	for r, s := range m1 {

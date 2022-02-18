@@ -16,6 +16,6 @@ type SetRequest struct {
 }
 
 type GossipRequest struct {
-	Nodes          []string `json:"nodes"`
-	TokensChecksum string   `json:"tokens_checksum"`
+	Nodes          map[string]int `json:"nodes"`
+	TokensChecksum string         `json:"tokens_checksum"`
 }

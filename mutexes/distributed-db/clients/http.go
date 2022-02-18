@@ -68,25 +68,25 @@ func (c *HTTPClient) Get(node string, keys []string) ([]models.CacheItem, error)
 	return cacheItems, nil
 }
 
-func (c *HTTPClient) Gossip(node string, nodes []string, tokensChecksum string) ([]string, error) {
+func (c *HTTPClient) Gossip(node string, nodes models.NodesMap, tokensChecksum string) (models.NodesMap, error) {
 	body := models.GossipRequest{
 		Nodes:          nodes,
 		TokensChecksum: tokensChecksum,
 	}
 	req, err := c.makeRequest(http.MethodPost, c.url(node, "gossip"), body)
 	if err != nil {
-		return []string{}, err
+		return models.NodesMap{}, err
 	}
 
 	res, err := c.httpClient.Do(req)
 	if err != nil {
-		return []string{}, err
+		return models.NodesMap{}, err
 	}
 
 	var gossipRes models.GossipResponse
 	err = json.NewDecoder(res.Body).Decode(&gossipRes)
 	if err != nil {
-		return []string{}, err
+		return models.NodesMap{}, err
 	}
 
 	return gossipRes.Nodes, nil

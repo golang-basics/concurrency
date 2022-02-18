@@ -16,22 +16,23 @@ import (
 )
 
 func New() (*App, error) {
-	nodes := models.Nodes{Map: map[string]struct{}{}}
+	nodesMap := models.NodesMap{}
 	port := flag.Int("port", 8080, "the port of the running server")
 	dataDir := flag.String("data", "", "the data directory of the running server")
-	flag.Var(&nodes, "node", "the list of nodes to talk to")
+	flag.Var(&nodesMap, "node", "the list of nodes to talk to")
 
 	flag.Parse()
 
-	addr := fmt.Sprintf("localhost:%d", *port)
-	if len(nodes.Map) < 1 {
+	if len(nodesMap) < 1 {
 		return nil, fmt.Errorf("need at least 1 node to talk to")
 	}
+
+	addr := fmt.Sprintf("localhost:%d", *port)
 	if *dataDir == "" {
 		*dataDir = fmt.Sprintf(".data/%s", addr)
 	}
 
-	nodes.CurrentNode = addr
+	nodes := models.NewNodes(addr, nodesMap)
 	tokens := models.NewTokens(nodes, 256)
 	cacheRepo := repositories.NewCache(*dataDir)
 	httpClient := clients.NewHTTP(addr)
