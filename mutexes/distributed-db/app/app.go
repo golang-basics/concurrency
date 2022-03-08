@@ -23,13 +23,14 @@ func New() (*App, error) {
 
 	flag.Parse()
 
-	if len(nodesMap) < 1 {
-		return nil, fmt.Errorf("need at least 1 node to talk to")
-	}
-
 	addr := fmt.Sprintf("localhost:%d", *port)
 	if *dataDir == "" {
 		*dataDir = fmt.Sprintf(".data/%s", addr)
+	}
+
+	delete(nodesMap, addr)
+	if len(nodesMap) < 1 {
+		return nil, fmt.Errorf("need at least 1 node to talk to")
 	}
 
 	nodes := models.NewNodes(addr, nodesMap)
@@ -42,11 +43,13 @@ func New() (*App, error) {
 		Addr:    addr,
 		Handler: router,
 	}
-	w := workers.NewGossip(svc)
+	gossipWorker := workers.NewGossip(svc)
+	streamerWorker := workers.NewStreamer(svc)
 	a := &App{
-		Server:    srv,
-		Worker:    w,
-		cacheRepo: cacheRepo,
+		Server:         srv,
+		GossipWorker:   gossipWorker,
+		StreamerWorker: streamerWorker,
+		cacheRepo:      cacheRepo,
 	}
 
 	return a, nil
@@ -57,13 +60,15 @@ type snapshotter interface {
 }
 
 type App struct {
-	Server    *http.Server
-	Worker    workers.Gossip
-	cacheRepo snapshotter
+	Server         *http.Server
+	GossipWorker   workers.Gossip
+	StreamerWorker workers.Streamer
+	cacheRepo      snapshotter
 }
 
 func (a App) Start(ctx context.Context) error {
-	go a.Worker.Start(ctx)
+	go a.GossipWorker.Start(ctx)
+	go a.StreamerWorker.Start(ctx)
 
 	log.Println("server started on address", a.Server.Addr)
 	err := a.Server.ListenAndServe()

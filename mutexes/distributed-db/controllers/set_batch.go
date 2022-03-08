@@ -8,27 +8,27 @@ import (
 	"distributed-db/models"
 )
 
-type cacheGetter interface {
-	Get(keys []string) []models.CacheItem
+type cacheBatchSetter interface {
+	SetBatch(items map[int]models.CacheItem) []models.CacheItem
 }
 
-func get(svc cacheGetter) http.HandlerFunc {
+func setBatch(svc cacheBatchSetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req models.GetRequest
+		var req models.SetBatchRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
-			log.Printf("could not decode get request: %v", err)
+			log.Printf("could not decode set batch request: %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		items := svc.Get(req.Keys)
+		items := svc.SetBatch(req.Items)
+		log.Printf("successfully stored batch")
 
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(items)
 		if err != nil {
-			log.Printf("could not encode json: %v", err)
-			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("could not encode set batch response: %v", err)
 		}
 	}
 }

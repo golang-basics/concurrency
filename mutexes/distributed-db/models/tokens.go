@@ -13,15 +13,6 @@ import (
 	"time"
 )
 
-type TokenMappings map[int]string
-
-type Tokens struct {
-	Mappings            TokenMappings
-	Nodes               *Nodes
-	ranges              []int
-	numberOfTokenRanges int
-}
-
 func NewTokens(nodes *Nodes, numberOfTokenRanges int) *Tokens {
 	nodeList := append([]string{nodes.Current()}, nodes.ListAll()...)
 	tokenRange := math.MaxInt / len(nodeList) / numberOfTokenRanges
@@ -58,11 +49,30 @@ func NewTokens(nodes *Nodes, numberOfTokenRanges int) *Tokens {
 	return tokens
 }
 
-func (t *Tokens) GetNode(key string) string {
-	token := HashKey(key)
-	idx := sort.SearchInts(t.ranges, int(token))
+type TokenMappings map[int]string
+
+type Tokens struct {
+	Mappings            TokenMappings
+	ForeignTokens       TokenMappings
+	Nodes               *Nodes
+	ranges              []int
+	numberOfTokenRanges int
+}
+
+func (t *Tokens) GetNode(token int) string {
+	idx := sort.SearchInts(t.ranges, token)
 	node := t.Mappings[t.ranges[idx]]
 	return node
+}
+
+func (t *Tokens) SetForeignTokens(items map[int]CacheItem, node string) {
+	for token, _ := range items {
+		t.ForeignTokens[token] = node
+	}
+}
+
+func (t *Tokens) DeleteForeignToken(token int) {
+	delete(t.ForeignTokens, token)
 }
 
 func (t *Tokens) Merge(mappings map[int]string) {

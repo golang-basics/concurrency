@@ -22,6 +22,27 @@ type HTTPClient struct {
 	httpClient *http.Client
 }
 
+func (c *HTTPClient) Get(node string, keys []string) ([]models.CacheItem, error) {
+	body := models.GetRequest{Keys: keys}
+	req, err := c.makeRequest(http.MethodGet, c.url(node, "get"), body)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	var cacheItems []models.CacheItem
+	err = json.NewDecoder(res.Body).Decode(&cacheItems)
+	if err != nil {
+		return []models.CacheItem{}, err
+	}
+
+	return cacheItems, nil
+}
+
 func (c *HTTPClient) Set(node string, key, value string) (models.CacheItem, error) {
 	body := models.SetRequest{
 		Key:   key,
@@ -47,9 +68,9 @@ func (c *HTTPClient) Set(node string, key, value string) (models.CacheItem, erro
 	return item, nil
 }
 
-func (c *HTTPClient) Get(node string, keys []string) ([]models.CacheItem, error) {
-	body := models.GetRequest{Keys: keys}
-	req, err := c.makeRequest(http.MethodGet, c.url(node, "get"), body)
+func (c *HTTPClient) SetBatch(node string, items map[int]models.CacheItem) ([]models.CacheItem, error) {
+	body := models.SetBatchRequest{Items: items}
+	req, err := c.makeRequest(http.MethodPost, c.url(node, "set/batch"), body)
 	if err != nil {
 		return []models.CacheItem{}, err
 	}
@@ -60,7 +81,7 @@ func (c *HTTPClient) Get(node string, keys []string) ([]models.CacheItem, error)
 	}
 
 	var cacheItems []models.CacheItem
-	err = json.NewDecoder(res.Body).Decode(&cacheItems)
+	err = json.NewDecoder(res.Body).Decode(&items)
 	if err != nil {
 		return []models.CacheItem{}, err
 	}

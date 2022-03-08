@@ -1,19 +1,18 @@
 package repositories
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"sync"
-	"time"
 
 	"distributed-db/models"
+	"encoding/json"
 )
 
 func NewCache(dataDir string) *Cache {
 	cache := &Cache{
-		data:    map[string]models.CacheItem{},
+		data:    map[int]models.CacheItem{},
 		dataDir: dataDir,
 	}
 	cache.init()
@@ -22,26 +21,11 @@ func NewCache(dataDir string) *Cache {
 
 type Cache struct {
 	mu      sync.RWMutex
-	data    map[string]models.CacheItem
+	data    map[int]models.CacheItem
 	dataDir string
 }
 
-func (c *Cache) Set(key, value string) models.CacheItem {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	item := models.CacheItem{
-		Key:       key,
-		Value:     value,
-		UpdatedAt: time.Now().UTC(),
-	}
-
-	sum := fmt.Sprintf("%d", models.HashKey(key))
-	c.data[sum] = item
-	return item
-}
-
-func (c *Cache) Get(keys []string) []models.CacheItem {
+func (c *Cache) Get(keys []int) []models.CacheItem {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
@@ -56,6 +40,38 @@ func (c *Cache) Get(keys []string) []models.CacheItem {
 	return items
 }
 
+func (c *Cache) GetAllKeys() []int {
+	keys := make([]int, 0, len(c.data))
+	for key := range c.data {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
+// make this a batch function that accepts multiple items
+// make it accept key and item instead
+func (c *Cache) Set(items map[int]models.CacheItem) {
+	for key, item := range items {
+		c.mu.Lock()
+		c.data[key] = item
+		c.mu.Unlock()
+	}
+}
+
+func (c *Cache) Delete(keys []int) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for _, key := range keys {
+		delete(c.data, key)
+	}
+}
+
+// Snapshot stores the in-memory database to db.json file
+// CRITICAL: This is very INEFFICIENT and only for development purposes.
+// A better approach would be only keeping a small portion of data in-memory,
+// the rest to be kept in small chunks per file
+// and a background compaction process that merges and optimizes data
 func (c *Cache) Snapshot() error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -80,13 +96,18 @@ func (c *Cache) Snapshot() error {
 	return nil
 }
 
+// init creates the initial state for the database from db.json file
+// CRITICAL: This is very INEFFICIENT and only for development purposes.
+// A better approach would be to use the disk directory and avoid initializing
+// the database like this. Creating optimized indexes and using file seeking can
+// drastically improve performance
 func (c *Cache) init() {
 	dbFile, err := os.Open(fmt.Sprintf("%s/db.json", c.dataDir))
 	if err != nil {
 		return
 	}
 
-	var cacheData map[string]models.CacheItem
+	var cacheData map[int]models.CacheItem
 	err = json.NewDecoder(dbFile).Decode(&cacheData)
 	if err != nil {
 		log.Printf("could not decode database file: %v", err)
