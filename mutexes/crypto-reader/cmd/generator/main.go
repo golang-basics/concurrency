@@ -53,7 +53,7 @@ func main() {
 		}
 
 		bs := generateTransactions(cfg, now)
-		filename := fmt.Sprintf("transaction-%s", now.Format(dateFileFormat))
+		filename := fmt.Sprintf("transaction-%s.txt", now.Format(dateFileFormat))
 		file, err := os.Create(path.Join(*directoryFlag, filename))
 		if err != nil {
 			log.Fatalf("could not create file: %v", err)
