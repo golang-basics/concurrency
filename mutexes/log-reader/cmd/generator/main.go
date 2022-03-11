@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"log"
 	"math/rand"
+	"os"
+	"path"
 	"time"
 )
 
@@ -13,14 +17,57 @@ const (
 	convertOperation  = "CONVERT"
 	withdrawOperation = "WITHDRAW"
 	dateFormat        = "01/02/2006 15:04:05 -0700"
+	dateFileFormat    = "01-02-2006-15:04:05"
 )
 
+type config struct {
+	rotationInterval         time.Duration
+	transactionInterval      time.Duration
+	transactionTotalLifetime time.Duration
+}
+
 func main() {
-	transactionIntervalFlag := flag.Duration("transaction-interval", time.Minute, "interval between each transaction")
-	rotationIntervalFlag := flag.Duration("rotation-interval", time.Hour, "interval between each transaction file")
+	directoryFlag := flag.String("dir", "testdata", "the directory to store the transaction files in")
+	intervalFlag := flag.Duration("interval", time.Minute, "interval between each transaction")
+	rotationFlag := flag.Duration("rotation", time.Hour, "rotation interval between each transaction file")
+	totalFlag := flag.Duration("total", time.Hour*10, "total lifetime of all transactions")
 
 	flag.Parse()
 
+	err := os.MkdirAll(*directoryFlag, 0777)
+	if err != nil {
+		log.Fatalf("could not craete directory: %v", err)
+	}
+
+	then := time.Now().UTC()
+	cfg := config{
+		rotationInterval:         *rotationFlag,
+		transactionInterval:      *intervalFlag,
+		transactionTotalLifetime: *totalFlag,
+	}
+
+	now := time.Now().UTC()
+	for {
+		if now.Sub(then) > cfg.transactionTotalLifetime {
+			return
+		}
+
+		bs := generateTransactions(cfg, now)
+		filename := fmt.Sprintf("transaction-%s", now.Format(dateFileFormat))
+		file, err := os.Create(path.Join(*directoryFlag, filename))
+		if err != nil {
+			log.Fatalf("could not create file: %v", err)
+		}
+		_, err = file.Write(bs)
+		if err != nil {
+			log.Fatalf("could not write to file: %v", err)
+		}
+
+		now = now.Add(cfg.rotationInterval+cfg.transactionInterval)
+	}
+}
+
+func generateTransactions(cfg config, now time.Time) []byte {
 	addresses := []string{
 		"0xa42c9E5B5d936309D6B4Ca323B0dD5739643D2Dd",
 		"0x7F1C681EF8aD3E695b8dd18C9aD99Ad3A1469CEb",
@@ -44,44 +91,69 @@ func main() {
 		"0xf9Fb58eB4871590764987ac1b1244b3AE4135626",
 	}
 	cryptoCoins := []string{"BTC", "ETH", "USDT", "BUSD", "SOL", "DOT", "LUNA"}
-	fiatCoins := []string{"USD", "EUR", "MDL"}
+	fiatCoins := []string{"USD", "EUR", "GBP"}
 	operations := []string{buyOperation, sellOperation, convertOperation, withdrawOperation}
-	//maxAmounts := map[string]float64{
-	//}
+	maxAmounts := map[string]float64{
+		"BTC":  2,
+		"ETH":  20,
+		"USDT": 5000,
+		"BUSD": 5000,
+		"SOL":  50,
+		"DOT":  100,
+		"LUNA": 80,
+	}
+	prices := map[string]float64{
+		"BTC":  41000,
+		"ETH":  2700,
+		"USDT": 0.9999,
+		"BUSD": 0.9999,
+		"SOL":  90,
+		"DOT":  18,
+		"LUNA": 90,
+	}
 	buyFee := 2.0
+	sellFee := 3.0
 	withdrawFee := 15
 
-	now, then := time.Now().UTC(), time.Now().UTC()
+	buf := &bytes.Buffer{}
+	then := now
 	for {
-		if now.Sub(then) > *rotationIntervalFlag {
-			return
+		if now.Sub(then) > cfg.rotationInterval {
+			break
 		}
 		rand.Seed(time.Now().UnixNano())
 		addressIndex := rand.Intn(len(addresses))
 		address := addresses[addressIndex]
 		cryptoCoinIndex := rand.Intn(len(cryptoCoins))
+		cryptoCoinIndexAlt := rand.Intn(len(cryptoCoins))
 		cryptoCoin := cryptoCoins[cryptoCoinIndex]
+		cryptoCoinAlt := cryptoCoins[cryptoCoinIndexAlt]
 		fiatCoinIndex := rand.Intn(len(fiatCoins))
 		fiatCoin := fiatCoins[fiatCoinIndex]
 		operationIndex := rand.Intn(len(operations))
 		operation := operations[operationIndex]
+		amount := rand.Float64() * maxAmounts[cryptoCoin]
+		price := (prices[cryptoCoin]*rand.Float64() + prices[cryptoCoin]) / 2
 		date := now.Format(dateFormat)
-
-		// make sure in and out coins are different otherwise skip iteration
 
 		line := ""
 		switch operation {
 		case buyOperation:
-			line = fmt.Sprintf("%s %s %s:%v %s:%v %v%% %s", address, operation, cryptoCoin, 1, fiatCoin, 123, buyFee, date)
+			line = fmt.Sprintf("%s %s %s/%s:%.2f %s:%.2f %v%%(%.2f %s) %s", address, operation, cryptoCoin, fiatCoin, price, fiatCoin, amount, buyFee, amount*buyFee/100, fiatCoin, date)
 		case sellOperation:
-			line = fmt.Sprintf("%s %s %s:%v %s:%v %v%% %s", address, operation, cryptoCoin, 1, fiatCoin, 123, 0, date)
+			line = fmt.Sprintf("%s %s %s/%s:%.2f %s:%.2f %v%%(%.2f %s) %s", address, operation, cryptoCoin, fiatCoin, price, fiatCoin, amount, sellFee, amount*sellFee/100, fiatCoin, date)
 		case convertOperation:
-			line = fmt.Sprintf("%s %s %s:%v %s:%v %v%% %s", address, operation, cryptoCoin, 1, cryptoCoin, 123, 0, date)
+			if cryptoCoin == cryptoCoinAlt {
+				continue
+			}
+			line = fmt.Sprintf("%s %s %s/%s:%.2f %s:%.2f %v%% %s", address, operation, cryptoCoin, cryptoCoinAlt, price, cryptoCoinAlt, price*amount, 0, date)
 		case withdrawOperation:
-			line = fmt.Sprintf("%s %s %s:%v %s:%v %v%s %s", address, operation, cryptoCoin, 1, cryptoCoin, 123, withdrawFee, fiatCoin, date)
+			line = fmt.Sprintf("%s %s %s/%s:%.2f %s:%.2f %v%s %s", address, operation, cryptoCoin, fiatCoin, price, fiatCoin, amount*price, withdrawFee, fiatCoin, date)
 		}
 
-		fmt.Println(line)
-		now = now.Add(*transactionIntervalFlag)
+		buf.WriteString(fmt.Sprintf("%s\n", line))
+		now = now.Add(cfg.transactionInterval)
 	}
+
+	return buf.Bytes()
 }
