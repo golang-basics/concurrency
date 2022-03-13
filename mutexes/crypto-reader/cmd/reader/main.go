@@ -14,24 +14,28 @@ import (
 
 func main() {
 	quit := make(chan os.Signal, 1)
-	addrFlag := flag.String("addr", "", "the crypto address to look for")
+	addressFlag := flag.String("address", "", "the crypto address to look for")
+	directoryFlag := flag.String("directory", "", "the path to the crypto transaction files")
 	intervalFlag := flag.Duration("interval", time.Hour, "the interval of transactions to look for")
-	dirFlag := flag.String("dir", ".", "the directory of crypto transaction files")
-	nFlag := flag.Int("n", 100, "the maximum number of transactions to read")
-
-	if *addrFlag == "" {
-		log.Fatal("provide a crypto address to read transactions for")
-	}
+	limitFlag := flag.Int("limit", 100, "the maximum number of transactions to read")
 
 	flag.Parse()
+
+	if *directoryFlag == "" {
+		log.Fatal("provide the directory ('directory' flag) of all transaction files")
+	}
+	if *addressFlag == "" {
+		log.Fatal("provide a crypto address ('address' flag) to read transactions for")
+	}
+
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cfg := crypto.TransactionsReaderConfig{
-		Address:   *addrFlag,
+		Address:   *addressFlag,
 		Interval:  *intervalFlag,
-		Directory: *dirFlag,
-		Limit:     *nFlag,
+		Directory: *directoryFlag,
+		Limit:     *limitFlag,
 	}
 	reader, err := crypto.NewTransactionsReader(cfg)
 	if err != nil {
