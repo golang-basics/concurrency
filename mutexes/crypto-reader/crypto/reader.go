@@ -3,9 +3,11 @@ package crypto
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"sort"
 	"time"
 )
@@ -49,6 +51,7 @@ func NewTransactionsReader(cfg TransactionsReaderConfig) (*TransactionsReader, e
 type TransactionsReader struct {
 	cfg       TransactionsReaderConfig
 	filesInfo []os.FileInfo
+	nowFunc   func() time.Time
 }
 
 // Read reads and streams the crypto transactions to an io.Writer using the given config
@@ -61,8 +64,86 @@ func (r *TransactionsReader) Read(ctx context.Context, w io.Writer) error {
 	}
 }
 
+// if there are an infinite number of log files,
+// knowing the exact log rotation period may help
+// skip iterations up to the very close of the log file
 func (r *TransactionsReader) read(w io.Writer) error {
-	return nil
+	logFileIndex := -1
+	for i, fi := range r.filesInfo {
+		nowMinusT := r.nowFunc().Add(-r.cfg.Interval * time.Minute)
+		if nowMinusT.Sub(fi.ModTime()) <= 0 {
+			logFileIndex = i
+			break
+		}
+	}
+	if logFileIndex == -1 {
+		return nil
+	}
+
+	filePath := path.Join(r.cfg.Directory, r.filesInfo[logFileIndex].Name())
+	f, err := os.Open(filePath)
+	defer func() { _ = f.Close() }()
+	if err != nil {
+		return err
+	}
+
+	nowMinusT := r.nowFunc().Add(-r.cfg.Interval * time.Minute)
+	file := NewFile(f)
+	offset, err := file.IndexTime(nowMinusT)
+	if err != nil {
+		return err
+	}
+
+	others := r.filesInfo[logFileIndex+1 : len(r.filesInfo)]
+	readTheRest := func() error {
+		for _, fi := range others {
+			file, err := os.Open(path.Join(r.cfg.Directory, fi.Name()))
+			if err != nil {
+				return err
+			}
+
+			for line := range r.stream(file) {
+
+				_, err := fmt.Fprintln(w, line)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+
+	if offset < 0 {
+		if logFileIndex+1 >= len(r.filesInfo) {
+			return nil
+		}
+
+		nowMinusT := r.nowFunc().Add(-r.cfg.Interval * time.Minute)
+		fi := r.filesInfo[logFileIndex+1]
+		if nowMinusT.Sub(fi.ModTime()) > 0 {
+			return nil
+		}
+		return readTheRest()
+	}
+
+	_, err = f.Seek(offset, io.SeekStart)
+	if err != nil {
+		return err
+	}
+	writer := bufio.NewWriter(w)
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		_, err := writer.WriteString(scanner.Text() + "\n")
+		if err != nil {
+			return err
+		}
+		err = writer.Flush()
+		if err != nil {
+			return err
+		}
+	}
+
+	return readTheRest()
 }
 
 func (r *TransactionsReader) stream(file io.ReadCloser) chan string {
