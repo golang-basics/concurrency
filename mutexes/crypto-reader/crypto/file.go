@@ -28,7 +28,7 @@ const (
 	dateTimeFormat            = "02/Jan/2006:15:04:05 -0700"
 )
 
-var errInvalidLogFormat = errors.New("invalid log format")
+var errInvalidTransactionFormat = errors.New("invalid crypto transaction format")
 
 // NewFile wraps an os.File creating a special apache common log format regex
 // and adding useful helper functions such as seekLine and search for easier working with log files
@@ -105,7 +105,7 @@ func (file *File) IndexTime(lookupTime time.Time) (int64, error) {
 			break
 		}
 
-		logTime, err := file.parseLogTime(line)
+		logTime, err := file.parseTransactionTime(line)
 		if err != nil {
 			return -1, err
 		}
@@ -222,13 +222,16 @@ func (file *File) seekLine(lines int64, whence int) (int64, error) {
 	return pos, err
 }
 
-// parseLogTime parses a given apache common log line and attempts to convert it into time.Time
-// example of apache common log line:
-// 127.0.0.1 user-identifier frank [04/Mar/2022:05:30:00 +0000] "GET /api/endpoint HTTP/1.0" 500 123
-func (file *File) parseLogTime(l string) (time.Time, error) {
+// parseTransactionTime parses a given apache common log line and attempts to convert it into time.Time
+// example of possible crypto transaction lines:
+//0xa42c9E5B5d936309D6B4Ca323B0dD5739643D2Dd WITHDRAW BTC/USD:26782.60 USD:13967.95 15USD 03/13/2022 11:35:51 +0000
+//0xeeaFf5e4B8B488303A9F1db36edbB9d73b38dFcf BUY BTC/USD:37448.30 USD:1.16 2%(0.02 USD) 03/13/2022 11:36:51 +0000
+//0x980Bc04e435C5E948B1f70a69cD377783500757b CONVERT USDT/BUSD:0.68 BUSD:3263.97 0% 03/13/2022 11:37:51 +0000
+//0xc68c701B5904fB27Ec72Cc8ff062530a0ffd2015 SELL SOL/GBP:74.60 GBP:36.52 3%(1.10 GBP) 03/13/2022 11:33:51 +0000
+func (file *File) parseTransactionTime(l string) (time.Time, error) {
 	matches := file.regEx.FindStringSubmatch(l)
 	if len(matches) == 0 {
-		return time.Time{}, fmt.Errorf("line '%s': %w", l, errInvalidLogFormat)
+		return time.Time{}, fmt.Errorf("line '%s': %w", l, errInvalidTransactionFormat)
 	}
 
 	var dateTime string
@@ -239,7 +242,7 @@ func (file *File) parseLogTime(l string) (time.Time, error) {
 		}
 	}
 	if dateTime == "" {
-		return time.Time{}, fmt.Errorf("invalid date: %w", errInvalidLogFormat)
+		return time.Time{}, fmt.Errorf("invalid date: %w", errInvalidTransactionFormat)
 	}
 
 	t, err := time.Parse(dateTimeFormat, dateTime)
