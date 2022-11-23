@@ -21,9 +21,9 @@ func main() {
 		}
 		connections++
 
-		go func() {
+		go func(con net.Conn) {
 			defer func() {
-				_ = conn.Close()
+				_ = con.Close()
 				atomic.AddInt32(&connections, -1)
 			}()
 			if atomic.LoadInt32(&connections) > 3 {
@@ -36,6 +36,6 @@ func main() {
 			if err != nil {
 				log.Fatalf("could not write to connection: %v", err)
 			}
-		}()
+		}(conn)
 	}
 }
