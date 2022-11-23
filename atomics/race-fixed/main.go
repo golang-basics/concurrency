@@ -12,15 +12,15 @@ func main() {
 	wg.Add(5)
 	go func() {
 		defer wg.Done()
-		atomic.StoreInt32(&count, 10)
+		atomic.AddInt32(&count, 10)
 	}()
 	go func() {
 		defer wg.Done()
-		atomic.StoreInt32(&count, -15)
+		atomic.AddInt32(&count, -15)
 	}()
 	go func() {
 		defer wg.Done()
-		atomic.StoreInt32(&count, 1)
+		atomic.AddInt32(&count, 1)
 	}()
 	go func() {
 		defer wg.Done()
